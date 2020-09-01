@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProgressBar android:id="@+id/claimDtlsProgrsDialog"
+    android:visibility="gone"
+    android:layout_width="40dp"
+    android:layout_centerInParent="true"
+    android:layout_gravity="center_vertical|center_horizontal"
+    android:layout_height="40dp"
+    android:progressBackgroundTint="@color/colorPrimary"
+    style="@android:style/Widget.Holo.Light.ProgressBar.Large"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
