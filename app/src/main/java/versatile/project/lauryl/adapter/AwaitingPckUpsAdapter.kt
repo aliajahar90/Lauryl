@@ -13,15 +13,10 @@ import versatile.project.lauryl.R
 import versatile.project.lauryl.model.AwaitingPickUpModel
 import versatile.project.lauryl.screens.HomeScreen
 
-class AwaitingPckUpsAdapter(
-    var activity: FragmentActivity?,
-    var context: Context,
-    var awtngPckUpList: ArrayList<AwaitingPickUpModel>?
-) : RecyclerView.Adapter<AwaitingPckUpsAdapter.MyViewHolder>() {
+class AwaitingPckUpsAdapter(var activity: FragmentActivity?, var context: Context, var awtngPckUpList:ArrayList<AwaitingPickUpModel>?): RecyclerView.Adapter<AwaitingPckUpsAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        var itemView: View =
-            LayoutInflater.from(context).inflate(R.layout.awaiting_pckup_lst_item, parent, false)
+        var itemView: View = LayoutInflater.from(context).inflate(R.layout.awaiting_pckup_lst_item,parent,false)
         return MyViewHolder(itemView)
     }
 
@@ -44,16 +39,16 @@ class AwaitingPckUpsAdapter(
         this.awtngPckUpList!!.clear()
     }
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
         var mainLyot: LinearLayout = itemView.mainLyot
         var orderIdTxt = itemView.orderIdTxt
-        var ordrDteTme: TextView? = itemView.ordrDteTme
+        var ordrDteTme : TextView? = itemView.ordrDteTme
         var pckUpAdrsTxt = itemView.pckUpAdrsTxt
 
-        fun bindDta(awtngPckUp: AwaitingPickUpModel) {
-            orderIdTxt.text = "Order No. ${awtngPckUp.orderIdVal}"
-            ordrDteTme!!.text = "${awtngPckUp.date} & ${awtngPckUp.time}"
+        fun bindDta(awtngPckUp: AwaitingPickUpModel){
+            orderIdTxt.text = "Order Id. ${awtngPckUp.orderIdVal}"
+            ordrDteTme!!.text = "${awtngPckUp.date}"
             pckUpAdrsTxt.text = awtngPckUp.pickUpAddress
         }
 

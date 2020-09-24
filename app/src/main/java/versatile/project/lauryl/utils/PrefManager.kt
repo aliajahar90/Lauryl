@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 
 
+
 class PrefManager(_context: Context) {
 
     var pref: SharedPreferences? = null
@@ -15,13 +16,13 @@ class PrefManager(_context: Context) {
     private val PREF_NAME = "androidhive-welcome"
     private val IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch"
 
-    init {
+    init{
         this._context = _context
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
         editor = pref!!.edit()
     }
 
-    fun setFirstTimeLaunch(isFirstTime: Boolean) {
+    fun setFirstTimeLaunch(isFirstTime:Boolean){
         editor!!.putBoolean(IS_FIRST_TIME_LAUNCH, isFirstTime)
         editor!!.commit()
     }

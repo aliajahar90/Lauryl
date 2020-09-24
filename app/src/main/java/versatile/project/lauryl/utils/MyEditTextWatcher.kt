@@ -6,26 +6,22 @@ import android.widget.EditText
 import versatile.project.lauryl.R
 import versatile.project.lauryl.screens.OTPVerificationScreen
 
-class MyEditTextWatcher(
-    var otpVerificationScreen: OTPVerificationScreen,
-    private var sourseEdt: EditText,
-    private var destEdt: EditText
-) : TextWatcher {
+class MyEditTextWatcher(var otpVerificationScreen: OTPVerificationScreen, private var sourseEdt:EditText, private var destEdt:EditText):TextWatcher {
 
     override fun afterTextChanged(p0: Editable?) {
 
-        when (sourseEdt.id) {
+        when(sourseEdt.id){
 
-            R.id.otpOneEdt -> {
+            R.id.otpOneEdt ->{
                 destEdt.requestFocus()
             }
-            R.id.otpTwoEdt -> {
+            R.id.otpTwoEdt ->{
                 destEdt.requestFocus()
             }
-            R.id.otpThreeEdt -> {
+            R.id.otpThreeEdt ->{
                 destEdt.requestFocus()
             }
-            R.id.otpFourEdt -> {
+            R.id.otpFourEdt ->{
                 destEdt.clearFocus()
                 otpVerificationScreen.hideKeyboard()
             }

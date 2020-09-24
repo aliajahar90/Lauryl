@@ -27,7 +27,7 @@
                 android:textStyle="bold"
                 android:layout_weight="0.4"
                 android:textColor="@android:color/black"
-                android:text="Order Id. 2884" />
+                android:text="Order Id. 2884"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -44,7 +44,7 @@
                     android:padding="5dp"
                     android:background="@color/lit_pink_red"
                     android:textColor="@android:color/white"
-                    android:text="Pickup Process" />
+                    android:text="Pickup Process"/>
 
             </LinearLayout>
 
@@ -58,7 +58,7 @@
             android:textSize="10sp"
             android:textStyle="bold"
             android:textColor="@android:color/darker_gray"
-            android:text="Pickup Date &amp; Time" />
+            android:text="Pickup Date &amp; Time"/>
 
         <TextView
             android:id="@+id/ordrDteTme"
@@ -69,13 +69,12 @@
             android:textSize="10sp"
             android:textStyle="bold"
             android:textColor="@android:color/darker_gray"
-            android:text="" />
+            android:text=""/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:padding="5dp">
+            android:layout_marginTop="20dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -92,7 +91,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:textColor="@android:color/black"
-                    android:text="Pickup Address" />
+                    android:text="Pickup Address"/>
 
                 <TextView
                     android:id="@+id/pckUpAdrsTxt"
@@ -109,20 +108,26 @@
 
             </LinearLayout>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:textSize="10sp"
                 android:layout_weight="0.4"
-                android:padding="5dp"
+                android:gravity="right|end"
                 android:layout_gravity="bottom"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:textColor="@android:color/white"
-                android:text="Reschedule Pickup"
-                android:background="@drawable/green_bckgrnd_round_corners_bckgrnd" />
+                android:layout_alignParentEnd="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|right"
+                    android:textSize="10sp"
+                    android:padding="5dp"
+                    android:textColor="@android:color/white"
+                    android:text="Reschedule Pickup"
+                    android:background="@drawable/green_bckgrnd_round_corners_bckgrnd"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

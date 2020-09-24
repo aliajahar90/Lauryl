@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@android:color/black"
     tools:context=".screens.SignUpOrLoginScreen"
     android:fillViewport="true">
 
@@ -29,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="fitStart"
-                android:background="@drawable/app_logo" />
+                android:background="@drawable/app_logo"/>
 
         </LinearLayout>
 
@@ -69,10 +70,9 @@
                             android:gravity="center_horizontal"
                             android:layout_gravity="center"
                             android:textColor="@android:color/white"
-                            android:padding="5dp" />
+                            android:padding="5dp"/>
 
                     </LinearLayout>
-
 
                     <LinearLayout
                         android:id="@+id/loginTxtUnSelectedLyot"
@@ -87,8 +87,8 @@
                             android:text="@string/login_txt"
                             android:gravity="center_horizontal"
                             android:layout_gravity="center"
-                            android:textColor="@android:color/black"
-                            android:padding="5dp" />
+                            android:textColor="@color/orange_color"
+                            android:padding="5dp"/>
 
                     </LinearLayout>
 
@@ -106,7 +106,7 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:textColor="@android:color/white"
-                            android:padding="5dp" />
+                            android:padding="5dp"/>
 
                     </LinearLayout>
 
@@ -122,8 +122,8 @@
                             android:text="@string/register_txt"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:textColor="@android:color/black"
-                            android:padding="5dp" />
+                            android:textColor="@color/orange_color"
+                            android:padding="5dp"/>
 
                     </LinearLayout>
 
@@ -134,96 +134,136 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:padding="5dp"
+                    android:textStyle="bold"
                     android:layout_gravity="left"
                     android:layout_marginTop="10dp"
-                    android:text="@string/register_hdng_txt" />
+                    android:text="@string/register_hdng_txt"/>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
+                    android:id="@+id/firstNamEdtLyout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:orientation="vertical"
                     android:textColorHint="@color/grey_color">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/frst_nme_txt"
+                        android:padding="5dp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"/>
 
                     <EditText
                         android:id="@+id/firstNamEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/frst_nme_txt"
-                        android:inputType="text" />
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:inputType="text"/>
 
-                </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
+                    android:id="@+id/lastNameEdtLyout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:orientation="vertical"
                     android:textColorHint="@color/grey_color">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/last_nme_txt"
+                        android:padding="5dp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"/>
 
                     <EditText
                         android:id="@+id/lastNameEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/last_nme_txt"
-                        android:inputType="text" />
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:inputType="text"/>
 
-                </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:orientation="vertical"
                     android:textColorHint="@color/grey_color">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mbl_num_txt"
+                        android:padding="5dp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"/>
 
                     <EditText
                         android:id="@+id/mblNumEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/mbl_num_txt"
-                        android:inputType="number" />
+                        android:maxLength="10"
+                        android:inputType="number"/>
 
-                </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    app:passwordToggleEnabled="true"
-                    style="@style/Custom_textinputlayout_style">
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pswrd_txt"
+                        android:padding="5dp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"/>
 
                     <EditText
                         android:id="@+id/pswrdEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/pswrd_txt"
                         android:backgroundTint="@android:color/darker_gray"
                         android:textColor="@android:color/black"
-                        android:inputType="textPassword" />
+                        android:inputType="textPassword"/>
 
-                </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:id="@+id/cnfPswrdEdtLyot"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:passwordToggleEnabled="true"
-                    style="@style/Custom_textinputlayout_style">
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cnf_pswrd_txt"
+                        android:padding="5dp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"/>
 
                     <EditText
                         android:id="@+id/cnfPswrdEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="@string/cnf_pswrd_txt"
                         android:backgroundTint="@android:color/darker_gray"
                         android:textColor="@android:color/black"
-                        android:inputType="textPassword" />
+                        android:inputType="textPassword"/>
 
-                </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/forgotPswrdTxt"
@@ -232,29 +272,31 @@
                     android:text="@string/forgot_pswrd_txt"
                     android:textColor="@color/orange_color"
                     android:layout_gravity="right"
-                    android:layout_marginTop="20dp" />
+                    android:layout_marginTop="20dp"/>
 
             </LinearLayout>
 
         </LinearLayout>
-
+        
         <RelativeLayout
             android:id="@+id/loginOrRegisterBtnLyot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/mainCardLyot"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
 
-
-            <ImageView
+            <Button
                 android:id="@+id/loginOrRegisterBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/enter_btn_icon" />
+                android:text=""
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/verify_otp_bckgrnd"/>
 
             <include
                 android:id="@+id/progressLyot"
@@ -267,4 +309,5 @@
         </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.core.widget.NestedScrollView>

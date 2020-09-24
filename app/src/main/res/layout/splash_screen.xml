@@ -22,7 +22,7 @@
             android:id="@+id/splashGif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="fitStart" />
+            android:scaleType="fitStart"/>
 
     </LinearLayout>
 

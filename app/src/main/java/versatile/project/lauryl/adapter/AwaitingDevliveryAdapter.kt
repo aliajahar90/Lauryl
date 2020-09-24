@@ -11,14 +11,10 @@ import versatile.project.lauryl.R
 import versatile.project.lauryl.model.AwaitingDeliveryModel
 import versatile.project.lauryl.model.AwaitingPickUpModel
 
-class AwaitingDevliveryAdapter(
-    var context: Context,
-    var awtngDlvryList: ArrayList<AwaitingDeliveryModel>?
-) : RecyclerView.Adapter<AwaitingDevliveryAdapter.MyViewHolder>() {
+class AwaitingDevliveryAdapter(var context: Context, var awtngDlvryList:ArrayList<AwaitingDeliveryModel>?): RecyclerView.Adapter<AwaitingDevliveryAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        var itemView: View =
-            LayoutInflater.from(context).inflate(R.layout.awaiting_dlvry_lst_item, parent, false)
+        var itemView: View = LayoutInflater.from(context).inflate(R.layout.awaiting_dlvry_lst_item,parent,false)
         return MyViewHolder(itemView)
     }
 
@@ -38,14 +34,14 @@ class AwaitingDevliveryAdapter(
         this.awtngDlvryList!!.clear()
     }
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var orderIdTxt = itemView.orderIdTxt
-        var ordrDteTme: TextView? = itemView.ordrDteTme
+        var ordrDteTme : TextView? = itemView.ordrDteTme
         var pckUpAdrsTxt = itemView.pckUpAdrsTxt
 
-        fun bindDta(awtngDlvry: AwaitingDeliveryModel) {
-            orderIdTxt.text = "Order No. ${awtngDlvry.orderIdVal}"
-            ordrDteTme!!.text = "${awtngDlvry.date} & ${awtngDlvry.time}"
+        fun bindDta(awtngDlvry: AwaitingDeliveryModel){
+            orderIdTxt.text = "Order Id. ${awtngDlvry.orderIdVal}"
+            ordrDteTme!!.text = "${awtngDlvry.date}"
             pckUpAdrsTxt.text = awtngDlvry.pickUpAddress
         }
 

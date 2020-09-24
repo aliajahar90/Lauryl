@@ -3,7 +3,7 @@ package versatile.project.lauryl.utils
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 
-class BiggerDotPasswordTransformationMethod : PasswordTransformationMethod() {
+class BiggerDotPasswordTransformationMethod: PasswordTransformationMethod() {
     override fun getTransformation(source: CharSequence, view: View): CharSequence {
         return PasswordCharSequence(super.getTransformation(source, view))
     }

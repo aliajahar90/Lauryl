@@ -27,7 +27,7 @@ class IntroScreen : AppCompatActivity() {
     private var prefManager: PrefManager? = null
     private lateinit var dots: Array<TextView>
     private var layouts: IntArray? = null
-    private lateinit var interoScreenViewModel: InteroScreenViewModel
+    private lateinit var interoScreenViewModel:InteroScreenViewModel
     private var myViewPagerAdapter: MyViewPagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +42,7 @@ class IntroScreen : AppCompatActivity() {
         }*/
         // Making notification bar transparent
         if (Build.VERSION.SDK_INT >= 21) {
-            window.decorView.systemUiVisibility =
-                SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            window.decorView.systemUiVisibility = SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         }
         setContentView(R.layout.activity_intro_screen)
 
@@ -51,8 +50,7 @@ class IntroScreen : AppCompatActivity() {
             R.layout.welcome_side1,
             R.layout.welcome_slide2,
             R.layout.welcome_slide3,
-            R.layout.welcome_slide4
-        )
+            R.layout.welcome_slide4)
 
         nextBtn.setOnClickListener {
             // checking for last page
@@ -80,12 +78,7 @@ class IntroScreen : AppCompatActivity() {
 
             override fun onPageScrollStateChanged(state: Int) {}
 
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-            }
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
 
@@ -121,7 +114,7 @@ class IntroScreen : AppCompatActivity() {
         val colorsInactive = resources.getIntArray(R.array.array_dot_inactive)
         layoutDots.removeAllViews()
 
-        for (pos in dots.indices) {
+        for(pos in dots.indices){
             dots[pos].text = Html.fromHtml("&#8226;")
             dots[pos].textSize = 35F
             dots[pos].setTextColor(colorsInactive[currentPage])
@@ -139,11 +132,11 @@ class IntroScreen : AppCompatActivity() {
 
     private fun launchHomeScreen() {
 //        prefManager!!.setFirstTimeLaunch(false)
-        startActivity(Intent(this@IntroScreen, SignUpOrLoginScreen::class.java))
+        startActivity(Intent(this@IntroScreen,SignUpOrLoginScreen::class.java))
         finish()
     }
 
-    inner class MyViewPagerAdapter : PagerAdapter() {
+    inner class MyViewPagerAdapter: PagerAdapter() {
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             val layoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

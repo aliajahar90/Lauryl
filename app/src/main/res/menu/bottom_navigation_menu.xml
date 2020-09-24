@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:title="@string/home_txt"
+    <item android:title="@string/home_txt"
         android:id="@+id/homeId"
-        android:icon="@drawable/home" />
+        android:icon="@drawable/home"/>
 
-    <item
-        android:title="@string/orders_txt"
+    <item android:title="@string/orders_txt"
         android:id="@+id/myOrdersId"
-        android:icon="@drawable/my_order_icon" />
+        android:icon="@drawable/my_order_icon"/>
 
-    <item
-        android:title="@string/shedule_pck_up_txt"
+    <item android:title="@string/shedule_pck_up_txt"
         android:id="@+id/schedulePckUpId"
-        android:icon="@drawable/schedule_pick_up_icon" />
+        android:icon="@drawable/schedule_pick_up_icon"/>
 
-    <item
-        android:title="@string/payment_txt"
+    <item android:title="@string/payment_txt"
         android:id="@+id/paymentId"
-        android:icon="@drawable/payment_icon" />
+        android:icon="@drawable/payment_icon"/>
 
-    <item
-        android:title="@string/profile_txt"
+    <item android:title="@string/profile_txt"
         android:id="@+id/profileId"
-        android:icon="@drawable/profile_icon" />
+        android:icon="@drawable/profile_icon"/>
 
 </menu>

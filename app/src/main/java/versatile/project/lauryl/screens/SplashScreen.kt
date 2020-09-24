@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -20,39 +21,30 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
+
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this) { instanceIdResult ->
             val newToken = instanceIdResult.token
             Log.d("newToken_", newToken)
             //updateFirebaseInstanceIdInAppServer(newToken)
         }
 
-        splashGif.setOnClickListener {
-            startActivity(Intent(this@SplashScreen, IntroScreen::class.java))
-            finish()
-        }
-
+        Handler().postDelayed(object :Runnable{
+            override fun run() {
+                startActivity(Intent(this@SplashScreen, IntroScreen::class.java))
+                finish()
+            }
+        },6000)
         startGifView()
-
+        
     }
 
     private fun startGifView() {
         Glide.with(this).load(R.drawable.splash).listener(object : RequestListener<Drawable> {
-            override fun onLoadFailed(
-                e: GlideException?,
-                model: Any?,
-                target: Target<Drawable>?,
-                isFirstResource: Boolean
-            ): Boolean {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                 return true
             }
 
-            override fun onResourceReady(
-                resource: Drawable?,
-                model: Any?,
-                target: Target<Drawable>?,
-                dataSource: DataSource?,
-                isFirstResource: Boolean
-            ): Boolean {
+            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                 if (resource is GifDrawable) {
                     (resource).setLoopCount(1)
                 }

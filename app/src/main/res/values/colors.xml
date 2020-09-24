@@ -4,12 +4,13 @@
     <color name="colorPrimaryDark">#0E0586</color>
     <color name="colorAccent">#0E0586</color>
     <color name="orange_color">#FD4E10</color>
-    <color name="grey_color">#9B9B9B</color>
+    <color name="grey_color">#808080</color>
     <color name="lit_grey">#C2C2C2</color>
     <color name="sky_blue">#0483DC</color>
     <color name="lit_red">#FF5F5F</color>
     <color name="lit_green">#39B54A</color>
     <color name="lit_pink_red">#FF5C5C</color>
+    <color name="blue">#25CCF7</color>
 
     <!-- dots inactive colors -->
     <color name="dot_dark_screen1">#C2C2C2</color>
@@ -35,6 +36,20 @@
         <item>@color/dot_dark_screen2</item>
         <item>@color/dot_dark_screen3</item>
         <item>@color/dot_dark_screen4</item>
+    </array>
+
+    <array name="array_months">
+        <item>Month</item>
+        <item>Jan</item>
+        <item>Fed</item>
+        <item>March</item>
+    </array>
+
+    <array name="array_srvcs">
+        <item>Services</item>
+        <item>Jan</item>
+        <item>Fed</item>
+        <item>March</item>
     </array>
 
 </resources>

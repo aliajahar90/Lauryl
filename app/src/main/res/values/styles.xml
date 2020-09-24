@@ -24,17 +24,13 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="BNavViewStyle">
-        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNavigationView.Active
-        </item>
-        <item name="itemTextAppearanceInactive">
-            @style/TextAppearance.BottomNavigationView.Inactive
-        </item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNavigationView.Active</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.BottomNavigationView.Inactive</item>
     </style>
 
     <!-- blank styles for better code readability-->
-    <style name="TextAppearance" />
-
-    <style name="TextAppearance.BottomNavigationView" />
+    <style name="TextAppearance"/>
+    <style name="TextAppearance.BottomNavigationView"/>
 
     <!-- inactive tab icon style -->
     <style name="TextAppearance.BottomNavigationView.Inactive">
@@ -44,6 +40,23 @@
     <!-- active tab icon style -->
     <style name="TextAppearance.BottomNavigationView.Active">
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="BottomNavigationView.InActive" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">8sp</item>
+    </style>
+
+    <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">8sp</item>
+    </style>
+
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
+    </style>
+
+    <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
     </style>
 
 </resources>

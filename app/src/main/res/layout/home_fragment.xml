@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="10dp"
@@ -33,7 +34,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"/>
 
             <TextView
                 android:id="@+id/serviceVwAlHdngTxt"
@@ -48,111 +49,119 @@
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/orange_color"
-                android:background="@drawable/semi_circle_orange_stroke_bckgrnd" />
+                android:background="@drawable/semi_circle_orange_stroke_bckgrnd"/>
 
         </RelativeLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            android:weightSum="0.8">
-
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:weightSum="0.8">
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/wash_fold_icon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_weight="0.2"
                     android:gravity="center"
-                    android:textColor="@android:color/black"
-                    android:text="@string/wash_fold_txt" />
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/wash_fold_icon"/>
+
+                    <TextView
+                        android:id="@+id/servicesOneTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"
+                        android:text="@string/empty"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/wash_iron_icon"/>
+
+                    <TextView
+                        android:id="@+id/servicesTwoTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"
+                        android:text="@string/empty"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/dry_clean_icon"/>
+
+                    <TextView
+                        android:id="@+id/servicesThreeTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"
+                        android:text="@string/empty"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/premium_wash_icon"/>
+
+                    <TextView
+                        android:id="@+id/servicesFourTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"
+                        android:text="@string/empty"/>
+
+                </LinearLayout>
 
             </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/wash_iron_icon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center"
-                    android:textColor="@android:color/black"
-                    android:text="@string/wash_iron_txt" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/dry_clean_icon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center"
-                    android:textColor="@android:color/black"
-                    android:text="@string/dry_clean_txt" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/premium_wash_icon" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center"
-                    android:textColor="@android:color/black"
-                    android:text="@string/primium_wash_txt" />
-
-            </LinearLayout>
-
         </LinearLayout>
-    </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -192,7 +201,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:id="@+id/awtngPckupsVwAlHdngTxt"
@@ -207,7 +216,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/orange_color"
-                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd" />
+                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd"/>
 
                 </RelativeLayout>
 
@@ -215,7 +224,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@android:color/darker_gray"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -232,7 +241,7 @@
                         android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:textColor="@android:color/black"
-                        android:text="Order Id. 2884" />
+                        android:text="Order Id. 2884"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -241,13 +250,12 @@
                         android:gravity="center"
                         android:textSize="10sp"
                         android:textColor="@android:color/darker_gray"
-                        android:text="Placed on Dec 19,2019" />
+                        android:text="Placed on Dec 19,2019"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:padding="5dp">
+                        android:layout_marginTop="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -258,7 +266,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:textColor="@android:color/darker_gray"
-                            android:text="11:30 - 12:30 PM" />
+                            android:text="11:30 - 12:30 PM"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -266,11 +274,12 @@
                             android:layout_marginTop="5dp"
                             android:gravity="center"
                             android:textSize="10sp"
+                            android:padding="5dp"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
                             android:textColor="@android:color/white"
-                            android:text="Placed on Dec 19,2019"
-                            android:background="@drawable/red_bckgrnd" />
+                            android:text="Pickup Process"
+                            android:background="@drawable/red_bckgrnd"/>
 
                     </RelativeLayout>
 
@@ -290,7 +299,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/t_shirt_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -300,7 +309,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="T-Shirt" />
+                            android:text="T-Shirt"/>
 
                     </LinearLayout>
 
@@ -314,7 +323,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 
@@ -332,7 +341,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/jeans_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -342,7 +351,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="Jeans" />
+                            android:text="Jeans"/>
 
                     </LinearLayout>
 
@@ -356,11 +365,20 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 
             </LinearLayout>
+
+
+
+
+
+
+
+
+
 
 
             <LinearLayout
@@ -387,7 +405,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -401,7 +419,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/orange_color"
-                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd" />
+                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd"/>
 
                 </RelativeLayout>
 
@@ -409,7 +427,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@android:color/darker_gray"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -426,7 +444,7 @@
                         android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:textColor="@android:color/black"
-                        android:text="Order Id. 2884" />
+                        android:text="Order Id. 2884"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -435,13 +453,12 @@
                         android:gravity="center"
                         android:textSize="10sp"
                         android:textColor="@android:color/darker_gray"
-                        android:text="Placed on Dec 19,2019" />
+                        android:text="Placed on Dec 19,2019"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:padding="5dp">
+                        android:layout_marginTop="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -452,7 +469,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:textColor="@android:color/darker_gray"
-                            android:text="11:30 - 12:30 PM" />
+                            android:text="11:30 - 12:30 PM"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -460,11 +477,12 @@
                             android:layout_marginTop="5dp"
                             android:gravity="center"
                             android:textSize="10sp"
+                            android:padding="5dp"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
                             android:textColor="@android:color/white"
-                            android:text="Placed on Dec 19,2019"
-                            android:background="@drawable/red_bckgrnd" />
+                            android:text="Pickup Process"
+                            android:background="@drawable/red_bckgrnd"/>
 
                     </RelativeLayout>
 
@@ -484,7 +502,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/t_shirt_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -494,7 +512,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="T-Shirt" />
+                            android:text="T-Shirt"/>
 
                     </LinearLayout>
 
@@ -508,7 +526,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 
@@ -526,7 +544,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/jeans_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -536,7 +554,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="Jeans" />
+                            android:text="Jeans"/>
 
                     </LinearLayout>
 
@@ -550,11 +568,33 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 
             </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             <LinearLayout
@@ -581,7 +621,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -595,7 +635,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/orange_color"
-                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd" />
+                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd"/>
 
                 </RelativeLayout>
 
@@ -603,7 +643,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@android:color/darker_gray"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -620,7 +660,7 @@
                         android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:textColor="@android:color/black"
-                        android:text="Order Id. 2884" />
+                        android:text="Order Id. 2884"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -629,13 +669,12 @@
                         android:gravity="center"
                         android:textSize="10sp"
                         android:textColor="@android:color/darker_gray"
-                        android:text="Placed on Dec 19,2019" />
+                        android:text="Placed on Dec 19,2019"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:padding="5dp">
+                        android:layout_marginTop="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -646,7 +685,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:textColor="@android:color/darker_gray"
-                            android:text="11:30 - 12:30 PM" />
+                            android:text="11:30 - 12:30 PM"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -654,11 +693,12 @@
                             android:layout_marginTop="5dp"
                             android:gravity="center"
                             android:textSize="10sp"
+                            android:padding="5dp"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
                             android:textColor="@android:color/white"
-                            android:text="Placed on Dec 19,2019"
-                            android:background="@drawable/red_bckgrnd" />
+                            android:text="Pickup Process"
+                            android:background="@drawable/red_bckgrnd"/>
 
                     </RelativeLayout>
 
@@ -678,7 +718,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/t_shirt_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -688,7 +728,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="T-Shirt" />
+                            android:text="T-Shirt"/>
 
                     </LinearLayout>
 
@@ -702,7 +742,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 
@@ -720,7 +760,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/jeans_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -730,7 +770,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="Jeans" />
+                            android:text="Jeans"/>
 
                     </LinearLayout>
 
@@ -744,11 +784,24 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 
             </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             <LinearLayout
@@ -775,7 +828,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -789,7 +842,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/orange_color"
-                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd" />
+                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd"/>
 
                 </RelativeLayout>
 
@@ -797,7 +850,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@android:color/darker_gray"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -814,7 +867,7 @@
                         android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:textColor="@android:color/black"
-                        android:text="Order Id. 2884" />
+                        android:text="Order Id. 2884"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -823,13 +876,12 @@
                         android:gravity="center"
                         android:textSize="10sp"
                         android:textColor="@android:color/darker_gray"
-                        android:text="Placed on Dec 19,2019" />
+                        android:text="Placed on Dec 19,2019"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:padding="5dp">
+                        android:layout_marginTop="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -840,7 +892,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:textColor="@android:color/darker_gray"
-                            android:text="11:30 - 12:30 PM" />
+                            android:text="11:30 - 12:30 PM"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -848,11 +900,12 @@
                             android:layout_marginTop="5dp"
                             android:gravity="center"
                             android:textSize="10sp"
+                            android:padding="5dp"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
                             android:textColor="@android:color/white"
-                            android:text="Placed on Dec 19,2019"
-                            android:background="@drawable/red_bckgrnd" />
+                            android:text="Pickup Process"
+                            android:background="@drawable/red_bckgrnd"/>
 
                     </RelativeLayout>
 
@@ -872,7 +925,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/t_shirt_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -882,7 +935,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="T-Shirt" />
+                            android:text="T-Shirt"/>
 
                     </LinearLayout>
 
@@ -896,7 +949,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 
@@ -914,7 +967,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/jeans_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -924,7 +977,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="Jeans" />
+                            android:text="Jeans"/>
 
                     </LinearLayout>
 
@@ -938,11 +991,27 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 
             </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             <LinearLayout
@@ -969,7 +1038,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -983,7 +1052,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/orange_color"
-                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd" />
+                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd"/>
 
                 </RelativeLayout>
 
@@ -991,7 +1060,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@android:color/darker_gray"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1008,7 +1077,7 @@
                         android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:textColor="@android:color/black"
-                        android:text="Order Id. 2884" />
+                        android:text="Order Id. 2884"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -1017,13 +1086,12 @@
                         android:gravity="center"
                         android:textSize="10sp"
                         android:textColor="@android:color/darker_gray"
-                        android:text="Placed on Dec 19,2019" />
+                        android:text="Placed on Dec 19,2019"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:padding="5dp">
+                        android:layout_marginTop="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1034,7 +1102,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:textColor="@android:color/darker_gray"
-                            android:text="11:30 - 12:30 PM" />
+                            android:text="11:30 - 12:30 PM"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1042,11 +1110,12 @@
                             android:layout_marginTop="5dp"
                             android:gravity="center"
                             android:textSize="10sp"
+                            android:padding="5dp"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
                             android:textColor="@android:color/white"
-                            android:text="Placed on Dec 19,2019"
-                            android:background="@drawable/red_bckgrnd" />
+                            android:text="Pickup Process"
+                            android:background="@drawable/red_bckgrnd"/>
 
                     </RelativeLayout>
 
@@ -1066,7 +1135,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/t_shirt_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1076,7 +1145,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="T-Shirt" />
+                            android:text="T-Shirt"/>
 
                     </LinearLayout>
 
@@ -1090,7 +1159,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 
@@ -1108,7 +1177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/jeans_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1118,7 +1187,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="Jeans" />
+                            android:text="Jeans"/>
 
                     </LinearLayout>
 
@@ -1132,11 +1201,23 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 
             </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             <LinearLayout
@@ -1163,7 +1244,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/black"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -1177,7 +1258,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/orange_color"
-                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd" />
+                        android:background="@drawable/semi_circle_orange_stroke_bckgrnd"/>
 
                 </RelativeLayout>
 
@@ -1185,7 +1266,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="5dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@android:color/darker_gray"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1202,7 +1283,7 @@
                         android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:textColor="@android:color/black"
-                        android:text="Order Id. 2884" />
+                        android:text="Order Id. 2884"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -1211,13 +1292,12 @@
                         android:gravity="center"
                         android:textSize="10sp"
                         android:textColor="@android:color/darker_gray"
-                        android:text="Placed on Dec 19,2019" />
+                        android:text="Placed on Dec 19,2019"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:padding="5dp">
+                        android:layout_marginTop="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1228,7 +1308,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:textColor="@android:color/darker_gray"
-                            android:text="11:30 - 12:30 PM" />
+                            android:text="11:30 - 12:30 PM"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1236,11 +1316,12 @@
                             android:layout_marginTop="5dp"
                             android:gravity="center"
                             android:textSize="10sp"
+                            android:padding="5dp"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
                             android:textColor="@android:color/white"
-                            android:text="Placed on Dec 19,2019"
-                            android:background="@drawable/red_bckgrnd" />
+                            android:text="Pickup Process"
+                            android:background="@drawable/red_bckgrnd"/>
 
                     </RelativeLayout>
 
@@ -1260,7 +1341,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/t_shirt_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1270,7 +1351,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="T-Shirt" />
+                            android:text="T-Shirt"/>
 
                     </LinearLayout>
 
@@ -1284,7 +1365,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 
@@ -1302,7 +1383,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/jeans_icon"
-                            android:layout_gravity="center_vertical" />
+                            android:layout_gravity="center_vertical"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1312,7 +1393,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@android:color/black"
-                            android:text="Jeans" />
+                            android:text="Jeans"/>
 
                     </LinearLayout>
 
@@ -1326,7 +1407,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/black"
-                        android:text="x 3" />
+                        android:text="x 3"/>
 
                 </RelativeLayout>
 

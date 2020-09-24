@@ -1,5 +1,4 @@
 package versatile.project.lauryl.push_notification
-
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -16,14 +15,14 @@ import com.google.firebase.messaging.RemoteMessage
 import versatile.project.lauryl.R
 import versatile.project.lauryl.screens.SplashScreen
 
-class FirebaseMessageService : FirebaseMessagingService() {
+class FirebaseMessageService: FirebaseMessagingService() {
 
     var TAG: String = "FirebaseMessageService_"
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d(TAG, "Received_Successfully!")
 
-        Log.d(TAG, "" + remoteMessage!!.sentTime)
+        Log.d(TAG,""+remoteMessage!!.sentTime)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             showNotifInOreoAll(remoteMessage)
@@ -36,21 +35,12 @@ class FirebaseMessageService : FirebaseMessagingService() {
     private fun showNotifInOreoAll(remoteMessage: RemoteMessage?) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            makeNotificationChannel(
-                "Channel1",
-                "Doctor channel",
-                NotificationManager.IMPORTANCE_HIGH
-            )
+            makeNotificationChannel("Channel1", "Doctor channel", NotificationManager.IMPORTANCE_HIGH)
         }
 
         val intent = Intent(applicationContext, SplashScreen::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(
-            applicationContext,
-            11,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val pendingIntent = PendingIntent.getActivity(applicationContext, 11 , intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
 
         var title = remoteMessage?.notification?.title
@@ -64,16 +54,10 @@ class FirebaseMessageService : FirebaseMessagingService() {
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setAutoCancel(false)
             .setSound(defaultSoundUri)
-            .setLargeIcon(
-                BitmapFactory.decodeResource(
-                    applicationContext.resources,
-                    R.mipmap.ic_launcher
-                )
-            )
+            .setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources, R.mipmap.ic_launcher))
             .setContentIntent(pendingIntent)
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(108, notificationBuilder.build())
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(108 ,notificationBuilder.build())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -91,12 +75,7 @@ class FirebaseMessageService : FirebaseMessagingService() {
 
         var title = remoteMessage?.notification?.title
 
-        val pendingIntent = PendingIntent.getActivity(
-            applicationContext,
-            11,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val pendingIntent = PendingIntent.getActivity(applicationContext, 11 , intent, PendingIntent.FLAG_UPDATE_CURRENT)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this)
             .setContentTitle(remoteMessage?.notification?.title)
@@ -106,16 +85,10 @@ class FirebaseMessageService : FirebaseMessagingService() {
             .setSmallIcon(R.mipmap.ic_launcher)
             .setAutoCancel(false)
             .setSound(defaultSoundUri)
-            .setLargeIcon(
-                BitmapFactory.decodeResource(
-                    applicationContext.resources,
-                    R.mipmap.ic_launcher
-                )
-            )
+            .setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources, R.mipmap.ic_launcher))
             .setContentIntent(pendingIntent)
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(108, notificationBuilder.build())
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(108 ,notificationBuilder.build())
 
     }
 

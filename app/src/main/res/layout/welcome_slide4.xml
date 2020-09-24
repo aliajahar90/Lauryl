@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".screens.IntroScreen"
-    android:background="@drawable/intro_backround_img">
+    android:background="@drawable/one_time_delivery_bckgrnd_img">
 
     <ImageView
         android:id="@+id/introImgVw"

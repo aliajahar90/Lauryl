@@ -22,25 +22,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/bckBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/back_icon"/>
+
             <TextView
                 android:id="@+id/homeNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/home_hdng_txt"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+                android:layout_toRightOf="@id/bckBtn"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"/>
+
+            <TextView
+                android:id="@+id/homeNameMdlVwTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chose_servcs_txt"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"/>
 
             <ImageView
+                android:id="@+id/filterTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/filter_white_icon" />
+                android:src="@drawable/filter_white_icon"/>
 
         </RelativeLayout>
 
@@ -58,7 +79,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"/>
 
         </RelativeLayout>
 
@@ -81,7 +102,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:src="@drawable/location_white_icon" />
+                    android:src="@drawable/location_white_icon"/>
 
                 <TextView
                     android:id="@+id/homelocTxt"
@@ -93,7 +114,7 @@
                     android:textStyle="bold"
                     android:layout_marginLeft="5dp"
                     android:layout_gravity="center_vertical"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"/>
 
 
             </LinearLayout>
@@ -111,7 +132,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:src="@drawable/change_location_white_icon" />
+                    android:src="@drawable/change_location_white_icon"/>
 
                 <TextView
                     android:id="@+id/homelocChangeTxt"
@@ -122,7 +143,7 @@
                     android:textSize="16sp"
                     android:layout_marginLeft="5dp"
                     android:layout_gravity="center_vertical"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"/>
 
             </LinearLayout>
 
@@ -141,7 +162,7 @@
             android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -152,12 +173,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:labelVisibilityMode="labeled"
+        app:itemIconSize="25dp"
+        app:elevation="10dp"
         app:itemTextColor="@color/bottom_navigation_item_txt_colors"
         app:itemBackground="@drawable/bottom_navigation_item_backgrnd_colors"
         app:itemIconTint="@drawable/bottom_navigation_item_colors"
-        style="@style/BNavViewStyle"
+        android:theme="@style/BNavViewStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
