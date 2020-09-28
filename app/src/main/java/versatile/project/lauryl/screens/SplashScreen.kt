@@ -28,11 +28,9 @@ class SplashScreen : AppCompatActivity() {
             //updateFirebaseInstanceIdInAppServer(newToken)
         }
 
-        Handler().postDelayed(object :Runnable{
-            override fun run() {
-                startActivity(Intent(this@SplashScreen, IntroScreen::class.java))
-                finish()
-            }
+        Handler().postDelayed({
+            startActivity(Intent(this@SplashScreen, IntroScreen::class.java))
+            finish()
         },6000)
         startGifView()
         
