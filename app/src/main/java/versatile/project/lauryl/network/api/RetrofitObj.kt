@@ -20,7 +20,7 @@ class RetrofitObj {
 
         fun getApiObj(): ApiServices? {
             val logging = HttpLoggingInterceptor()
-            logging.setLevel(HttpLoggingInterceptor.Level.BASIC)
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY)
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(BasicAuthInterceptor(Constants.API_BASIC_AUTH_USER_NAME,Constants.API_BASIC_AUTH_PASSWORD))
                 .addInterceptor(logging)
@@ -41,7 +41,7 @@ class RetrofitObj {
 
         fun getVersatileApiObj(): ApiServices? {
             val logging = HttpLoggingInterceptor()
-            logging.setLevel(HttpLoggingInterceptor.Level.BASIC)
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY)
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(BasicAuthInterceptor(Constants.API_BASIC_AUTH_USER_NAME_VERSATILE,Constants.API_BASIC_AUTH_PASSWORD_VERSATILE))
                 .addInterceptor(logging)
