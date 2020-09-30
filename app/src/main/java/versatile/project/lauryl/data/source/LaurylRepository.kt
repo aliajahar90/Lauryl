@@ -2,7 +2,6 @@ package versatile.project.lauryl.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -10,7 +9,6 @@ import retrofit2.Response
 import versatile.project.lauryl.model.*
 import versatile.project.lauryl.network.api.ApiServices
 import versatile.project.lauryl.network.api.RetrofitObj
-import versatile.project.lauryl.utils.Globals
 
 class LaurylRepository {
 
