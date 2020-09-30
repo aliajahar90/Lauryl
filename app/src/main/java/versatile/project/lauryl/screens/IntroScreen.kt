@@ -21,6 +21,7 @@ import android.view.WindowManager
 import androidx.viewpager.widget.PagerAdapter
 import android.view.LayoutInflater
 import android.content.Context
+import android.content.pm.ActivityInfo
 
 class IntroScreen : AppCompatActivity() {
 
@@ -32,6 +33,8 @@ class IntroScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         interoScreenViewModel = ViewModelProvider(this).get(InteroScreenViewModel::class.java)
 
         // Checking for first time launch - before calling setContentView()

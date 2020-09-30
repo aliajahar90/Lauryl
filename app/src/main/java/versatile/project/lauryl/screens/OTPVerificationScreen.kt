@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.activity_otpverification_screen.*
 import versatile.project.lauryl.R
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
@@ -24,6 +25,8 @@ class OTPVerificationScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_otpverification_screen)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         otpVerificationViewModel = ViewModelProvider(this).get(OtpVerificationViewModel::class.java)
         val mblNum = intent.getStringExtra(Constants.MOBILE_NUMBER) as String
         val first2Chars = "${mblNum.substring(0,2)}"

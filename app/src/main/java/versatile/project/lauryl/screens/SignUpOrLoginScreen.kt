@@ -1,6 +1,7 @@
 package versatile.project.lauryl.screens
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -31,6 +32,8 @@ class SignUpOrLoginScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up_or_login_screen)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         signUpOrLoginViewModel = ViewModelProvider(this).get(SignUpOrLoginViewModel::class.java)
 
         loginTxtSelectedLyot.setOnClickListener {
