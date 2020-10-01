@@ -19,7 +19,7 @@ class PrefManager(_context: Context) {
     init{
         this._context = _context
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
-        editor = pref!!.edit()
+        editor = pref?.edit()
     }
 
     fun setFirstTimeLaunch(isFirstTime:Boolean){

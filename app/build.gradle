@@ -5,13 +5,18 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'com.android.application'
-
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 
 android {
 
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
+
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "versatile.project.lauryl"
         minSdkVersion 16
@@ -57,5 +62,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+
 
 }
