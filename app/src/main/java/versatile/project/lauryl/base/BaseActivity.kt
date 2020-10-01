@@ -23,10 +23,10 @@ open class BaseActivity : AppCompatActivity() {
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show()
     }
 
-    fun showLoading(message: String) {
+    fun showLoading() {
 
         if (progressDialog == null) {
-            progressDialog = ProgressDialogHelper.progressDialog(this, message)
+            progressDialog = ProgressDialogHelper.progressDialog(this)
         }
         if (!progressDialog?.isShowing!!)
             progressDialog?.show()

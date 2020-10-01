@@ -46,7 +46,7 @@ class ForgotPasswordScreen : BaseActivity() {
     }
 
     private fun generateOtpToResetPswrd(mblNumberTxt: String) {
-        showLoading("Sending otp....")
+        showLoading()
         forgotPswrdViewModel.generateOtp(mblNumberTxt)
     }
 
