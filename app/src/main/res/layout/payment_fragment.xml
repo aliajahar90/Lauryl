@@ -1,30 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewmodel"
+            type="versatile.project.lauryl.payment.viewModel.PaymentViewModel" />
+        <variable
+            name="fragment"
+            type="versatile.project.lauryl.payment.PaymentFragment" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
     android:orientation="vertical"
-    android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/serviceHdngTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Payment"
-        android:singleLine="true"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="5dp"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical"
-        android:textColor="@color/colorPrimary"/>
+        <RelativeLayout
+            android:id="@+id/rlPaymentHeader"
+            android:padding="@dimen/dp_15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_alignParentLeft="true"
+                android:id="@+id/rlUpi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgUPI"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/upi">
+                </androidx.appcompat.widget.AppCompatImageView>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="@color/orange"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_below="@+id/imgUPI"
+                    android:text="@string/bank_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_toRightOf="@+id/rlUpi"
+                android:layout_toLeftOf="@+id/rlNetbank"
+                android:id="@+id/rlCards"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgCards"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cards">
+                </androidx.appcompat.widget.AppCompatImageView>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="@color/orange"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_below="@+id/imgCards"
+                    android:text="@string/debit_credit_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_alignParentRight="true"
+                android:id="@+id/rlNetbank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgNetBank"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/netbanking">
+                </androidx.appcompat.widget.AppCompatImageView>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="@color/orange"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_below="@+id/imgNetBank"
+                    android:text="@string/net_banking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
+            </RelativeLayout>
+        </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_below="@+id/rlPaymentHeader"
+        android:layout_above="@+id/rlPaymentButton"
+        android:id="@+id/RLcontainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/fragment_payment_upi" android:id="@+id/paymentUPI" android:visibility="gone"></include>
+        <include layout="@layout/fragment_payment_cards" android:id="@+id/paymentCard" android:visibility="gone"></include>
+        <include layout="@layout/fragment_payment_netbanking" android:id="@+id/paymentNetBank" android:visibility="gone"></include>
+
+    </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlPaymentButton"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:background="@color/colorPrimary"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50">
+            <LinearLayout
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="@color/white"
+                    android:text="R"
+                    android:id="@+id/txtSign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:text="67"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txtAmount">
+
+                </androidx.appcompat.widget.AppCompatTextView>
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textColor="@color/white"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtPayNow"
+                android:text="@string/pay_now">
+
+            </androidx.appcompat.widget.AppCompatTextView>
+
+
+        </RelativeLayout>
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

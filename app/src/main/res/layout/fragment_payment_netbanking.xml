@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:padding="@dimen/dp_10"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints" >
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="@string/net_banking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/dark_grey">
+
+                </androidx.appcompat.widget.AppCompatTextView>
+                <LinearLayout
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:scaleType="fitXY"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:id="@+id/iconSBI"
+                            android:src="@drawable/sbi"
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30">
+
+                        </androidx.appcompat.widget.AppCompatImageView>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:visibility="invisible"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/iconSBI"
+                            android:text="test"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                        </androidx.appcompat.widget.AppCompatTextView>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:id="@+id/iconHDFC"
+                            android:src="@drawable/hdfc"
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30">
+
+                        </androidx.appcompat.widget.AppCompatImageView>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:visibility="invisible"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/iconHDFC"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                        </androidx.appcompat.widget.AppCompatTextView>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:id="@+id/iconBB"
+                            android:src="@drawable/bb"
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30">
+
+                        </androidx.appcompat.widget.AppCompatImageView>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:visibility="invisible"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/iconBB"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                        </androidx.appcompat.widget.AppCompatTextView>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:id="@+id/iconICIC"
+                            android:src="@drawable/icici"
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30">
+
+                        </androidx.appcompat.widget.AppCompatImageView>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:visibility="invisible"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/iconICIC"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                        </androidx.appcompat.widget.AppCompatTextView>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:id="@+id/iconCANARA"
+                            android:src="@drawable/canara"
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30">
+
+                        </androidx.appcompat.widget.AppCompatImageView>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:visibility="invisible"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/iconCANARA"
+                            android:text="test"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                        </androidx.appcompat.widget.AppCompatTextView>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_centerVertical="true"
+                           android:layout_centerHorizontal="true"
+                            android:id="@+id/iconKotak"
+                            android:src="@drawable/kotak"
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30">
+
+                        </androidx.appcompat.widget.AppCompatImageView>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:visibility="invisible"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/iconKotak"
+                            android:text="test"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                        </androidx.appcompat.widget.AppCompatTextView>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/grey_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"></View>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="@string/more_banks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/dark_grey">
+
+                </androidx.appcompat.widget.AppCompatTextView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
