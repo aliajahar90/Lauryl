@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:padding="@dimen/dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dark_grey"
+            android:textStyle="bold"
+            android:text="@string/enter_card_details">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+        <androidx.appcompat.widget.AppCompatEditText
+            android:layout_marginTop="@dimen/dp_10"
+            android:padding="@dimen/dp_10"
+            android:background="@drawable/border_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_grey"
+            android:hint="@string/enter_card_details">
+
+        </androidx.appcompat.widget.AppCompatEditText>
+        <LinearLayout
+            android:layout_marginTop="@dimen/dp_10"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_marginRight="@dimen/dp_5"
+                android:padding="@dimen/dp_10"
+                android:layout_weight="1"
+                android:background="@drawable/border_box"
+                android:id="@+id/rlMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:hint="@string/month"
+                    android:textColor="@color/light_grey">
+
+                </androidx.appcompat.widget.AppCompatEditText>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginLeft="@dimen/dp_5"
+                android:padding="@dimen/dp_10"
+                android:layout_weight="1"
+                android:background="@drawable/border_box"
+                android:id="@+id/rlYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:background="@color/white"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_grey"
+                    android:hint="@string/year">
+
+                </androidx.appcompat.widget.AppCompatEditText>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="@dimen/dp_10"
+            android:padding="@dimen/dp_10"
+            android:background="@drawable/border_box"
+            android:layout_weight="1"
+            android:id="@+id/rlCVV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatEditText
+                android:background="@color/white"
+                android:layout_centerHorizontal="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_grey"
+                android:hint="@string/cvv">
+
+            </androidx.appcompat.widget.AppCompatEditText>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="@dimen/dp_10"
+            android:id="@+id/rlcheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:layout_centerHorizontal="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_grey"
+                android:hint="@string/save_card">
+
+            </androidx.appcompat.widget.AppCompatCheckBox>
+        </RelativeLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -3,12 +3,12 @@ package versatile.project.lauryl.screens
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home_screen.*
 import versatile.project.lauryl.R
 import versatile.project.lauryl.fragment.*
+import versatile.project.lauryl.payment.PaymentFragment
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
 
@@ -66,12 +66,13 @@ class HomeScreen : AppCompatActivity() {
     }
 
     private fun displayProfileFragment() {
+        bckBtn.visibility = View.VISIBLE;
         val fragment = ProfileFragment()
         loadMyFragment(fragment)
     }
 
     private fun displayPaymentFragment() {
-        val fragment = PaymentFragment()
+        val fragment = PaymentFragment.newInstance(PaymentFragment.PaymentTypeUpi)
         loadMyFragment(fragment)
     }
 

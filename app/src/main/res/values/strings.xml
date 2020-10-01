@@ -100,4 +100,17 @@
     <string name="model_awaiting_dlvry">Awaiting Delivery</string>
     <string name="model_awaiting_cmpltd">Completed</string>
     <string name="no_data">No data found</string>
+    <string name="bank_account">Bank Account</string>
+    <string name="pay_now">PAY NOW</string>
+    <string name="debit_credit_card">Debit/Credit Card</string>
+    <string name="net_banking">Net Banking</string>
+    <string name="enter_the_upi_id">Enter the UPI ID</string>
+    <string name="enter_the_upi_id_description">Enter the UPI ID description multiline</string>
+    <string name="mobile_no_or_upi_id">Mobile No or UPI ID</string>
+    <string name="enter_card_details">Enter Card Details</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="cvv">Cvv</string>
+    <string name="save_card">Save Card</string>
+    <string name="more_banks">More Banks</string>
 </resources>

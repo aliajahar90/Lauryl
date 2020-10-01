@@ -1,9 +1,10 @@
 package versatile.project.lauryl.network.api
 
 import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import okhttp3.OkHttpClient
 import versatile.project.lauryl.utils.Constants
 import java.util.concurrent.TimeUnit
 
@@ -14,13 +15,15 @@ class RetrofitObj {
 
         var retrofit: Retrofit? = null
         var versatileRetrofit: Retrofit? = null
-        private const val BASE_URL_GENERAL = "https://apistaging.versatilecommerce.co.uk/Lauryl/"
+        private const val BASE_URL_GENERAL = "http://108.129.42.62:8080/Lauryl/"
         private const val BASE_URL_VERSATILE_GENERAL = "https://apiqa.versatilecommerce.co.uk/vcApi/"
 
         fun getApiObj(): ApiServices? {
-
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(BasicAuthInterceptor(Constants.API_BASIC_AUTH_USER_NAME,Constants.API_BASIC_AUTH_PASSWORD))
+                .addInterceptor(interceptor)
                 .readTimeout(120, TimeUnit.SECONDS)
                 .writeTimeout(120, TimeUnit.SECONDS)
                 .connectTimeout(120, TimeUnit.SECONDS)
@@ -37,9 +40,11 @@ class RetrofitObj {
         }
 
         fun getVersatileApiObj(): ApiServices? {
-
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(BasicAuthInterceptor(Constants.API_BASIC_AUTH_USER_NAME_VERSATILE,Constants.API_BASIC_AUTH_PASSWORD_VERSATILE))
+                .addInterceptor(interceptor)
                 .readTimeout(120, TimeUnit.SECONDS)
                 .writeTimeout(120, TimeUnit.SECONDS)
                 .connectTimeout(120, TimeUnit.SECONDS)

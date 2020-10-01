@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+<!--        <domain includeSubdomains="true">http://108.129.42.62:8080</domain>-->
+    </base-config>
+</network-security-config>

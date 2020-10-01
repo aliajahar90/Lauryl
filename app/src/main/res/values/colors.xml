@@ -11,7 +11,9 @@
     <color name="lit_green">#39B54A</color>
     <color name="lit_pink_red">#FF5C5C</color>
     <color name="blue">#25CCF7</color>
-
+    <color name="white">#FFFFFF</color>
+    <color name="dark_grey">#FF1A1A1A</color>
+    <color name="light_grey">#FF666666</color>
     <!-- dots inactive colors -->
     <color name="dot_dark_screen1">#C2C2C2</color>
     <color name="dot_dark_screen2">#C2C2C2</color>
@@ -23,6 +25,7 @@
     <color name="dot_light_screen2">#0E0586</color>
     <color name="dot_light_screen3">#0E0586</color>
     <color name="dot_light_screen4">#0E0586</color>
+    <color name="orange">#FD4E10</color>
 
     <array name="array_dot_active">
         <item>@color/dot_light_screen1</item>
