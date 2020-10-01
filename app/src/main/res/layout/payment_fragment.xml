@@ -26,6 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
+                android:padding="@dimen/dp_5"
                 android:layout_alignParentLeft="true"
                 android:id="@+id/rlUpi"
                 android:layout_width="wrap_content"
@@ -38,6 +39,7 @@
                     android:src="@drawable/upi">
                 </androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtBankAccount"
                     android:textColor="@color/orange"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dp_15"
@@ -47,11 +49,19 @@
                     android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
             </RelativeLayout>
             <RelativeLayout
+
                 android:layout_toRightOf="@+id/rlUpi"
                 android:layout_toLeftOf="@+id/rlNetbank"
                 android:id="@+id/rlCards"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:padding="@dimen/dp_5"
+                    android:id="@+id/rlCardsChild"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgCards"
                     android:layout_centerInParent="true"
@@ -60,6 +70,7 @@
                     android:src="@drawable/cards">
                 </androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtCards"
                     android:textColor="@color/orange"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dp_15"
@@ -67,8 +78,10 @@
                     android:text="@string/debit_credit_card"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
+                </RelativeLayout>
             </RelativeLayout>
             <RelativeLayout
+                android:padding="@dimen/dp_5"
                 android:layout_alignParentRight="true"
                 android:id="@+id/rlNetbank"
                 android:layout_width="wrap_content"
@@ -81,6 +94,7 @@
                     android:src="@drawable/netbanking">
                 </androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtNetBanking"
                     android:textColor="@color/orange"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dp_15"
