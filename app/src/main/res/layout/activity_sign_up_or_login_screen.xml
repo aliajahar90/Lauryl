@@ -67,6 +67,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/login_txt"
+                            android:textSize="18sp"
                             android:gravity="center_horizontal"
                             android:layout_gravity="center"
                             android:textColor="@android:color/white"
@@ -85,6 +86,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/login_txt"
+                            android:textSize="18sp"
                             android:gravity="center_horizontal"
                             android:layout_gravity="center"
                             android:textColor="@color/orange_color"
@@ -103,6 +105,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/register_txt"
+                            android:textSize="18sp"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:textColor="@android:color/white"
@@ -120,6 +123,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/register_txt"
+                            android:textSize="18sp"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:textColor="@color/orange_color"
@@ -134,8 +138,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
-                    android:textSize="15sp"
-                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
                     android:textStyle="bold"
                     android:layout_gravity="left"
                     android:layout_marginTop="10dp"
@@ -271,8 +277,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/forgot_pswrd_txt"
                     android:textColor="@color/orange_color"
+                    android:textStyle="bold"
                     android:layout_gravity="right"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="0dp"/>
 
             </LinearLayout>
 

@@ -1,6 +1,7 @@
 package versatile.project.lauryl.screens
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,6 +22,7 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this) { instanceIdResult ->
             val newToken = instanceIdResult.token
@@ -28,11 +30,9 @@ class SplashScreen : AppCompatActivity() {
             //updateFirebaseInstanceIdInAppServer(newToken)
         }
 
-        Handler().postDelayed(object :Runnable{
-            override fun run() {
-                startActivity(Intent(this@SplashScreen, IntroScreen::class.java))
-                finish()
-            }
+        Handler().postDelayed({
+            startActivity(Intent(this@SplashScreen, IntroScreen::class.java))
+            finish()
         },6000)
         startGifView()
         

@@ -15,7 +15,7 @@
     <string name="cnf_txt">Confirm</string>
     <string name="register_hdng_txt">Please enter your information</string>
     <string name="login_also_txt">You also login with</string>
-    <string name="forgot_pswrd_txt">Forgot Password?</string>
+    <string name="forgot_pswrd_txt"><u>Forgot Password?</u></string>
     <string name="reset_pswrd_txt">Reset Password?</string>
     <string name="reset_pswrd_hdng_txt">Reset Password</string>
     <string name="skip_txt">Skip</string>
@@ -66,7 +66,7 @@
     <string name="shedule_pck_up_txt">Schedule PickUp</string>
     <string name="payment_txt">Payment</string>
     <string name="profile_txt">Profile</string>
-    <string name="plz_login_txt">Please Login</string>
+    <string name="plz_login_txt">Please login</string>
     <string name="plz_reg_txt">Please provide your details</string>
     <string name="awaiting_pckup_txt">Awaiting Pickup</string>
     <string name="awaiting_dlvry_txt">Awaiting Delivery</string>

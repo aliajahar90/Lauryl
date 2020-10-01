@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".screens.IntroScreen"
-    android:background="@drawable/schedule_pickup_bckgrng_img">
+    android:background="@drawable/intro_bg_2">
 
     <ImageView
         android:id="@+id/introImgVw"
@@ -40,6 +40,7 @@
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:textSize="14sp"
+        android:visibility="invisible"
         android:gravity="center"
         android:text="@string/schedule_pckup_sub_txt"
         android:layout_marginTop="10dp"

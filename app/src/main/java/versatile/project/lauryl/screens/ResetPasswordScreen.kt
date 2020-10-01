@@ -1,5 +1,6 @@
 package versatile.project.lauryl.screens
 
+import android.content.pm.ActivityInfo
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,6 +23,8 @@ class ResetPasswordScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password_screen)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         resetPswrdViewModel = ViewModelProvider(this).get(ResetPasswordViewModel::class.java)
 
         sendBtn.setOnClickListener {

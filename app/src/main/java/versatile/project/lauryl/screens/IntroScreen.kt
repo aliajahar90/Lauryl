@@ -21,8 +21,10 @@ import android.view.WindowManager
 import androidx.viewpager.widget.PagerAdapter
 import android.view.LayoutInflater
 import android.content.Context
+import android.content.pm.ActivityInfo
+import versatile.project.lauryl.base.BaseActivity
 
-class IntroScreen : AppCompatActivity() {
+class IntroScreen : BaseActivity() {
 
     private var prefManager: PrefManager? = null
     private lateinit var dots: Array<TextView>
@@ -32,8 +34,11 @@ class IntroScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         interoScreenViewModel = ViewModelProvider(this).get(InteroScreenViewModel::class.java)
 
+        //showLoading()
         // Checking for first time launch - before calling setContentView()
         /*prefManager = PrefManager(this)
         if (!prefManager!!.isFirstTimeLaunch()) {
