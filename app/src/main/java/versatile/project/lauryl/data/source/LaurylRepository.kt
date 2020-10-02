@@ -12,7 +12,7 @@ import versatile.project.lauryl.network.api.ApiServices
 import versatile.project.lauryl.network.api.RetrofitObj
 import versatile.project.lauryl.utils.Globals
 
-class LaurylRepository {
+open class LaurylRepository {
 
     var apiServices:ApiServices = RetrofitObj.getApiObj()!!
     var apiVersatileServices:ApiServices = RetrofitObj.getVersatileApiObj()!!
