@@ -20,7 +20,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/dp_20">
 
             <ImageView
                 android:id="@+id/bckBtn"
@@ -126,8 +126,8 @@
                 android:gravity="right|end">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/dp_15"
+                    android:layout_height="@dimen/dp_15"
                     android:scaleType="fitXY"
                     android:layout_gravity="center_vertical"
                     android:layout_alignParentRight="true"
@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/loc_chnge_hdng_txt"
                     android:singleLine="true"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:layout_marginLeft="5dp"
                     android:layout_gravity="center_vertical"
                     android:textColor="@android:color/white"/>
@@ -173,7 +173,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:labelVisibilityMode="labeled"
-        app:itemIconSize="25dp"
+        app:itemIconSize="24dp"
         app:elevation="10dp"
         app:itemTextColor="@color/bottom_navigation_item_txt_colors"
         app:itemBackground="@drawable/bottom_navigation_item_backgrnd_colors"

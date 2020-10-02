@@ -23,17 +23,17 @@
         app:tabTextAppearance="@style/MyCustomTabTextAppearance">
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/awaiting_pckup_txt" />
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/awaiting_dlvry_txt" />
 
         <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/completed_txt" />
 

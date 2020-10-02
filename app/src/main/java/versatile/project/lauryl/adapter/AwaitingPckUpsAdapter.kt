@@ -29,6 +29,10 @@ class AwaitingPckUpsAdapter(var activity: FragmentActivity?, var context: Contex
         requiredViewHolder.mainLyot.setOnClickListener {
             (activity as HomeScreen).displayOrderHstryFragment()
         }
+        requiredViewHolder.reschedule_pickup_btn.setOnClickListener {
+            (activity as HomeScreen).displayCnfPckUpFragment()
+        }
+
     }
 
     fun setNewAwaitingPckUpsList(awtngPckUpList: ArrayList<AwaitingPickUpModel>) {
@@ -45,6 +49,7 @@ class AwaitingPckUpsAdapter(var activity: FragmentActivity?, var context: Contex
         var orderIdTxt = itemView.orderIdTxt
         var ordrDteTme : TextView? = itemView.ordrDteTme
         var pckUpAdrsTxt = itemView.pckUpAdrsTxt
+        var reschedule_pickup_btn =itemView.reschedule_pickup_btn
 
         fun bindDta(awtngPckUp: AwaitingPickUpModel){
             orderIdTxt.text = "Order Id. ${awtngPckUp.orderIdVal}"

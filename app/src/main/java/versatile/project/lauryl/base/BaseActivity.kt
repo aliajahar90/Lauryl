@@ -22,6 +22,9 @@ open class BaseActivity : AppCompatActivity() {
     fun shout(message: String){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show()
     }
+    fun scream(message: String){
+        Toast.makeText(this,message, Toast.LENGTH_LONG).show()
+    }
 
     fun showLoading() {
 
