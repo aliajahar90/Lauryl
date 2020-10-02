@@ -31,9 +31,9 @@ class SplashScreen : AppCompatActivity() {
         }
 
         Handler().postDelayed({
-            startActivity(Intent(this@SplashScreen, HomeScreen::class.java))
+            startActivity(Intent(this@SplashScreen, IntroScreen::class.java))
             finish()
-        },1000)
+        },6000)
         startGifView()
         
     }
