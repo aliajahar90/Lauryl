@@ -173,7 +173,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:labelVisibilityMode="labeled"
-        app:itemIconSize="25dp"
+        app:itemIconSize="24dp"
         app:elevation="10dp"
         app:itemTextColor="@color/bottom_navigation_item_txt_colors"
         app:itemBackground="@drawable/bottom_navigation_item_backgrnd_colors"
