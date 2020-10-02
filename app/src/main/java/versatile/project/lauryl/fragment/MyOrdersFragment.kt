@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.my_orders_fragment.*
+import timber.log.Timber
 import versatile.project.lauryl.R
 import versatile.project.lauryl.adapter.AwaitingCompleteAdapter
 import versatile.project.lauryl.adapter.AwaitingDevliveryAdapter
@@ -27,11 +28,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MyOrdersFragment: Fragment() {
+class MyOrdersFragment : Fragment() {
 
-    private var awtngPckUpAdapter:AwaitingPckUpsAdapter? = null
-    private var awtngDlvryAdapter:AwaitingDevliveryAdapter? = null
-    private var awtngCmpltdAdapter:AwaitingCompleteAdapter? = null
+    private var awtngPckUpAdapter: AwaitingPckUpsAdapter? = null
+    private var awtngDlvryAdapter: AwaitingDevliveryAdapter? = null
+    private var awtngCmpltdAdapter: AwaitingCompleteAdapter? = null
     lateinit var myOrdersViewModel: MyOrdersViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +41,12 @@ class MyOrdersFragment: Fragment() {
         observeDataSources()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.my_orders_fragment,container,false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.my_orders_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,14 +55,14 @@ class MyOrdersFragment: Fragment() {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 // Handle tab select
-                when(tab!!.position){
-                    0 ->{
+                when (tab!!.position) {
+                    0 -> {
                         setUpAwaitingPckUps(myOrdersViewModel.awaitingPckUpDtaLst)
                     }
-                    1 ->{
+                    1 -> {
                         setUpAwaitingDelvrs(myOrdersViewModel.awaitingPckUpDevryDtaLst)
                     }
-                    2->{
+                    2 -> {
                         setUpAwaitingCompleted(myOrdersViewModel.awaitingPckUpCompletedDtaLst)
                     }
                 }
@@ -65,7 +70,7 @@ class MyOrdersFragment: Fragment() {
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // Handle tab reselect
-                Globals.showToastMsg(activity!!.applicationContext,"${tab!!.position} re-selected")
+                Globals.showToastMsg(activity!!.applicationContext, "${tab!!.position} re-selected")
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -75,60 +80,87 @@ class MyOrdersFragment: Fragment() {
         })
         setUpAwaitingPckUps(myOrdersViewModel.awaitingPckUpDtaLst)
         (activity as HomeScreen).selectMyOrdersDashboard()
-        if(myOrdersViewModel.awaitingPckUpDtaLst.size > 0){
+        if (myOrdersViewModel.awaitingPckUpDtaLst.size > 0) {
             setUpAwaitingPckUps(myOrdersViewModel.awaitingPckUpDtaLst)
         }
     }
 
     private fun getMyOrdersData() {
         val inputJson = JsonObject()
-        inputJson.addProperty("currentPage",0)
-        inputJson.addProperty("pageSize",100)
-        inputJson.addProperty("sort","DESC")
-        inputJson.addProperty("sortBy","createdAt")
+        inputJson.addProperty("currentPage", 0)
+        inputJson.addProperty("pageSize", 100)
+        inputJson.addProperty("sort", "DESC")
+        inputJson.addProperty("sortBy", "createdAt")
         //inputJson.addProperty("search","[]")
         val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
-        if(myApplication != null){
-            myOrdersViewModel.getMyOrders(myApplication.accessToken,inputJson)
+        if (myApplication != null) {
+            myOrdersViewModel.getMyOrders(myApplication.accessToken, inputJson)
         }
     }
 
     private fun observeDataSources() {
         myOrdersViewModel.getMyOrdersResponseToObserver().observe(this, Observer {
-            if(it != null){
+            if (it != null) {
 
-                if(it.data.totalCount > 0){
+                if (it.data.totalCount > 0) {
 
                     setUpMyOrdersData(it.data.list)
 
-                }else{
-                    Globals.showToastMsg(activity!!.applicationContext,"${resources.getString(R.string.no_orders)}")
+                } else {
+                    Globals.showToastMsg(
+                        activity!!.applicationContext,
+                        "${resources.getString(R.string.no_orders)}"
+                    )
                 }
 
-            }else{
-                Globals.showToastMsg(activity!!.applicationContext,"${resources.getString(R.string.server_error_txt)}")
+            } else {
+                Globals.showToastMsg(
+                    activity!!.applicationContext,
+                    "${resources.getString(R.string.server_error_txt)}"
+                )
             }
         })
     }
 
     private fun setUpMyOrdersData(myOrdersDtaLst: MutableList<MyOrdersDataItem>) {
-
-        for(dataItem in myOrdersDtaLst){
-            when(dataItem.orderStage){
+Timber.e("Seeting orders.")
+        for (dataItem in myOrdersDtaLst) {
+            when (dataItem.orderStage) {
 
                 getString(R.string.model_awaiting_pckup) -> {
                     val dateTimeString = getDateTimeString(dataItem.orderDateTime)
-                    myOrdersViewModel.addAwaitingPckUpDta(AwaitingPickUpModel((dataItem.orderNumber),dateTimeString,"","${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}"))
+                    myOrdersViewModel.addAwaitingPckUpDta(
+                        AwaitingPickUpModel(
+                            (dataItem.orderNumber),
+                            dateTimeString,
+                            "",
+                            "${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}"
+                        )
+                    )
                 }
 
-                getString(R.string.model_awaiting_dlvry) ->{
+                getString(R.string.model_awaiting_dlvry) -> {
                     val dateTimeString = getDateTimeString(dataItem.orderDateTime)
-                    myOrdersViewModel.addAwaitingDlvryDta(AwaitingDeliveryModel((dataItem.orderNumber),dateTimeString,"","${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}"))
+                    myOrdersViewModel.addAwaitingDlvryDta(
+                        AwaitingDeliveryModel(
+                            (dataItem.orderNumber),
+                            dateTimeString,
+                            "",
+                            "${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}"
+                        )
+                    )
                 }
 
-                getString(R.string.model_awaiting_cmpltd) ->{
+                getString(R.string.model_awaiting_cmpltd) -> {
                     val dateTimeString = getDateTimeString(dataItem.orderDateTime)
-                    myOrdersViewModel.addAwaitingPckUpCmpltdDta(AwaitingCompleteModel((dataItem.orderNumber),dateTimeString,"","${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}"))
+                    myOrdersViewModel.addAwaitingPckUpCmpltdDta(
+                        AwaitingCompleteModel(
+                            (dataItem.orderNumber),
+                            dateTimeString,
+                            "",
+                            "${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}"
+                        )
+                    )
                 }
 
             }
@@ -145,19 +177,19 @@ class MyOrdersFragment: Fragment() {
 
     private fun setUpAwaitingCompleted(awaitingPckUpCompletedDtaLst: ArrayList<AwaitingCompleteModel>) {
 
-        if(awaitingPckUpCompletedDtaLst.size == 0){
+        if (awaitingPckUpCompletedDtaLst.size == 0) {
             myOrdrsRcyclrVw.visibility = View.GONE
             noDtaTxt.visibility = View.VISIBLE
             return
-        }else{
+        } else {
             noDtaTxt.visibility = View.GONE
             myOrdrsRcyclrVw.visibility = View.VISIBLE
         }
-
-        if(awtngCmpltdAdapter == null){
-            awtngCmpltdAdapter = AwaitingCompleteAdapter(activity!!.applicationContext,awaitingPckUpCompletedDtaLst)
-            myOrdrsRcyclrVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
-        }else{
+        myOrdrsRcyclrVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
+        if (awtngCmpltdAdapter == null) {
+            awtngCmpltdAdapter =
+                AwaitingCompleteAdapter(activity!!.applicationContext, awaitingPckUpCompletedDtaLst)
+        } else {
             awtngCmpltdAdapter!!.setNewAwaitingCmpltdList(awaitingPckUpCompletedDtaLst)
         }
 
@@ -167,19 +199,19 @@ class MyOrdersFragment: Fragment() {
 
     private fun setUpAwaitingDelvrs(awaitingPckUpDevryDtaLst: ArrayList<AwaitingDeliveryModel>) {
 
-        if(awaitingPckUpDevryDtaLst.size == 0){
+        if (awaitingPckUpDevryDtaLst.size == 0) {
             myOrdrsRcyclrVw.visibility = View.GONE
             noDtaTxt.visibility = View.VISIBLE
             return
-        }else{
+        } else {
             noDtaTxt.visibility = View.GONE
             myOrdrsRcyclrVw.visibility = View.VISIBLE
         }
-
-        if(awtngDlvryAdapter == null){
-            awtngDlvryAdapter = AwaitingDevliveryAdapter(activity!!.applicationContext,awaitingPckUpDevryDtaLst)
-            myOrdrsRcyclrVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
-        }else{
+        myOrdrsRcyclrVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
+        if (awtngDlvryAdapter == null) {
+            awtngDlvryAdapter =
+                AwaitingDevliveryAdapter(activity!!.applicationContext, awaitingPckUpDevryDtaLst)
+        } else {
             awtngDlvryAdapter!!.setNewAwaitingPckUpsList(awaitingPckUpDevryDtaLst)
         }
         myOrdrsRcyclrVw.adapter = awtngDlvryAdapter!!
@@ -189,19 +221,19 @@ class MyOrdersFragment: Fragment() {
 
     private fun setUpAwaitingPckUps(awaitingPckUpDtaLst: ArrayList<AwaitingPickUpModel>) {
 
-        if(awaitingPckUpDtaLst.size == 0){
+        if (awaitingPckUpDtaLst.size == 0) {
             myOrdrsRcyclrVw.visibility = View.GONE
             noDtaTxt.visibility = View.VISIBLE
             return
-        }else{
+        } else {
             noDtaTxt.visibility = View.GONE
             myOrdrsRcyclrVw.visibility = View.VISIBLE
         }
-
-        if(awtngPckUpAdapter == null){
-            awtngPckUpAdapter = AwaitingPckUpsAdapter(activity,activity!!.applicationContext,awaitingPckUpDtaLst)
-            myOrdrsRcyclrVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
-        }else{
+        myOrdrsRcyclrVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
+        if (awtngPckUpAdapter == null) {
+            awtngPckUpAdapter =
+                AwaitingPckUpsAdapter(activity, activity!!.applicationContext, awaitingPckUpDtaLst)
+        } else {
             awtngPckUpAdapter!!.setNewAwaitingPckUpsList(awaitingPckUpDtaLst)
         }
         myOrdrsRcyclrVw.adapter = awtngPckUpAdapter!!
@@ -210,6 +242,7 @@ class MyOrdersFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Timber.e("fetching orders....")
         getMyOrdersData()
     }
 

@@ -58,8 +58,10 @@
         <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
     </style>
 
-    <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+    <style name="MyCustomTabTextAppearance" parent="Base.Widget.Design.TabLayout">
         <item name="android:maxLines">1</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textAllCaps">false</item>
         <item name="android:singleLine">true</item>
     </style>
 
