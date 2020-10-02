@@ -118,6 +118,7 @@
                 android:layout_alignParentEnd="true">
 
                 <TextView
+                    android:id="@+id/reschedule_pickup_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/blue_bckgrnd_round_corners_bckgrnd"

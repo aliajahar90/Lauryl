@@ -40,7 +40,7 @@ class SchedulePickUpFragment: Fragment() {
                     schdlePckUpBtn.visibility = View.VISIBLE
                     val schedulePickUpAdapter = SchedulePickUpAdapter(activity!!.applicationContext,it.getData().list as ArrayList<TopServicesDataItem>)
                     recyclerVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
-                    recyclerVw.adapter = schedulePickUpAdapter!!
+                    recyclerVw.adapter = schedulePickUpAdapter
                 }else{
                     progressLyot.visibility = View.GONE
                     Globals.showToastMsg(activity!!.applicationContext,"${resources.getString(R.string.no_services)}")
