@@ -160,7 +160,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:textSize="14dp"
                         android:padding="5dp"
                         android:textColor="@android:color/black"
                         android:text="@string/didnt_rcv_otp_txt"/>
@@ -170,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:textSize="14dp"
                         android:padding="5dp"
                         android:textColor="@color/orange_color"
                         android:text="@string/send_otp_again_txt"/>
