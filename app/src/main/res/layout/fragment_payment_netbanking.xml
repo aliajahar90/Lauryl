@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
-        android:padding="@dimen/dp_10"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints" >
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_marginTop="@dimen/dp_10"
                     android:text="@string/net_banking"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -26,6 +26,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <RelativeLayout
+                        android:id="@+id/rlSBIN"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -50,6 +51,7 @@
                         </androidx.appcompat.widget.AppCompatTextView>
                     </RelativeLayout>
                     <RelativeLayout
+                        android:id="@+id/rlHDFC"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -71,6 +73,7 @@
                         </androidx.appcompat.widget.AppCompatTextView>
                     </RelativeLayout>
                     <RelativeLayout
+                        android:id="@+id/rlBB"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -92,6 +95,7 @@
                         </androidx.appcompat.widget.AppCompatTextView>
                     </RelativeLayout>
                     <RelativeLayout
+                        android:id="@+id/rlICIC"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -113,6 +117,7 @@
                         </androidx.appcompat.widget.AppCompatTextView>
                     </RelativeLayout>
                     <RelativeLayout
+                        android:id="@+id/rlCANARA"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -135,6 +140,7 @@
                         </androidx.appcompat.widget.AppCompatTextView>
                     </RelativeLayout>
                     <RelativeLayout
+                        android:id="@+id/rlKotak"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -174,6 +180,7 @@
 
                 </androidx.appcompat.widget.AppCompatTextView>
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/listBanks"
                     android:layout_marginTop="@dimen/dp_10"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">

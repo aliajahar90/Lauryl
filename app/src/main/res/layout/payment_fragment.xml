@@ -15,17 +15,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <RelativeLayout
+            android:visibility="visible"
+            android:id="@+id/rlOptionPage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/rlPaymentHeader"
-            android:padding="@dimen/dp_15"
+            android:padding="@dimen/dp_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
+                android:padding="@dimen/dp_5"
                 android:layout_alignParentLeft="true"
                 android:id="@+id/rlUpi"
                 android:layout_width="wrap_content"
@@ -38,6 +44,7 @@
                     android:src="@drawable/upi">
                 </androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtBankAccount"
                     android:textColor="@color/orange"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dp_15"
@@ -47,11 +54,19 @@
                     android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
             </RelativeLayout>
             <RelativeLayout
+
                 android:layout_toRightOf="@+id/rlUpi"
                 android:layout_toLeftOf="@+id/rlNetbank"
                 android:id="@+id/rlCards"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:padding="@dimen/dp_5"
+                    android:id="@+id/rlCardsChild"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgCards"
                     android:layout_centerInParent="true"
@@ -60,6 +75,7 @@
                     android:src="@drawable/cards">
                 </androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtCards"
                     android:textColor="@color/orange"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dp_15"
@@ -67,8 +83,10 @@
                     android:text="@string/debit_credit_card"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
+                </RelativeLayout>
             </RelativeLayout>
             <RelativeLayout
+                android:padding="@dimen/dp_5"
                 android:layout_alignParentRight="true"
                 android:id="@+id/rlNetbank"
                 android:layout_width="wrap_content"
@@ -81,6 +99,7 @@
                     android:src="@drawable/netbanking">
                 </androidx.appcompat.widget.AppCompatImageView>
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtNetBanking"
                     android:textColor="@color/orange"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/dp_15"
@@ -111,7 +130,7 @@
             android:background="@color/colorPrimary"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50">
+            android:layout_height="@dimen/dp_40">
             <LinearLayout
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
@@ -120,7 +139,7 @@
                 android:layout_height="wrap_content">
                 <androidx.appcompat.widget.AppCompatTextView
                     android:textColor="@color/white"
-                    android:text="R"
+                    android:text="Unit"
                     android:id="@+id/txtSign"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
@@ -149,6 +168,12 @@
 
 
         </RelativeLayout>
-    </RelativeLayout>
+        </RelativeLayout>
+        <WebView
+            android:id="@+id/wvCheckout"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></WebView>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
