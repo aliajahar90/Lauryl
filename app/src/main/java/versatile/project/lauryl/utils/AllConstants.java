@@ -24,6 +24,7 @@ public class AllConstants {
 
         public static class Errors {
             public static final String ERROR_VPA_VALIDATION = "Unable to validate vpa /n Please try Again";
+            public static final String ERROR_LOAD_PAYMENT = "Unable to load payment";
         }
     }
 

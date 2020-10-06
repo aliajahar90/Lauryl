@@ -1,11 +1,16 @@
 package versatile.project.lauryl.payment;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,16 +28,25 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.razorpay.Razorpay;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayDeque;
 import java.util.List;
+import java.util.Queue;
+import java.util.logging.Logger;
 
 import versatile.project.lauryl.R;
+import versatile.project.lauryl.base.BaseActivity;
 import versatile.project.lauryl.base.BaseBinding;
+import versatile.project.lauryl.base.DeferredFragmentTransaction;
+import versatile.project.lauryl.base.HomeNavigationController;
 import versatile.project.lauryl.databinding.PaymentFragmentBinding;
 import versatile.project.lauryl.payment.adapter.NetBankAdapter;
 import versatile.project.lauryl.payment.data.NetBanking;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
+import versatile.project.lauryl.payment.util.CardFormattingTextWatcher;
+import versatile.project.lauryl.payment.util.PaymentDefferedFragmentTransaction;
 import versatile.project.lauryl.payment.viewModel.PaymentViewModel;
 import versatile.project.lauryl.utils.AllConstants;
 
@@ -46,6 +60,9 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     private Razorpay razorpay;
     List<NetBanking> netBankingList;
     public static int activePaymentType = PaymentTypeUpi;
+    private NetBanking activeBankForCheckout = null;
+    public static final String TAG = PaymentFragment.class.getName();
+
 
     public static PaymentFragment newInstance(int viewType) {
         PaymentFragment paymentFragment = new PaymentFragment();
@@ -69,8 +86,10 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         paymentFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.payment_fragment, container, false);
         displayView(paymentBaseShareData.getViewType());
-        paymentFragmentBinding.setViewmodel(paymentViewModel);
+        initRazorpay();
         createWebView();
+        paymentFragmentBinding.setViewmodel(paymentViewModel);
+        paymentViewModel.setRazorpay(razorpay);
         return paymentFragmentBinding.getRoot();
     }
 
@@ -107,10 +126,28 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        showLoading();
         paymentViewModel.getValidPaymentMethods();
         controlViewVisibility();
         onClicks();
-
+        paymentViewModel.getPaymentMethodError().observe(this, s -> {
+            hideLoading();
+            getMyActivity().shout(s);
+        });
+        paymentViewModel.getPaymentSuccess().observe(this, paymentSuccess -> {
+            hideLoading();
+            HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment();
+        });
+        paymentViewModel.getPaymentError().observe(this, paymentError -> {
+            hideLoading();
+            if (paymentError.getCode() == -1) {
+                Log.d("Payment", "checksum error");
+                HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment();
+            } else {
+                Log.d("Payment", "payment Erro");
+                HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment();
+            }
+        });
 
     }
 
@@ -163,17 +200,16 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         paymentViewModel.getNetBankingList().observe(this, netBankings -> {
             netBankingList = netBankings;
         });
-        paymentViewModel.onSwitchPaymentView().observe(this, integer -> {
-            switch (integer) {
-                case AllConstants.Payment.PaymentViewOptions:
-                    paymentFragmentBinding.rlOptionPage.setVisibility(View.VISIBLE);
-                    paymentFragmentBinding.wvCheckout.setVisibility(View.GONE);
-                    break;
-                case AllConstants.Payment.PaymentViewCheckout:
-                    paymentFragmentBinding.wvCheckout.setVisibility(View.VISIBLE);
-                    paymentFragmentBinding.rlOptionPage.setVisibility(View.GONE);
-                    break;
-
+        paymentViewModel.onSwitchPaymentViewWebCheckout().observe(this, aBoolean -> {
+            if(aBoolean){
+                paymentFragmentBinding.wvCheckout.setVisibility(View.VISIBLE);
+                paymentFragmentBinding.rlOptionPage.setVisibility(View.GONE);
+            }
+        });
+        paymentViewModel.onSwitchPaymentViewDefault().observe(this, aBoolean -> {
+            if(aBoolean){
+                paymentFragmentBinding.rlOptionPage.setVisibility(View.VISIBLE);
+                paymentFragmentBinding.wvCheckout.setVisibility(View.GONE);
             }
         });
     }
@@ -194,15 +230,126 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                     processUpiService();
                     break;
                 case PaymentTypeCards:
+                    processCardPaymentService();
+                    break;
                 case PaymentTypeNetBanking:
+                    processNetBankPaymentService();
                     break;
             }
         });
+        paymentFragmentBinding.paymentCard.inputCardNumber.addTextChangedListener(new CardFormattingTextWatcher(paymentFragmentBinding.paymentCard.inputCardNumber, new CardFormattingTextWatcher.CardType() {
+            @Override
+            public void setCardType(String s) {
+                String cardType = "";
+                if (paymentFragmentBinding.paymentCard.txtCardType.toString().length() == 0) {
+                    {
+                        cardType = razorpay.getCardNetwork(s);
+                    }
+                    paymentFragmentBinding.paymentCard.txtCardType.setText(cardType);
+                }
+            }
+
+            @Override
+            public void resetCardType() {
+                paymentFragmentBinding.paymentCard.txtCardType.setText("");
+            }
+        }));
+        hotBankOnclick();
+
+    }
+
+    private void hotBankOnclick() {
+        paymentFragmentBinding.paymentNetBank.rlSBIN.setOnClickListener(view -> {
+            switchToSelectedBackground(paymentFragmentBinding.paymentNetBank.rlSBIN);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlHDFC);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlBB);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlICIC);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlCANARA);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlKotak);
+            NetBanking netBanking = new NetBanking();
+            netBanking.setBankCode(AllConstants.Payment.HotBanks.SBIN);
+            netBanking.setBankName("SBI");
+            activeBankForCheckout = netBanking;
+
+        });
+        paymentFragmentBinding.paymentNetBank.rlHDFC.setOnClickListener(view -> {
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlSBIN);
+            switchToSelectedBackground(paymentFragmentBinding.paymentNetBank.rlHDFC);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlBB);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlICIC);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlCANARA);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlKotak);
+            NetBanking netBanking = new NetBanking();
+            netBanking.setBankCode(AllConstants.Payment.HotBanks.HDFC);
+            netBanking.setBankName("HDFC");
+            activeBankForCheckout = netBanking;
+
+        });
+        paymentFragmentBinding.paymentNetBank.rlBB.setOnClickListener(view -> {
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlSBIN);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlHDFC);
+            switchToSelectedBackground(paymentFragmentBinding.paymentNetBank.rlBB);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlICIC);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlCANARA);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlKotak);
+            NetBanking netBanking = new NetBanking();
+            netBanking.setBankCode(AllConstants.Payment.HotBanks.BARB_R);
+            netBanking.setBankName("Bank of Baroda");
+            activeBankForCheckout = netBanking;
+
+        });
+        paymentFragmentBinding.paymentNetBank.rlICIC.setOnClickListener(view -> {
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlSBIN);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlHDFC);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlBB);
+            switchToSelectedBackground(paymentFragmentBinding.paymentNetBank.rlICIC);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlCANARA);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlKotak);
+            NetBanking netBanking = new NetBanking();
+            netBanking.setBankCode(AllConstants.Payment.HotBanks.ICIC);
+            netBanking.setBankName("ICICI");
+            activeBankForCheckout = netBanking;
+
+        });
+        paymentFragmentBinding.paymentNetBank.rlCANARA.setOnClickListener(view -> {
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlSBIN);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlHDFC);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlBB);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlICIC);
+            switchToSelectedBackground(paymentFragmentBinding.paymentNetBank.rlCANARA);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlKotak);
+            NetBanking netBanking = new NetBanking();
+            netBanking.setBankCode(AllConstants.Payment.HotBanks.CNRB);
+            netBanking.setBankName("Canara Bank");
+            activeBankForCheckout = netBanking;
+
+        });
+        paymentFragmentBinding.paymentNetBank.rlKotak.setOnClickListener(view -> {
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlSBIN);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlHDFC);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlBB);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlICIC);
+            switchToDefaultdBackground(paymentFragmentBinding.paymentNetBank.rlCANARA);
+            switchToSelectedBackground(paymentFragmentBinding.paymentNetBank.rlKotak);
+            NetBanking netBanking = new NetBanking();
+            netBanking.setBankCode(AllConstants.Payment.HotBanks.KKBK);
+            netBanking.setBankName("Kotak");
+            activeBankForCheckout = netBanking;
+
+        });
+
+    }
+
+    void switchToSelectedBackground(View view) {
+        view.setBackgroundResource(R.drawable.circle_primary_stroke_bckgrnd);
+    }
+
+    void switchToDefaultdBackground(View view) {
+        view.setBackgroundColor(Color.TRANSPARENT);
     }
 
     @Override
     protected void initializeViewModel() {
-        initRazorpay();
         paymentViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
@@ -271,13 +418,16 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         paymentFragmentBinding.paymentNetBank.listBanks.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         paymentFragmentBinding.paymentNetBank.listBanks.setLayoutManager(layoutManager);
-        NetBankAdapter mAdapter = new NetBankAdapter(netBankingList);
+        NetBankAdapter mAdapter = new NetBankAdapter(netBankingList, netBanking -> {
+            activeBankForCheckout = netBanking;
+        });
         paymentFragmentBinding.paymentNetBank.listBanks.setItemAnimator(new DefaultItemAnimator());
         paymentFragmentBinding.paymentNetBank.listBanks.setAdapter(mAdapter);
         // mAdapter.notifyDataSetChanged();
     }
 
     private void processUpiService() {
+        showLoading();
         paymentViewModel.validateVPA(paymentFragmentBinding.paymentUPI.inputUPI.getText().toString());
         setVpaValidationObserver();
     }
@@ -292,7 +442,6 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                     payload.put("email", "customer@name.com");
                     payload.put("order_id", "order_FkB8IeJE6PpkDe");
                     payload.put("method", "upi");
-                    payload.put("payment_capture", "1");
                     payload.put("vpa", paymentFragmentBinding.paymentUPI.inputUPI.getText().toString());
                     paymentViewModel.processPayment(payload);
                 } catch (Exception e) {
@@ -303,7 +452,119 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             }
         });
         paymentViewModel.onVpaValidationFailed().observe(this, errorMsg -> {
+            hideLoading();
             Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private void processCardPaymentService() {
+        showLoading();
+        paymentViewModel.validateCard(paymentFragmentBinding.paymentCard.inputCardNumber.getText().toString(),
+                paymentFragmentBinding.paymentCard.inputName.getText().toString(),
+                paymentFragmentBinding.paymentCard.inputMonth.getText().toString(),
+                paymentFragmentBinding.paymentCard.inputYear.getText().toString(),
+                paymentFragmentBinding.paymentCard.inputCvv.getText().toString());
+        setCardValidationObserver();
+    }
+
+    private void setCardValidationObserver() {
+        paymentViewModel.getCardPaymentValidationSuccess().observe(this, aBoolean -> {
+            if (aBoolean) {
+                try {
+                    JSONObject data = new JSONObject("{currency: 'INR'}");
+                    data.put("amount", 1 * 100);
+                    data.put("email", "gaurav.kumar@example.com");
+                    data.put("contact", "9123456789");
+                    data.put("method", "card");
+                    data.put("card[name]", paymentFragmentBinding.paymentCard.inputName.getText().toString());
+                    data.put("card[number]", paymentFragmentBinding.paymentCard.inputCardNumber.getText().toString());
+                    data.put("card[expiry_month]", paymentFragmentBinding.paymentCard.inputMonth.getText().toString());
+                    data.put("card[expiry_year]", paymentFragmentBinding.paymentCard.inputYear.getText().toString());
+                    data.put("card[cvv]", paymentFragmentBinding.paymentCard.inputCvv.getText().toString());
+                    paymentViewModel.processPayment(data);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        paymentViewModel.getCardPaymentValidationError().observe(this, msg -> {
+            hideLoading();
+            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void processNetBankPaymentService() {
+        if (activeBankForCheckout != null) {
+            showLoading();
+            try {
+                JSONObject data = new JSONObject("{currency: 'INR'}");
+                data.put("amount", 1 * 100);
+                data.put("email", "gaurav.kumar@example.com");
+                data.put("contact", "9123456789");
+                data.put("method", "netbanking");
+                data.put("bank", activeBankForCheckout.getBankCode());
+                paymentViewModel.processPayment(data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void showLoading() {
+        if (getActivity() instanceof BaseActivity)
+            ((BaseActivity) getActivity()).showLoading();
+    }
+
+    private void hideLoading() {
+        ((BaseActivity) getActivity()).hideLoading();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        while (!HomeNavigationController.getInstance(getActivity()).getDeferredFragmentTransactions().isEmpty()) {
+            HomeNavigationController.getInstance(getActivity()).getDeferredFragmentTransactions().remove().commit();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (paymentFragmentBinding.wvCheckout.getVisibility() == View.VISIBLE) {
+            PaymentDefferedFragmentTransaction defferedFragmentTransaction = new PaymentDefferedFragmentTransaction() {
+                @Override
+                public void commit() {
+                    HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment();
+                }
+            };
+            PaymentBaseShareData.PaymentError paymentError = new PaymentBaseShareData.PaymentError();
+            paymentError.setCode(-1);
+            paymentError.setDescription("User left the payment");
+            paymentError.setPaymentData(null);
+            defferedFragmentTransaction.setPaymentError(paymentError);
+            Queue<DeferredFragmentTransaction> paymentDefferedFragmentTransactionQueue=new ArrayDeque<>();
+            paymentDefferedFragmentTransactionQueue.add(defferedFragmentTransaction);
+           HomeNavigationController.getInstance(getActivity()).setDeferredFragmentTransactions(paymentDefferedFragmentTransactionQueue);
+        }
+        Log.d("Payment","OnDestroyView");
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d("Payment","OnDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        Log.d("Payment","OnDestroyDetach");
+        super.onDetach();
     }
 }

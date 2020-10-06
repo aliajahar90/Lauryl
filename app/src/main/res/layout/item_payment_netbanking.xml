@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
         <androidx.appcompat.widget.AppCompatImageView
+            android:background="@color/white"
             android:layout_centerVertical="true"
             android:id="@+id/icon_bank"
             android:src="@drawable/netbanking"
@@ -18,18 +19,25 @@
             android:layout_height="@dimen/dp_30">
 
         </androidx.appcompat.widget.AppCompatImageView>
-        <androidx.appcompat.widget.AppCompatTextView
-            android:gravity="center_vertical"
+        <RelativeLayout
+            android:id="@+id/rlBankName"
             android:background="@drawable/item_netbank_box"
-            android:textColor="@color/dark_grey"
-            android:id="@+id/txt_bankName"
             android:layout_marginLeft="@dimen/dp_10"
-            android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/icon_bank"
+            android:layout_centerVertical="true"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_30">
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:gravity="center_vertical"
+                android:textColor="@color/dark_grey"
+                android:id="@+id/txt_bankName"
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_30">
 
-        </androidx.appcompat.widget.AppCompatTextView>
+            </androidx.appcompat.widget.AppCompatTextView>
+        </RelativeLayout>
+
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
