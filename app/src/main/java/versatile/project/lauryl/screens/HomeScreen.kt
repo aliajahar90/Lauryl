@@ -8,13 +8,15 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home_screen.*
 import versatile.project.lauryl.R
+import versatile.project.lauryl.base.BaseActivity
+import versatile.project.lauryl.base.HomeNavigationController
 import versatile.project.lauryl.fragment.*
 import versatile.project.lauryl.payment.PaymentFragment
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
 
 class HomeScreen : AppCompatActivity() {
-
+    lateinit var homeNavigationController: HomeNavigationController;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
@@ -23,7 +25,8 @@ class HomeScreen : AppCompatActivity() {
         Constants.CURRENT_AUTH_TOKEN = Globals.getStringFromPreferences(this, Constants.AUTH_TOKEN)
         botmNavVw.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         displayHomeFragment()
-        bckBtn.setOnClickListener {
+        homeNavigationController= HomeNavigationController.getInstance(this)
+                bckBtn.setOnClickListener {
 
             if (supportFragmentManager.backStackEntryCount > 1){
                 supportFragmentManager.popBackStack()
@@ -75,8 +78,7 @@ class HomeScreen : AppCompatActivity() {
     }
 
     private fun displayPaymentFragment() {
-        val fragment = PaymentFragment.newInstance(PaymentFragment.PaymentTypeUpi)
-        loadMyFragment(fragment)
+       homeNavigationController.addPaymentFragment()
     }
 
     fun displaySPFragment() {

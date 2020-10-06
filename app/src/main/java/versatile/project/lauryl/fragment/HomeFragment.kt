@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.home_fragment.*
 import kotlinx.coroutines.GlobalScope
 import versatile.project.lauryl.R
 import versatile.project.lauryl.application.MyApplication
+import versatile.project.lauryl.base.HomeNavigationController
 import versatile.project.lauryl.model.TopServicesResponse
 import versatile.project.lauryl.screens.HomeScreen
 import versatile.project.lauryl.utils.Constants
@@ -21,7 +22,6 @@ import versatile.project.lauryl.view.model.HomeFragmentViewModel
 import versatile.project.lauryl.view.model.OtpVerificationViewModel
 
 class HomeFragment: Fragment() {
-
     lateinit var homeFragmentViewModel: HomeFragmentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

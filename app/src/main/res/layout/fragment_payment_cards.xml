@@ -18,14 +18,49 @@
             android:text="@string/enter_card_details">
 
         </androidx.appcompat.widget.AppCompatTextView>
+        <RelativeLayout
+            android:background="@drawable/border_box"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatEditText
+                android:maxLength="20"
+                android:layout_toLeftOf="@+id/txtCardType"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:id="@+id/inputCardNumber"
+                android:padding="@dimen/dp_10"
+                android:background="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_grey"
+                android:hint="@string/enter_card_number">
+            </androidx.appcompat.widget.AppCompatEditText>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:paddingRight="@dimen/dp_10"
+                android:textColor="@color/dark_grey"
+                android:textStyle="bold"
+                android:layout_centerVertical="true"
+                android:id="@+id/txtCardType"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </androidx.appcompat.widget.AppCompatTextView>
+        </RelativeLayout>
         <androidx.appcompat.widget.AppCompatEditText
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName"
+            android:id="@+id/inputName"
             android:layout_marginTop="@dimen/dp_10"
             android:padding="@dimen/dp_10"
             android:background="@drawable/border_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/light_grey"
-            android:hint="@string/enter_card_details">
+            android:hint="@string/name_on_card">
 
         </androidx.appcompat.widget.AppCompatEditText>
         <LinearLayout
@@ -43,6 +78,11 @@
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatEditText
+                    android:singleLine="true"
+                    android:maxLength="2"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:id="@+id/inputMonth"
                     android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -61,6 +101,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.appcompat.widget.AppCompatEditText
+                    android:maxLength="4"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:id="@+id/inputYear"
                     android:background="@color/white"
                     android:layout_centerHorizontal="true"
                     android:layout_width="match_parent"
@@ -81,6 +126,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/inputCvv"
+                android:imeOptions="actionDone"
+                android:maxLength="3"
+                android:singleLine="true"
+                android:inputType="number"
                 android:background="@color/white"
                 android:layout_centerHorizontal="true"
                 android:layout_width="match_parent"
@@ -97,6 +147,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkSaveCard"
                 android:layout_centerHorizontal="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

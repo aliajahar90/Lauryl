@@ -5,9 +5,14 @@ import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.JsonObject;
+import com.razorpay.Order;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultWithDataListener;
 import com.razorpay.Razorpay;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
+import com.razorpay.Utils;
 import com.razorpay.ValidateVpaCallback;
 
 import org.json.JSONException;
@@ -18,8 +23,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import versatile.project.lauryl.base.asyncjob.TaskRunner;
 import versatile.project.lauryl.data.source.LaurylRepository;
+import versatile.project.lauryl.payment.backgroundjob.PaymentBackgroundTask;
 import versatile.project.lauryl.payment.data.NetBanking;
+import versatile.project.lauryl.payment.data.PaymentBaseShareData;
+import versatile.project.lauryl.payment.viewModel.Signature;
 import versatile.project.lauryl.utils.AllConstants;
 
 import static versatile.project.lauryl.utils.AllConstants.Payment.HotBanks.BARB_R;
@@ -45,7 +54,15 @@ public class PaymentRepository extends LaurylRepository {
     private MutableLiveData<Boolean> isValidVpa = new MutableLiveData<>();
     private MutableLiveData<String> errorValidateVPA = new MutableLiveData<>();
     private MutableLiveData<List<NetBanking>> netBankList = new MutableLiveData<>();
-    private MutableLiveData<Integer> onSwitchView = new MutableLiveData<>();
+    private MutableLiveData<Boolean> onSwitchToWebCheckout = new MutableLiveData<>();
+    private MutableLiveData<Boolean> onSwitchDefaultView= new MutableLiveData<>();
+    private MutableLiveData<String> paymentMethodLoadError = new MutableLiveData<>();
+    private MutableLiveData<PaymentBaseShareData.PaymentSuccess> paymentSuccessMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<PaymentBaseShareData.PaymentError> paymentErrorMutableLiveData = new MutableLiveData<>();
+
+    public void setRazorpay(Razorpay razorpay) {
+        this.razorpay = razorpay;
+    }
 
     private PaymentRepository(Razorpay razorpay) {
         this.razorpay = razorpay;
@@ -65,11 +82,14 @@ public class PaymentRepository extends LaurylRepository {
             public void onPaymentMethodsReceived(String result) {
                 Log.d("Result", "" + result);
                 inflateLists(result);
+                onSwitchDefaultView.setValue(true);
             }
 
             @Override
             public void onError(String error) {
                 Log.d("Get Payment error", error);
+                paymentMethodLoadError.setValue(error);
+                onSwitchDefaultView.setValue(true);
             }
         });
     }
@@ -102,17 +122,20 @@ public class PaymentRepository extends LaurylRepository {
                 }
                 NetBanking netBanking = new NetBanking();
                 netBanking.setBankCode(key);
+                netBanking.setBankLogo(getBankLogoUrls(key));
                 try {
                     netBanking.setBankName(banksListJSON.getString(key));
                     netBankingList.add(netBanking);
                     netBankList.setValue(netBankingList);
                 } catch (JSONException e) {
                     Log.d("Reading Banks List", "" + e.getMessage());
+                    paymentMethodLoadError.setValue(AllConstants.Payment.Errors.ERROR_LOAD_PAYMENT);
                 }
             }
 
         } catch (Exception e) {
             Log.e("Parsing Result", "" + e.getMessage());
+            paymentMethodLoadError.setValue(AllConstants.Payment.Errors.ERROR_LOAD_PAYMENT);
         }
     }
 
@@ -138,6 +161,9 @@ public class PaymentRepository extends LaurylRepository {
                 break;
             default:
         }
+    }
+    String getBankLogoUrls(String bankCode){
+        return razorpay.getBankLogoUrl(bankCode);
     }
 
     public MutableLiveData<Boolean> getIsCardSupported() {
@@ -204,41 +230,128 @@ public class PaymentRepository extends LaurylRepository {
     }
 
     public void processPayment(JSONObject payload) {
-        razorpay.validateFields(payload, new Razorpay.ValidationListener() {
-            @Override
-            public void onValidationSuccess() {
-                try {
-                    Log.d("Payment","validation success");
-                    onSwitchView.setValue(AllConstants.Payment.PaymentViewCheckout);
-                    razorpay.submit(payload, new PaymentResultWithDataListener() {
-                        @Override
-                        public void onPaymentSuccess(String razorpayPaymentId, PaymentData paymentData) {
-                            Log.d("Payment","success"+razorpayPaymentId);
-                            onSwitchView.setValue(AllConstants.Payment.PaymentViewOptions);
-                        }
+        createOrderInServer(payload);
 
-                        @Override
-                        public void onPaymentError(int i, String description, PaymentData paymentData) {
-                            onSwitchView.setValue(AllConstants.Payment.PaymentViewOptions);
-                            Log.d("Payment","failed"+description);
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e("com.example", "Exception: ", e);
-                }
-            }
-
-            @Override
-            public void onValidationError(Map<String, String> error) {
-                onSwitchView.setValue(AllConstants.Payment.PaymentViewOptions);
-                Log.d("Payment","validation failed");
-                // Log.d("com.example", "Validation failed: " + error.get("field") + " " + error.get("description"));
-                // Toast.makeText(PaymentOptions.this, "Validation: " + error.get("field") + " " + error.get("description"), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
-    public MutableLiveData<Integer> getOnSwitchView() {
-        return onSwitchView;
+    public MutableLiveData<Boolean> getOnSwitchToWebCheckout() {
+        return onSwitchToWebCheckout;
+    }
+
+    public MutableLiveData<Boolean> getOnSwitchDefaultView() {
+        return onSwitchDefaultView;
+    }
+
+    public void createOrderInServer(JSONObject payload) {
+        try {
+            RazorpayClient razorpayClient = new RazorpayClient("rzp_live_uCuH3yqyHZjoYj", "V1bFCk7Jurwyjm74cCO8KHHP");
+            TaskRunner paymentTaskRunner = new TaskRunner();
+            paymentTaskRunner.executeAsync(new PaymentBackgroundTask(new PaymentBackgroundTask.iOnDataFetched() {
+                @Override
+                public void notifyPreProcess() {
+
+                }
+
+                @Override
+                public void onBackgroundResult(Object result) {
+                    try {
+                        payload.put("order_id", result instanceof Order ? ((Order) result).get("id") : "");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    razorpay.validateFields(payload, new Razorpay.ValidationListener() {
+                        @Override
+                        public void onValidationSuccess() {
+                            try {
+                                Log.d("Payment", "validation success");
+                                onSwitchToWebCheckout.setValue(true);
+                                razorpay.submit(payload, new PaymentResultWithDataListener() {
+                                    @Override
+                                    public void onPaymentSuccess(String razorpayPaymentId, PaymentData paymentData) {
+                                        Log.d("Payment", "success" + razorpayPaymentId);
+                                        onSwitchDefaultView.setValue(true);
+                                        verifyPostPaymentSignature(result instanceof Order ? ((Order) result).get("id"):"",paymentData,"V1bFCk7Jurwyjm74cCO8KHHP",razorpayPaymentId);
+                                    }
+
+                                    @Override
+                                    public void onPaymentError(int i, String description, PaymentData paymentData) {
+                                        onSwitchDefaultView.setValue(true);
+                                        PaymentBaseShareData.PaymentError paymentError=new PaymentBaseShareData.PaymentError();
+                                        paymentError.setCode(i);
+                                        paymentError.setDescription(description);
+                                        paymentError.setPaymentData(paymentData);
+                                        paymentErrorMutableLiveData.setValue(paymentError);
+                                        Log.d("Payment", "failed" + description);
+                                    }
+                                });
+                            } catch (Exception e) {
+                                onSwitchDefaultView.setValue(true);
+                                Log.e("com.example", "Exception: ", e);
+                            }
+                        }
+
+                        @Override
+                        public void onValidationError(Map<String, String> error) {
+                            onSwitchDefaultView.setValue(true);
+                            Log.d("Payment", "validation failed");
+                            // Log.d("com.example", "Validation failed: " + error.get("field") + " " + error.get("description"));
+                            // Toast.makeText(PaymentOptions.this, "Validation: " + error.get("field") + " " + error.get("description"), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void notifyPostProcess() {
+
+                }
+
+                @Override
+                public Object notifyDoBackground() {
+                    JSONObject options = new JSONObject();
+                    try {
+                        options.put("amount", 100);
+                        options.put("currency", "INR");
+                        Order order = razorpayClient.Orders.create(options);
+                        return order;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (RazorpayException e) {
+                        e.printStackTrace();
+                    }
+
+                    return null;
+                }
+            }));
+        } catch (RazorpayException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void verifyPostPaymentSignature(String orderId,PaymentData paymentData, String secretKey,String razorPayPaymentId){
+       // Utils.verifyPaymentSignature()
+        if( Signature.verifyPaymentSignature(orderId,paymentData.getPaymentId(),secretKey,paymentData.getSignature())){
+                PaymentBaseShareData.PaymentSuccess paymentSuccess=new PaymentBaseShareData.PaymentSuccess();
+                paymentSuccess.setPaymentTransactionId(razorPayPaymentId);
+                paymentSuccess.setPaymentData(paymentData);
+                paymentSuccessMutableLiveData.setValue(paymentSuccess);
+        }else {
+            PaymentBaseShareData.PaymentError paymentError=new PaymentBaseShareData.PaymentError();
+            paymentError.setCode(-1);
+            paymentError.setDescription(null);
+            paymentError.setPaymentData(paymentData);
+            paymentErrorMutableLiveData.setValue(paymentError);
+        }
+    }
+
+    public MutableLiveData<String> getPaymentMethodLoadError() {
+        return paymentMethodLoadError;
+    }
+
+    public MutableLiveData<PaymentBaseShareData.PaymentSuccess> getPaymentSuccessMutableLiveData() {
+        return paymentSuccessMutableLiveData;
+    }
+
+    public MutableLiveData<PaymentBaseShareData.PaymentError> getPaymentErrorMutableLiveData() {
+        return paymentErrorMutableLiveData;
     }
 }
