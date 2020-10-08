@@ -123,8 +123,8 @@ class HomeScreen : AppCompatActivity() {
         homeNameTxt.text = getString(R.string.home_hdng_txt)
         homeNameTxt.visibility = View.VISIBLE
         homeNameMdlVwTxt.visibility = View.GONE
-        filterTxt.visibility = View.VISIBLE
         bckBtn.visibility = View.GONE
+        filterTxt.visibility = View.GONE
         botmNavVw.menu.findItem(R.id.homeId).isChecked = true
     }
 
