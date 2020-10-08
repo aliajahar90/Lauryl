@@ -36,8 +36,8 @@
     <string name="didnt_rcv_otp_txt">Didn\'t receive OTP?</string>
     <string name="send_otp_again_txt">Send Again?</string>
     <string name="code_verify_txt">Verification Code</string>
-    <string name="mbl_valid_num_txt">Mobile Number is Mandatory</string>
-    <string name="mbl_valid_pswrd_txt">Password is Mandatory</string>
+    <string name="mbl_valid_num_txt">Please Enter Your Mobile Number</string>
+    <string name="mbl_valid_pswrd_txt">Please Enter Your Password</string>
     <string name="grant_type_txt">password</string>
     <string name="versatile_user_name_txt">lauryl</string>
     <string name="versatile_pswrd_txt">praveen22</string>
@@ -74,7 +74,7 @@
     <string name="prfrd_time_txt">Your Preferred time?</string>
     <string name="user_existence">User Existence</string>
     <string name="user_exist_disclaimer">User already exist with the phone number</string>
-    <string name="validation">Validation</string>
+    <string name="validation">Lauryl</string>
     <string name="fn_valid_txt">First Name is Mandatory</string>
     <string name="ln_valid_txt">Last Name is Mandatory</string>
     <string name="pswrd_valid_txt">Password is Mandatory</string>
