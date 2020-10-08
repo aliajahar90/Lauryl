@@ -40,11 +40,11 @@ class IntroScreen : BaseActivity() {
 
         //showLoading()
         // Checking for first time launch - before calling setContentView()
-        /*prefManager = PrefManager(this)
+       prefManager = PrefManager(this)
         if (!prefManager!!.isFirstTimeLaunch()) {
             launchHomeScreen()
             finish()
-        }*/
+        }
         // Making notification bar transparent
         if (Build.VERSION.SDK_INT >= 21) {
             window.decorView.systemUiVisibility = SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -100,6 +100,12 @@ class IntroScreen : BaseActivity() {
             }
 
         })
+//        val sharedPref = this@IntroScreen?.getSharedPreferences(
+//            "Lauryl", Context.MODE_PRIVATE)
+//        with (sharedPref.edit()) {
+//            putBoolean("IntroStatus", true);
+//            apply()
+//        }
     }
 
     private fun changeStatusBarColor() {
@@ -136,7 +142,7 @@ class IntroScreen : BaseActivity() {
     }
 
     private fun launchHomeScreen() {
-//        prefManager!!.setFirstTimeLaunch(false)
+        prefManager!!.setFirstTimeLaunch(false)
         startActivity(Intent(this@IntroScreen,SignUpOrLoginScreen::class.java))
         finish()
     }
