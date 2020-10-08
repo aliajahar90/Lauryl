@@ -118,7 +118,7 @@
     <string name="enter_card_number">Enter card number</string>
     <string name="todo">TODO</string>
     <string name="thanks_for_choosing_us">Thanks for choosing us</string>
-    <string name="payment_details">Payment Details</string>
+    <string name="payment_details">Payment Methods</string>
     <string name="order_id">Order Id</string>
     <string name="debited_amount">Debited Amount</string>
     <string name="pickup_date_time"><![CDATA[Pickup Date & Time]]></string>

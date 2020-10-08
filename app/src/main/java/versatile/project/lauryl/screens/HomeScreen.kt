@@ -78,6 +78,7 @@ class HomeScreen : AppCompatActivity() {
     }
 
     private fun displayPaymentFragment() {
+        selectPayment()
        homeNavigationController.addPaymentFragment()
     }
 
@@ -171,5 +172,16 @@ class HomeScreen : AppCompatActivity() {
             finish()
         }
     }
-
+    fun selectPayment() {
+        homeNameMdlVwTxt.text = getString(R.string.payment_details)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        rlChange.visibility=View.VISIBLE
+        homeLocHdngTxt.text=getString(R.string.loc_hdng_txt)
+        homelocTxt.text="Hydrabad"
+        imgLoc.setImageResource(R.drawable.location_white_icon)
+        botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
+        bckBtn.visibility = View.VISIBLE;
+    }
 }
