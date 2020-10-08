@@ -141,7 +141,7 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                                                 Globals.saveStringToPreferences(applicationContext, Constants.AUTH_TOKEN, response.body()!!.accessToken)
                                                 (application as MyApplication).accessToken = response.body()!!.accessToken
                                                 Globals.showPopoUpDialog(this@SignUpOrLoginScreen,
-                                                    getString(R.string.login),
+                                                    getString(R.string.lauryl),
                                                     getString(
                                                         R.string.user_login_successful
                                                     ),

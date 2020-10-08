@@ -57,7 +57,7 @@
     <string name="on_time_delivery_txt">Get On-Time Delivery</string>
     <string name="on_time_delivery_sub_txt">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed dium nonummy nibh euismod incidunt ut</string>
     <string name="server_txt">Server error</string>
-    <string name="login_success_txt">Login successful</string>
+    <string name="login_success_txt">Login Successful</string>
     <string name="server_error_txt">Server Error</string>
     <string name="internet_error_txt">Check internet connection</string>
     <string name="home_txt">Lauryl</string>
@@ -88,6 +88,7 @@
     <string name="user_register_successful">User registration successful</string>
     <string name="registration">Registration</string>
     <string name="login">Login</string>
+    <string name="lauryl">Lauryl</string>
     <string name="user_login_successful">Login Successful</string>
     <string name="mbl_digit_valid_txt">Phone number should contain 10 digits</string>
     <string name="fn_alpha_valid_txt">"Invalid first name "</string>
