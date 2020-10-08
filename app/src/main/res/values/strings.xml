@@ -37,7 +37,7 @@
     <string name="send_otp_again_txt">Send Again?</string>
     <string name="code_verify_txt">Verification Code</string>
     <string name="mbl_valid_num_txt">Please Enter Your Mobile Number</string>
-    <string name="mbl_valid_pswrd_txt">Please Enter Your Password</string>
+    <string name="mbl_valid_pswrd_txt">Please enter the Password</string>
     <string name="grant_type_txt">password</string>
     <string name="versatile_user_name_txt">lauryl</string>
     <string name="versatile_pswrd_txt">praveen22</string>
