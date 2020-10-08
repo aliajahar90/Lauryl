@@ -12,7 +12,7 @@ import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.recyclerview_lyout.*
 import kotlinx.android.synthetic.main.schedule_pick_up_fragment.*
 import versatile.project.lauryl.R
-import versatile.project.lauryl.adapter.SchedulePickUpAdapter
+import versatile.project.lauryl.adapter.SchedulePickUpAdapterJava
 import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.model.TopServicesDataItem
 import versatile.project.lauryl.model.TopServicesResponse
@@ -20,10 +20,10 @@ import versatile.project.lauryl.screens.HomeScreen
 import versatile.project.lauryl.utils.Globals
 import versatile.project.lauryl.view.model.SchedulePickUpFragmentViewModel
 
-class SchedulePickUpFragment: Fragment() {
+class SchedulePickUpFragment: Fragment(), SchedulePickUpAdapterJava.OnItemClickListener {
 
     lateinit var schedulePickUpViewModel: SchedulePickUpFragmentViewModel
-
+    private val topServicesDataItems: MutableList<TopServicesDataItem> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         schedulePickUpViewModel = ViewModelProvider(this).get(SchedulePickUpFragmentViewModel::class.java)
@@ -38,7 +38,8 @@ class SchedulePickUpFragment: Fragment() {
                 if(it.getData().totalCount > 0){
                     progressLyot.visibility = View.GONE
                     schdlePckUpBtn.visibility = View.VISIBLE
-                    val schedulePickUpAdapter = SchedulePickUpAdapter(activity!!.applicationContext,it.getData().list as ArrayList<TopServicesDataItem>)
+
+                    val schedulePickUpAdapter = SchedulePickUpAdapterJava(it.getData().list as ArrayList<TopServicesDataItem>,this)
                     recyclerVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
                     recyclerVw.adapter = schedulePickUpAdapter
                 }else{
@@ -63,7 +64,12 @@ class SchedulePickUpFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as HomeScreen).selectShedulePckUpDashBoard()
         schdlePckUpBtn.setOnClickListener {
-            (activity as HomeScreen).displayCnfPckUpFragment()
+            if(topServicesDataItems.size>0) {
+                topServicesDataItems.clear()
+                (activity as HomeScreen).displayCnfPckUpFragment()
+            }else{
+                Globals.showToastMsg(activity!!.applicationContext,"Please select a service")
+            }
         }
         getTopServices()
     }
@@ -80,6 +86,12 @@ class SchedulePickUpFragment: Fragment() {
         val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
         if(myApplication != null){
             schedulePickUpViewModel.getTopServices(myApplication.accessToken,inputJson)
+        }
+    }
+
+    override fun onItemClicked(netBanking: TopServicesDataItem?) {
+        if (netBanking != null) {
+            topServicesDataItems.add(netBanking)
         }
     }
 
