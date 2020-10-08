@@ -20,7 +20,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_20">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/bckBtn"
@@ -74,7 +74,7 @@
                 android:id="@+id/homeLocHdngTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/loc_hdng_txt"
+                android:text=""
                 android:textSize="14sp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -96,6 +96,8 @@
                 android:layout_weight="0.6">
 
                 <ImageView
+                    android:id="@+id/imgLoc"
+                    android:visibility="visible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="fitXY"
@@ -108,7 +110,7 @@
                     android:id="@+id/homelocTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="18-17-489, ram nagar, RTC cross road"
+                    android:text=""
                     android:singleLine="true"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -120,6 +122,8 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/rlChange"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
