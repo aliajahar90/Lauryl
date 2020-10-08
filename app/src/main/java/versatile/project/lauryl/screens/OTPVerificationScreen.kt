@@ -66,6 +66,9 @@ class OTPVerificationScreen : AppCompatActivity() {
         if(otpSourceType == EnumOTPSource.ENUM_TYPE_REGISTRATION){
             generateOtp()
         }
+        txtSendAgain.setOnClickListener {
+            generateOtp()
+        }
 
     }
 
