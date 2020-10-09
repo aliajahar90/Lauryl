@@ -518,6 +518,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     }
 
     private void hideLoading() {
+        if (getActivity() instanceof BaseActivity)
         ((BaseActivity) getActivity()).hideLoading();
     }
 

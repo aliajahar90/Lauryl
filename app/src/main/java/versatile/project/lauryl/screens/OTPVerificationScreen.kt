@@ -131,7 +131,7 @@ class OTPVerificationScreen : AppCompatActivity() {
         })
 
         otpVerificationViewModel.getRegisterUserResponseToObserve().observe(this, Observer {
-            if(it.status){
+            if(it!=null && it.status){
                 Globals.showPopoUpDialog(this,getString(R.string.registration),getString(R.string.user_register_successful),true,object : OnRegistrationCallback{
                     override fun userRegisteredSuccessfully() {
                         startActivity(Intent(this@OTPVerificationScreen,SignUpOrLoginScreen::class.java))

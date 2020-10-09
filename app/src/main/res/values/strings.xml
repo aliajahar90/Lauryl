@@ -49,7 +49,7 @@
     <string name="email_adrs_txt">Enter the email address associated with your account</string>
     <string name="otp_adrs_txt">We will email you an OTP to reset your password</string>
     <string name="choose_clothes_sub_txt">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed dium nonummy nibh euismod tincidunt ut</string>
-    <string name="schedule_pckup_txt">Schedule Pickup</string>
+    <string name="schedule_pckup_txt">Pickup</string>
     <string name="my_orders_txt">My Orders</string>
     <string name="schedule_pckup_sub_txt">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed dium nonummy nibh euismod incidunt ut</string>
     <string name="top_washing_facilities_txt">You relax we take care</string>
@@ -63,7 +63,7 @@
     <string name="home_txt">Lauryl</string>
     <string name="orders_txt">My Orders</string>
     <string name="order_histry_txt">Order Details</string>
-    <string name="shedule_pck_up_txt">Schedule PickUp</string>
+    <string name="shedule_pck_up_txt">Schedule Pickup</string>
     <string name="payment_txt">Payment</string>
     <string name="profile_txt">Profile</string>
     <string name="plz_login_txt">Please login</string>

@@ -121,7 +121,7 @@
                     android:id="@+id/reschedule_pickup_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="@drawable/green_bckgrnd_round_corners_bckgrnd"
+                    android:background="@drawable/blue_bckgrnd_round_corners_bckgrnd"
                     android:gravity="center|right"
                     android:padding="5dp"
                     android:text="Reschedule Pickup"

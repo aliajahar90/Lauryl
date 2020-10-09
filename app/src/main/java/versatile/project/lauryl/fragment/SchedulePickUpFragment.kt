@@ -1,6 +1,7 @@
 package versatile.project.lauryl.fragment
 
 import android.os.Bundle
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,8 @@ class SchedulePickUpFragment: Fragment(), SchedulePickUpAdapterJava.OnItemClickL
 
     lateinit var schedulePickUpViewModel: SchedulePickUpFragmentViewModel
     private val topServicesDataItems: MutableList<TopServicesDataItem> = ArrayList()
+    private var selectedItems = SparseBooleanArray()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         schedulePickUpViewModel = ViewModelProvider(this).get(SchedulePickUpFragmentViewModel::class.java)
@@ -38,7 +41,7 @@ class SchedulePickUpFragment: Fragment(), SchedulePickUpAdapterJava.OnItemClickL
                 if(it.getData().totalCount > 0){
                     progressLyot.visibility = View.GONE
                     schdlePckUpBtn.visibility = View.VISIBLE
-
+                    selectedItems.clear()
                     val schedulePickUpAdapter = SchedulePickUpAdapterJava(it.getData().list as ArrayList<TopServicesDataItem>,this)
                     recyclerVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
                     recyclerVw.adapter = schedulePickUpAdapter
@@ -64,8 +67,7 @@ class SchedulePickUpFragment: Fragment(), SchedulePickUpAdapterJava.OnItemClickL
         super.onViewCreated(view, savedInstanceState)
         (activity as HomeScreen).selectShedulePckUpDashBoard()
         schdlePckUpBtn.setOnClickListener {
-            if(topServicesDataItems.size>0) {
-                topServicesDataItems.clear()
+            if(selectedItems.size()>0) {
                 (activity as HomeScreen).displayCnfPckUpFragment()
             }else{
                 Globals.showToastMsg(activity!!.applicationContext,"Please select a service")
@@ -89,10 +91,8 @@ class SchedulePickUpFragment: Fragment(), SchedulePickUpAdapterJava.OnItemClickL
         }
     }
 
-    override fun onItemClicked(netBanking: TopServicesDataItem?) {
-        if (netBanking != null) {
-            topServicesDataItems.add(netBanking)
-        }
+    override fun onItemClicked(sItem: SparseBooleanArray) {
+        selectedItems=sItem;
     }
 
 }

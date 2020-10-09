@@ -87,6 +87,7 @@ public class SchedulePickUpAdapterJava extends RecyclerView.Adapter<SchedulePick
             itemPaymentNetbankingBinding.getRoot().setOnClickListener(view -> {
                 selectedPosition=position;
                 if (selectedItems.get(selectedPosition, false)) {
+
                     selectedItems.delete(selectedPosition);
                    view.setSelected(false);
                 }
@@ -95,13 +96,13 @@ public class SchedulePickUpAdapterJava extends RecyclerView.Adapter<SchedulePick
                   view.setSelected(true);
                 }
                 notifyDataSetChanged();
-                clickListener.onItemClicked(netBanking);
+                clickListener.onItemClicked(selectedItems);
             });
         }
     }
 
 
     public interface OnItemClickListener {
-        void onItemClicked(TopServicesDataItem netBanking);
+        void onItemClicked(SparseBooleanArray sparseBooleanArray);
     }
 }
