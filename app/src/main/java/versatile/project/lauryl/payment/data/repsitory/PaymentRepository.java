@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import versatile.project.lauryl.base.SingleLiveEvent;
 import versatile.project.lauryl.base.asyncjob.TaskRunner;
 import versatile.project.lauryl.data.source.LaurylRepository;
 import versatile.project.lauryl.payment.backgroundjob.PaymentBackgroundTask;
@@ -42,23 +43,23 @@ public class PaymentRepository extends LaurylRepository {
     // static variable single_instance of type Singleton
     private static PaymentRepository single_instance = null;
     private Razorpay razorpay;
-    private MutableLiveData<Boolean> isCardSupported = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isUpiSupported = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isNetBankingSupported = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isNetBankingSBINSupported = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isNetBankingHDFCSupported = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isNetBankingCANARASupported = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isNetBankingICICSupported = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isNetBankingBBSupported = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isNetBankingKotakSupported = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isValidVpa = new MutableLiveData<>();
-    private MutableLiveData<String> errorValidateVPA = new MutableLiveData<>();
-    private MutableLiveData<List<NetBanking>> netBankList = new MutableLiveData<>();
-    private MutableLiveData<Boolean> onSwitchToWebCheckout = new MutableLiveData<>();
-    private MutableLiveData<Boolean> onSwitchDefaultView= new MutableLiveData<>();
-    private MutableLiveData<String> paymentMethodLoadError = new MutableLiveData<>();
-    private MutableLiveData<PaymentBaseShareData.PaymentSuccess> paymentSuccessMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<PaymentBaseShareData.PaymentError> paymentErrorMutableLiveData = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> isCardSupported = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> isUpiSupported = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> isNetBankingSupported = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> isNetBankingSBINSupported = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> isNetBankingHDFCSupported = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> isNetBankingCANARASupported = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> isNetBankingICICSupported = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> isNetBankingBBSupported = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> isNetBankingKotakSupported = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> isValidVpa = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> errorValidateVPA = new SingleLiveEvent<>();
+    private SingleLiveEvent<List<NetBanking>> netBankList = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> onSwitchToWebCheckout = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> onSwitchDefaultView= new SingleLiveEvent<>();
+    private SingleLiveEvent<String> paymentMethodLoadError = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentBaseShareData.PaymentSuccess> paymentSuccessSingleLiveEvent = new SingleLiveEvent<>();
+    private SingleLiveEvent<PaymentBaseShareData.PaymentError> paymentErrorSingleLiveEvent = new SingleLiveEvent<>();
 
     public void setRazorpay(Razorpay razorpay) {
         this.razorpay = razorpay;
@@ -166,51 +167,51 @@ public class PaymentRepository extends LaurylRepository {
         return razorpay.getBankLogoUrl(bankCode);
     }
 
-    public MutableLiveData<Boolean> getIsCardSupported() {
+    public SingleLiveEvent<Boolean> getIsCardSupported() {
         return isCardSupported;
     }
 
-    public MutableLiveData<Boolean> getIsUpiSupported() {
+    public SingleLiveEvent<Boolean> getIsUpiSupported() {
         return isUpiSupported;
     }
 
-    public MutableLiveData<Boolean> getIsNetBankingSupported() {
+    public SingleLiveEvent<Boolean> getIsNetBankingSupported() {
         return isNetBankingSupported;
     }
 
-    public MutableLiveData<Boolean> getIsNetBankingSBINSupported() {
+    public SingleLiveEvent<Boolean> getIsNetBankingSBINSupported() {
         return isNetBankingSBINSupported;
     }
 
-    public MutableLiveData<Boolean> getIsNetBankingHDFCSupported() {
+    public SingleLiveEvent<Boolean> getIsNetBankingHDFCSupported() {
         return isNetBankingHDFCSupported;
     }
 
-    public MutableLiveData<Boolean> getIsNetBankingCANARASupported() {
+    public SingleLiveEvent<Boolean> getIsNetBankingCANARASupported() {
         return isNetBankingCANARASupported;
     }
 
-    public MutableLiveData<Boolean> getIsNetBankingICICSupported() {
+    public SingleLiveEvent<Boolean> getIsNetBankingICICSupported() {
         return isNetBankingICICSupported;
     }
 
-    public MutableLiveData<Boolean> getIsNetBankingBBSupported() {
+    public SingleLiveEvent<Boolean> getIsNetBankingBBSupported() {
         return isNetBankingBBSupported;
     }
 
-    public MutableLiveData<Boolean> getIsNetBankingKotakSupported() {
+    public SingleLiveEvent<Boolean> getIsNetBankingKotakSupported() {
         return isNetBankingKotakSupported;
     }
 
-    public MutableLiveData<List<NetBanking>> getNetBankList() {
+    public SingleLiveEvent<List<NetBanking>> getNetBankList() {
         return netBankList;
     }
 
-    public MutableLiveData<Boolean> getIsValidVpa() {
+    public SingleLiveEvent<Boolean> getIsValidVpa() {
         return isValidVpa;
     }
 
-    public MutableLiveData<String> getErrorValidateVPA() {
+    public SingleLiveEvent<String> getErrorValidateVPA() {
         return errorValidateVPA;
     }
 
@@ -234,11 +235,11 @@ public class PaymentRepository extends LaurylRepository {
 
     }
 
-    public MutableLiveData<Boolean> getOnSwitchToWebCheckout() {
+    public SingleLiveEvent<Boolean> getOnSwitchToWebCheckout() {
         return onSwitchToWebCheckout;
     }
 
-    public MutableLiveData<Boolean> getOnSwitchDefaultView() {
+    public SingleLiveEvent<Boolean> getOnSwitchDefaultView() {
         return onSwitchDefaultView;
     }
 
@@ -280,7 +281,7 @@ public class PaymentRepository extends LaurylRepository {
                                         paymentError.setCode(i);
                                         paymentError.setDescription(description);
                                         paymentError.setPaymentData(paymentData);
-                                        paymentErrorMutableLiveData.setValue(paymentError);
+                                        paymentErrorSingleLiveEvent.setValue(paymentError);
                                         Log.d("Payment", "failed" + description);
                                     }
                                 });
@@ -333,25 +334,25 @@ public class PaymentRepository extends LaurylRepository {
                 PaymentBaseShareData.PaymentSuccess paymentSuccess=new PaymentBaseShareData.PaymentSuccess();
                 paymentSuccess.setPaymentTransactionId(razorPayPaymentId);
                 paymentSuccess.setPaymentData(paymentData);
-                paymentSuccessMutableLiveData.setValue(paymentSuccess);
+                paymentSuccessSingleLiveEvent.setValue(paymentSuccess);
         }else {
             PaymentBaseShareData.PaymentError paymentError=new PaymentBaseShareData.PaymentError();
             paymentError.setCode(-1);
             paymentError.setDescription(null);
             paymentError.setPaymentData(paymentData);
-            paymentErrorMutableLiveData.setValue(paymentError);
+            paymentErrorSingleLiveEvent.setValue(paymentError);
         }
     }
 
-    public MutableLiveData<String> getPaymentMethodLoadError() {
+    public SingleLiveEvent<String> getPaymentMethodLoadError() {
         return paymentMethodLoadError;
     }
 
-    public MutableLiveData<PaymentBaseShareData.PaymentSuccess> getPaymentSuccessMutableLiveData() {
-        return paymentSuccessMutableLiveData;
+    public SingleLiveEvent<PaymentBaseShareData.PaymentSuccess> getPaymentSuccessSingleLiveEvent() {
+        return paymentSuccessSingleLiveEvent;
     }
 
-    public MutableLiveData<PaymentBaseShareData.PaymentError> getPaymentErrorMutableLiveData() {
-        return paymentErrorMutableLiveData;
+    public SingleLiveEvent<PaymentBaseShareData.PaymentError> getPaymentErrorSingleLiveEvent() {
+        return paymentErrorSingleLiveEvent;
     }
 }
