@@ -15,7 +15,7 @@ import versatile.project.lauryl.payment.PaymentFragment
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
 
-class HomeScreen : AppCompatActivity() {
+class HomeScreen : BaseActivity() {
     lateinit var homeNavigationController: HomeNavigationController;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

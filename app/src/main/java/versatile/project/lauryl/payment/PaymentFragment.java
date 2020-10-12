@@ -142,11 +142,10 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             hideLoading();
             if (paymentError.getCode() == -1) {
                 Log.d("Payment", "checksum error");
-                HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment();
             } else {
                 Log.d("Payment", "payment Erro");
-                HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment();
             }
+            HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment();
         });
 
     }
