@@ -45,7 +45,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('/Users/kevin/Documents/Android/LaurylAndroid/lauryl_keystore')
+            storeFile file('lauryl_keystore')
             storePassword 'Lauryl11$$'
             keyAlias "key0"
             keyPassword 'Lauryl11$$'
