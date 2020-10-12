@@ -50,6 +50,12 @@ android {
             keyAlias "key0"
             keyPassword 'Lauryl11$$'
         }
+        debug {
+            storeFile file('lauryl_keystore')
+            storePassword 'Lauryl11$$'
+            keyAlias "key0"
+            keyPassword 'Lauryl11$$'
+        }
     }
 
     dataBinding{
