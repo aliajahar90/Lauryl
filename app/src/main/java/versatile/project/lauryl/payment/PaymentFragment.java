@@ -207,6 +207,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         });
         paymentViewModel.onSwitchPaymentViewDefault().observe(this, aBoolean -> {
             if(aBoolean){
+                hideLoading();
                 paymentFragmentBinding.rlOptionPage.setVisibility(View.VISIBLE);
                 paymentFragmentBinding.wvCheckout.setVisibility(View.GONE);
             }
