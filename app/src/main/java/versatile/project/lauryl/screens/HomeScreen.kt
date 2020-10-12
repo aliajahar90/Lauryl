@@ -184,4 +184,12 @@ class HomeScreen : BaseActivity() {
         botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
     }
+    fun hideBackButton(){
+        bckBtn.visibility = View.GONE;
+
+    }
+    fun showBackButton(){
+        bckBtn.visibility = View.VISIBLE;
+
+    }
 }

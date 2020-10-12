@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 
 import versatile.project.lauryl.R;
 import versatile.project.lauryl.base.BaseBinding;
+import versatile.project.lauryl.base.HomeNavigationController;
 import versatile.project.lauryl.databinding.FragmentPaymentErrorBinding;
 import versatile.project.lauryl.databinding.FragmentPaymentSuccessBinding;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
@@ -49,5 +50,18 @@ public class PaymentErrorFragment extends BaseBinding<PaymentErrorViewModel, Fra
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         paymentErrorBinding= DataBindingUtil.inflate(inflater, R.layout.fragment_payment_error,container,false);
         return paymentErrorBinding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        onClicks();
+    }
+    void onClicks(){
+        paymentErrorBinding.btnRetry.setOnClickListener(view -> {
+            HomeNavigationController.getInstance(getActivity()).enableBackButton();
+            getActivity().getSupportFragmentManager().popBackStackImmediate();
+
+        });
     }
 }
