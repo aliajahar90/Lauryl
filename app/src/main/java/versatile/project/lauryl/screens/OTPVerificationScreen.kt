@@ -14,11 +14,12 @@ import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonObject
+import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.interfaces.OnRegistrationCallback
 import versatile.project.lauryl.utils.*
 import versatile.project.lauryl.view.model.OtpVerificationViewModel
 
-class OTPVerificationScreen : AppCompatActivity() {
+class OTPVerificationScreen : BaseActivity() {
 
     lateinit var otpVerificationViewModel:OtpVerificationViewModel
 
@@ -67,6 +68,7 @@ class OTPVerificationScreen : AppCompatActivity() {
             generateOtp()
         }
         txtSendAgain.setOnClickListener {
+            showLoading()
             generateOtp()
         }
 
@@ -80,6 +82,7 @@ class OTPVerificationScreen : AppCompatActivity() {
     private fun observeDataSources() {
 
         otpVerificationViewModel.getOtpResponseToObserve().observe(this, Observer {
+            hideLoading()
             if(it.data != null){
 
                 Log.d("otp_","${it.data}")
@@ -95,7 +98,7 @@ class OTPVerificationScreen : AppCompatActivity() {
         })
 
         otpVerificationViewModel.getChkOtpResponseToObserve().observe(this, Observer {
-
+            hideLoading()
             if(it.status){
 
                 val otpSourceType = intent.getSerializableExtra(Constants.FORGOT_PASSWORD_SOURCE_TYPE) as EnumOTPSource
