@@ -41,7 +41,7 @@ class OtpVerificationViewModel: ViewModel() {
         laurylRepository.checkOtp(inputJsonObj)
     }
 
-    fun registerUser(inputJsonObj:JsonObject){
+    fun registerUser(inputJsonObj: JsonObject){
         laurylRepository.registerUser(inputJsonObj)
     }
 
