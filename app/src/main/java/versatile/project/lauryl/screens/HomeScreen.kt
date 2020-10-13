@@ -1,7 +1,6 @@
 package versatile.project.lauryl.screens
 
 import android.content.pm.ActivityInfo
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -11,7 +10,7 @@ import versatile.project.lauryl.R
 import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.base.HomeNavigationController
 import versatile.project.lauryl.fragment.*
-import versatile.project.lauryl.payment.PaymentFragment
+import versatile.project.lauryl.pickup.CnfSchedulePckUpFragment
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
 
@@ -72,9 +71,8 @@ class HomeScreen : BaseActivity() {
     }
 
     private fun displayProfileFragment() {
-        bckBtn.visibility = View.VISIBLE;
-        val fragment = ProfileFragment()
-        loadMyFragment(fragment)
+        selectProfile()
+        homeNavigationController.addProfileFragment();
     }
 
     private fun displayPaymentFragment() {
@@ -139,7 +137,7 @@ class HomeScreen : BaseActivity() {
 
     fun displayCnfPckUpFragment(){
        selectCnfPckUp()
-        val fragment = CnfSchedulePckUpFragment()
+        val fragment = CnfSchedulePckUpFragment.newInstance()
         loadMyFragment(fragment)
     }
 
@@ -171,6 +169,18 @@ class HomeScreen : BaseActivity() {
         }else{
             finish()
         }
+    }
+    fun selectProfile() {
+        homeNameMdlVwTxt.text = getString(R.string.my_profile)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        rlChange.visibility=View.VISIBLE
+        homeLocHdngTxt.text=getString(R.string.loc_hdng_txt)
+        homelocTxt.text="Hydrabad"
+     //   imgLoc.setImageResource(R.drawable.ic_name)
+        botmNavVw.menu.findItem(R.id.profileId).isChecked = true
+        bckBtn.visibility = View.VISIBLE;
     }
     fun selectPayment() {
         homeNameMdlVwTxt.text = getString(R.string.payment_details)

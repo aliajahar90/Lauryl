@@ -27,5 +27,12 @@ public class AllConstants {
             public static final String ERROR_LOAD_PAYMENT = "Unable to load payment";
         }
     }
+    public static class PickUp{
+        public static final String PickUpData = "pickupata";
+    }
+    public  static  class Profile{
+        public static final String PROFILE_DATA = "profiledata";
+    }
+
 
 }
