@@ -1,22 +1,25 @@
 package versatile.project.lauryl.screens
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_otpverification_screen.*
-import versatile.project.lauryl.R
-import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import kotlinx.android.synthetic.main.activity_otpverification_screen.*
+import versatile.project.lauryl.R
 import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.interfaces.OnRegistrationCallback
-import versatile.project.lauryl.utils.*
+import versatile.project.lauryl.utils.Constants
+import versatile.project.lauryl.utils.EnumOTPSource
+import versatile.project.lauryl.utils.Globals
+import versatile.project.lauryl.utils.MyEditTextWatcher
 import versatile.project.lauryl.view.model.OtpVerificationViewModel
 
 class OTPVerificationScreen : BaseActivity() {
@@ -103,7 +106,6 @@ class OTPVerificationScreen : BaseActivity() {
 
                 val otpSourceType = intent.getSerializableExtra(Constants.FORGOT_PASSWORD_SOURCE_TYPE) as EnumOTPSource
                 if(otpSourceType == EnumOTPSource.ENUM_TYPE_REGISTRATION){
-
                     val usertNameTxt = intent.getStringExtra(Constants.MOBILE_NUMBER)
                     val pswrdTxt = intent.getStringExtra(Constants.PASSWORD)
                     val phoneNumTxt = intent.getStringExtra(Constants.MOBILE_NUMBER).toLong()
@@ -115,6 +117,8 @@ class OTPVerificationScreen : BaseActivity() {
                     inputJson.addProperty("phoneNumber",phoneNumTxt)
                     inputJson.addProperty("firstName",firstNameTxt)
                     inputJson.addProperty("lastName",lastNameTxt)
+                    inputJson.addProperty("email","")
+                    inputJson.add("addressList", JsonArray())
                     otpVerificationViewModel.registerUser(inputJson)
 
                 }else if(otpSourceType == EnumOTPSource.ENUM_TYPE_FORGOT_PASSWORD){
