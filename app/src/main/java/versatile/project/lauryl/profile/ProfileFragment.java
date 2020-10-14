@@ -1,5 +1,6 @@
 package versatile.project.lauryl.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,15 +29,20 @@ import versatile.project.lauryl.payment.data.PaymentBaseShareData;
 import versatile.project.lauryl.profile.data.GetProfileResponse;
 import versatile.project.lauryl.profile.data.ProfileSharedData;
 import versatile.project.lauryl.profile.viewmodel.ProfileViewModel;
+import versatile.project.lauryl.screens.ResetPasswordScreen;
+import versatile.project.lauryl.screens.SignUpOrLoginScreen;
 import versatile.project.lauryl.utils.AllConstants;
+import versatile.project.lauryl.utils.Constants;
+import versatile.project.lauryl.utils.Globals;
 
 public class ProfileFragment extends BaseBinding<ProfileViewModel, FragmentProfileBinding> {
 
-    public static final String TAG =ProfileFragment.class.getName() ;
+    public static final String TAG = ProfileFragment.class.getName();
     private FragmentProfileBinding profileBinding;
     private ProfileViewModel profileViewModel;
     private ProfileSharedData profileSharedData;
-    private boolean isErrorDialgActive =false;
+    private boolean isErrorDialgActive = false;
+
     public static ProfileFragment newInstance() {
         ProfileFragment profileFragment = new ProfileFragment();
         try {
@@ -46,6 +52,7 @@ public class ProfileFragment extends BaseBinding<ProfileViewModel, FragmentProfi
         }
         return profileFragment;
     }
+
     @Override
     protected void initializeViewModel() {
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
@@ -64,9 +71,30 @@ public class ProfileFragment extends BaseBinding<ProfileViewModel, FragmentProfi
         showLoader();
         MyApplication myApplication = (MyApplication) getActivity().getApplicationContext();
         if (myApplication != null) {
-            profileViewModel.getProfile(myApplication.getAccessToken());
+            profileViewModel.getProfile(myApplication.getUserAccessToken());
         }
         setupGetProfileObserver();
+        onClicks();
+    }
+
+    private void onClicks() {
+        profileBinding.rlChPassword.setOnClickListener(view -> {
+            Intent navtToRestPswrdIntent = new Intent(getActivity(), ResetPasswordScreen.class);
+            navtToRestPswrdIntent.putExtra(AllConstants.Profile.MOBILE_NUMBER, profileBinding.txtNumber.getText().toString());
+            startActivity(navtToRestPswrdIntent);
+        });
+        profileBinding.rlLogout.setOnClickListener(view -> {
+            Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getUSER_AUTH_TOKEN(), "");
+            Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getAUTH_TOKEN(), "");
+            MyApplication myApplication = (MyApplication) getActivity().getApplicationContext();
+            myApplication.setAccessToken("");
+            myApplication.setUserAccessToken("");
+            Intent navtToRestPswrdIntent = new Intent(getActivity(), SignUpOrLoginScreen.class);
+            navtToRestPswrdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            navtToRestPswrdIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(navtToRestPswrdIntent);
+            getActivity().finish();
+        });
     }
 
     private void setupGetProfileObserver() {
@@ -81,26 +109,26 @@ public class ProfileFragment extends BaseBinding<ProfileViewModel, FragmentProfi
             hideLoading();
 
             try {
-                JSONObject jsonObject=new JSONObject();
-                jsonObject.put("logoId",-1);
-                jsonObject.put("tile","Error fetching profile");
-                jsonObject.put("msg","We are unable to fetch your profile at the moment. Please try again after sometime");
-                jsonObject.put("cancelTxt","Cancel");
-                jsonObject.put("proceedTxt","");
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("logoId", -1);
+                jsonObject.put("tile", "Error fetching profile");
+                jsonObject.put("msg", "We are unable to fetch your profile at the moment. Please try again after sometime");
+                jsonObject.put("cancelTxt", "Cancel");
+                jsonObject.put("proceedTxt", "");
 
-                ErrorBottomSheetDialog errorBottomSheetDialog=ErrorBottomSheetDialog.newInstance(new Gson().toJson(jsonObject),new ErrorBottomSheetDialog.DialogClickListener() {
+                ErrorBottomSheetDialog errorBottomSheetDialog = ErrorBottomSheetDialog.newInstance(new Gson().toJson(jsonObject), new ErrorBottomSheetDialog.DialogClickListener() {
                     @Override
                     public void dialogProceed() {
-                        isErrorDialgActive=false;
+                        isErrorDialgActive = false;
                     }
 
                     @Override
                     public void dialogCancelled() {
-                        isErrorDialgActive=false;
+                        isErrorDialgActive = false;
                     }
                 });
-                if(!isErrorDialgActive) {
-                    isErrorDialgActive=true;
+                if (!isErrorDialgActive) {
+                    isErrorDialgActive = true;
                     errorBottomSheetDialog.show(getFragmentManager(), ErrorBottomSheetDialog.TAG);
                 }
             } catch (JSONException e) {
@@ -111,7 +139,7 @@ public class ProfileFragment extends BaseBinding<ProfileViewModel, FragmentProfi
     }
 
     private void profileUiController(GetProfileResponse.ProfileData profileData) {
-        profileBinding.txtName.setText(profileData.getFirstName() + " "+ profileData.getLastName());
+        profileBinding.txtName.setText(profileData.getFirstName() + " " + profileData.getLastName());
         profileBinding.txtNumber.setText(profileData.getPhoneNumber());
     }
 

@@ -28,71 +28,11 @@ public class ProfileRepository extends LaurylRepository {
     private MutableLiveData<Throwable> throwableMutableLiveData = new MutableLiveData<>();
 
     public void getProfileInformation(String accessToken) {
-        getApiVersatileServices().getMyProfile(accessToken).enqueue(new Callback<GetProfileResponse>() {
+        getApiServices().getMyProfile(accessToken).enqueue(new Callback<GetProfileResponse>() {
             @Override
             public void onResponse(Call<GetProfileResponse> call, Response<GetProfileResponse> response) {
                 if (response.isSuccessful() && response.code() == 200) {
-                    String res="{\n" +
-                            "    \"data\": {\n" +
-                            "        \"id\": \"5f7d9f18742bca0c68321d65\",\n" +
-                            "        \"userName\": \"9542603950\",\n" +
-                            "        \"password\": null,\n" +
-                            "        \"email\": \"test@gmail.com\",\n" +
-                            "        \"firstName\": \"vijay\",\n" +
-                            "        \"lastName\": \"k\",\n" +
-                            "        \"isVerified\": true,\n" +
-                            "        \"isPrimaryUser\": true,\n" +
-                            "        \"isActive\": true,\n" +
-                            "        \"isAdmin\": true,\n" +
-                            "        \"profilePicUrl\": null,\n" +
-                            "        \"phoneNumber\": 9542603950,\n" +
-                            "        \"expiryDate\": null,\n" +
-                            "        \"addressList\": [\n" +
-                            "            {\n" +
-                            "                \"createdBy\": null,\n" +
-                            "                \"createdAt\": 1602068249179,\n" +
-                            "                \"modifiedBy\": null,\n" +
-                            "                \"modifiedAt\": 1602068249180,\n" +
-                            "                \"isDeleted\": false,\n" +
-                            "                \"createdByUser\": null,\n" +
-                            "                \"modifiedByUser\": null,\n" +
-                            "                \"sellerId\": null,\n" +
-                            "                \"vAccountId\": null,\n" +
-                            "                \"marketPlaceName\": null,\n" +
-                            "                \"id\": \"5f7d9f19742bca0c68321d66\",\n" +
-                            "                \"address1\": \"vijay-1-address1\",\n" +
-                            "                \"address2\": \"vijay-1-address2\",\n" +
-                            "                \"city\": null,\n" +
-                            "                \"state\": null,\n" +
-                            "                \"country\": null,\n" +
-                            "                \"pinCode\": null,\n" +
-                            "                \"phoneNumber\": 9542603950\n" +
-                            "            },\n" +
-                            "            {\n" +
-                            "                \"createdBy\": null,\n" +
-                            "                \"createdAt\": 1602068250272,\n" +
-                            "                \"modifiedBy\": null,\n" +
-                            "                \"modifiedAt\": 1602068250274,\n" +
-                            "                \"isDeleted\": false,\n" +
-                            "                \"createdByUser\": null,\n" +
-                            "                \"modifiedByUser\": null,\n" +
-                            "                \"sellerId\": null,\n" +
-                            "                \"vAccountId\": null,\n" +
-                            "                \"marketPlaceName\": null,\n" +
-                            "                \"id\": \"5f7d9f1a742bca0c68321d67\",\n" +
-                            "                \"address1\": \"vijay-2-address1\",\n" +
-                            "                \"address2\": \"vijay-2-address2\",\n" +
-                            "                \"city\": null,\n" +
-                            "                \"state\": null,\n" +
-                            "                \"country\": null,\n" +
-                            "                \"pinCode\": null,\n" +
-                            "                \"phoneNumber\": 9542603950\n" +
-                            "            }\n" +
-                            "        ],\n" +
-                            "        \"firstTimeLogin\": false\n" +
-                            "    }\n" +
-                            "}";
-                    GetProfileResponse getProfileResponse=new Gson().fromJson(res,GetProfileResponse.class);
+                    GetProfileResponse getProfileResponse=response.body();
                     getProfileResponseLiveData.postValue(getProfileResponse);
                 }else {
                     getProfileResponseLiveData.postValue(null);
@@ -101,69 +41,7 @@ public class ProfileRepository extends LaurylRepository {
 
             @Override
             public void onFailure(Call<GetProfileResponse> call, Throwable t) {
-                String res="{\n" +
-                        "    \"data\": {\n" +
-                        "        \"id\": \"5f7d9f18742bca0c68321d65\",\n" +
-                        "        \"userName\": \"9542603950\",\n" +
-                        "        \"password\": null,\n" +
-                        "        \"email\": \"test@gmail.com\",\n" +
-                        "        \"firstName\": \"vijay\",\n" +
-                        "        \"lastName\": \"k\",\n" +
-                        "        \"isVerified\": true,\n" +
-                        "        \"isPrimaryUser\": true,\n" +
-                        "        \"isActive\": true,\n" +
-                        "        \"isAdmin\": true,\n" +
-                        "        \"profilePicUrl\": null,\n" +
-                        "        \"phoneNumber\": 9542603950,\n" +
-                        "        \"expiryDate\": null,\n" +
-                        "        \"addressList\": [\n" +
-                        "            {\n" +
-                        "                \"createdBy\": null,\n" +
-                        "                \"createdAt\": 1602068249179,\n" +
-                        "                \"modifiedBy\": null,\n" +
-                        "                \"modifiedAt\": 1602068249180,\n" +
-                        "                \"isDeleted\": false,\n" +
-                        "                \"createdByUser\": null,\n" +
-                        "                \"modifiedByUser\": null,\n" +
-                        "                \"sellerId\": null,\n" +
-                        "                \"vAccountId\": null,\n" +
-                        "                \"marketPlaceName\": null,\n" +
-                        "                \"id\": \"5f7d9f19742bca0c68321d66\",\n" +
-                        "                \"address1\": \"vijay-1-address1\",\n" +
-                        "                \"address2\": \"vijay-1-address2\",\n" +
-                        "                \"city\": null,\n" +
-                        "                \"state\": null,\n" +
-                        "                \"country\": null,\n" +
-                        "                \"pinCode\": null,\n" +
-                        "                \"phoneNumber\": 9542603950\n" +
-                        "            },\n" +
-                        "            {\n" +
-                        "                \"createdBy\": null,\n" +
-                        "                \"createdAt\": 1602068250272,\n" +
-                        "                \"modifiedBy\": null,\n" +
-                        "                \"modifiedAt\": 1602068250274,\n" +
-                        "                \"isDeleted\": false,\n" +
-                        "                \"createdByUser\": null,\n" +
-                        "                \"modifiedByUser\": null,\n" +
-                        "                \"sellerId\": null,\n" +
-                        "                \"vAccountId\": null,\n" +
-                        "                \"marketPlaceName\": null,\n" +
-                        "                \"id\": \"5f7d9f1a742bca0c68321d67\",\n" +
-                        "                \"address1\": \"vijay-2-address1\",\n" +
-                        "                \"address2\": \"vijay-2-address2\",\n" +
-                        "                \"city\": null,\n" +
-                        "                \"state\": null,\n" +
-                        "                \"country\": null,\n" +
-                        "                \"pinCode\": null,\n" +
-                        "                \"phoneNumber\": 9542603950\n" +
-                        "            }\n" +
-                        "        ],\n" +
-                        "        \"firstTimeLogin\": false\n" +
-                        "    }\n" +
-                        "}";
-                GetProfileResponse getProfileResponse=new Gson().fromJson(res,GetProfileResponse.class);
-                getProfileResponseLiveData.postValue(getProfileResponse);
-                //throwableMutableLiveData.postValue(t);
+               throwableMutableLiveData.postValue(t);
             }
         });
     }

@@ -32,6 +32,7 @@ public class AllConstants {
     }
     public  static  class Profile{
         public static final String PROFILE_DATA = "profiledata";
+        public static final String MOBILE_NUMBER = "Mobile_Number";
     }
 
 
