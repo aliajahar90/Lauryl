@@ -25,51 +25,55 @@ class HomeScreen : BaseActivity() {
         Constants.CURRENT_AUTH_TOKEN = Globals.getStringFromPreferences(this, Constants.AUTH_TOKEN)
         botmNavVw.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         displayHomeFragment()
-        homeNavigationController= HomeNavigationController.getInstance(this)
-                bckBtn.setOnClickListener {
+        homeNavigationController = HomeNavigationController.getInstance(this)
+        bckBtn.setOnClickListener {
 
-            if (supportFragmentManager.backStackEntryCount > 1){
+            if (supportFragmentManager.backStackEntryCount > 1) {
                 supportFragmentManager.popBackStack()
-            }else{
+            } else {
                 finish()
             }
 
         }
+        changeLocation.setOnClickListener {
+            displayMapLocationFragment()
+        }
     }
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
+    private val mOnNavigationItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
 
-        when (menuItem.itemId) {
+            when (menuItem.itemId) {
 
-            R.id.homeId -> {
-                displayHomeFragment()
-                return@OnNavigationItemSelectedListener true
+                R.id.homeId -> {
+                    displayHomeFragment()
+                    return@OnNavigationItemSelectedListener true
+                }
+
+                R.id.myOrdersId -> {
+                    displayMyOrdersFragment()
+                    return@OnNavigationItemSelectedListener true
+                }
+
+                R.id.schedulePckUpId -> {
+                    displaySPFragment()
+                    return@OnNavigationItemSelectedListener true
+                }
+
+                R.id.paymentId -> {
+                    displayPaymentFragment()
+                    return@OnNavigationItemSelectedListener true
+                }
+
+                R.id.profileId -> {
+                    displayProfileFragment()
+                    return@OnNavigationItemSelectedListener true
+                }
+
             }
-
-            R.id.myOrdersId -> {
-                displayMyOrdersFragment()
-                return@OnNavigationItemSelectedListener true
-            }
-
-            R.id.schedulePckUpId -> {
-                displaySPFragment()
-                return@OnNavigationItemSelectedListener true
-            }
-
-            R.id.paymentId -> {
-                displayPaymentFragment()
-                return@OnNavigationItemSelectedListener true
-            }
-
-            R.id.profileId -> {
-                displayProfileFragment()
-                return@OnNavigationItemSelectedListener true
-            }
+            false
 
         }
-        false
-
-    }
 
     private fun displayProfileFragment() {
         bckBtn.visibility = View.VISIBLE;
@@ -79,7 +83,7 @@ class HomeScreen : BaseActivity() {
 
     private fun displayPaymentFragment() {
         selectPayment()
-       homeNavigationController.addPaymentFragment()
+        homeNavigationController.addPaymentFragment()
     }
 
     fun displaySPFragment() {
@@ -95,6 +99,38 @@ class HomeScreen : BaseActivity() {
         filterTxt.visibility = View.GONE
         bckBtn.visibility = View.GONE
         botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
+    }
+
+    fun selectMapLocationPickUpDashBoard() {
+        homeNameMdlVwTxt.text = getString(R.string.set_location)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+        // botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
+    }
+
+    private fun displayMapLocationFragment() {
+        val fragment = MapLocationFragment()
+        loadMyFragment(fragment)
+        selectMapLocationPickUpDashBoard()
+        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        //selectMyOrdersDashboard()
+    }
+    fun selectChangeAddressDashBoard() {
+        homeNameMdlVwTxt.text = getString(R.string.change_address)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+    }
+
+    fun displayChangeAddressFragment() {
+        val fragment = ChangeAddressFragment()
+        loadMyFragment(fragment)
+        selectChangeAddressDashBoard()
+        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        //selectMyOrdersDashboard()
     }
 
     fun displayMyOrdersFragment() {
@@ -137,8 +173,8 @@ class HomeScreen : BaseActivity() {
     }
 
 
-    fun displayCnfPckUpFragment(){
-       selectCnfPckUp()
+    fun displayCnfPckUpFragment() {
+        selectCnfPckUp()
         val fragment = CnfSchedulePckUpFragment()
         loadMyFragment(fragment)
     }
@@ -151,13 +187,13 @@ class HomeScreen : BaseActivity() {
         botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
     }
 
-    fun displayOrderHstryFragment(){
+    fun displayOrderHstryFragment() {
         val fragment = OrderHistoryFragment()
         loadMyFragment(fragment)
         selectOrderHistory()
     }
 
-    fun selectOrderHistory(){
+    fun selectOrderHistory() {
         homeNameMdlVwTxt.text = getString(R.string.order_histry_txt)
         homeNameMdlVwTxt.visibility = View.VISIBLE
         homeNameTxt.visibility = View.GONE
@@ -166,20 +202,21 @@ class HomeScreen : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 1){
+        if (supportFragmentManager.backStackEntryCount > 1) {
             supportFragmentManager.popBackStack()
-        }else{
+        } else {
             finish()
         }
     }
+
     fun selectPayment() {
         homeNameMdlVwTxt.text = getString(R.string.payment_details)
         homeNameMdlVwTxt.visibility = View.VISIBLE
         homeNameTxt.visibility = View.GONE
         filterTxt.visibility = View.GONE
-        rlChange.visibility=View.VISIBLE
-        homeLocHdngTxt.text=getString(R.string.loc_hdng_txt)
-        homelocTxt.text="Hydrabad"
+        rlChange.visibility = View.VISIBLE
+        homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
+        homelocTxt.text = "Hydrabad"
         imgLoc.setImageResource(R.drawable.location_white_icon)
         botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
