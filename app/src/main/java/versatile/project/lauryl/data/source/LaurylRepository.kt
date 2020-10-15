@@ -23,6 +23,9 @@ open class LaurylRepository {
     var versatileLoginLiveData: MutableLiveData<VersatileLoginResponse> = MutableLiveData()
     var topServicesLiveData: MutableLiveData<TopServicesResponse> = MutableLiveData()
     var myOrdersLiveData: MutableLiveData<MyOrdersResponse> = MutableLiveData()
+    var citiesLiveData:MutableLiveData<ArrayList<String>> = MutableLiveData()
+    var statesLiveData:MutableLiveData<ArrayList<String>> = MutableLiveData()
+    var addressLiveData:MutableLiveData<ArrayList<AddressModel>> = MutableLiveData()
 
     fun getMyOrdersLiveDta(): LiveData<MyOrdersResponse>{
         return myOrdersLiveData
@@ -217,6 +220,30 @@ open class LaurylRepository {
 
         })
 
+    }
+
+    fun getCities(){
+        val list = ArrayList<String>()
+        list.add("Hyderabad")
+        list.add("Pune")
+        list.add("Kolkata")
+        citiesLiveData.postValue(list)
+    }
+    fun getStates(){
+        val list = ArrayList<String>()
+        list.add("Andhra")
+        list.add("Telangana")
+        list.add("Kerala")
+        list.add("West Bangal")
+        statesLiveData.postValue(list)
+    }
+
+    fun getAddresses(){
+        val list = ArrayList<AddressModel>()
+        list.add(AddressModel("Home","5-206, Shapoorji palangi, Kolkata,\n West Bengal"))
+        list.add(AddressModel("Work","5-206, Shapoorji palangi, Kolkata,\n West Bengal"))
+        list.add(AddressModel("Other","5-206, Shapoorji palangi, Kolkata,\n West Bengal"))
+        addressLiveData.postValue(list)
     }
 
 }

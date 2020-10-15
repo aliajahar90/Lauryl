@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp">
 
+    <Spinner
+        android:layout_width="match_parent"
+        android:id="@+id/address_spinner"
+        android:layout_margin="@dimen/dp_5"
+        android:background="@drawable/border_box"
+        android:layout_height="wrap_content" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -137,7 +147,7 @@
                 android:id="@+id/city_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_5"
                 tools:listitem="@layout/state_spinner_item" />
 
             <View
@@ -159,7 +169,7 @@
                 android:id="@+id/state_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_5"
                 tools:listitem="@layout/state_spinner_item" />
 
             <View
@@ -217,3 +227,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</ScrollView>
