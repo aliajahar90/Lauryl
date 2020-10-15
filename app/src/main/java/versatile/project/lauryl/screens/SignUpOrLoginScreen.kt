@@ -111,8 +111,15 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                         call: Call<LoginResponse>,
                         response: Response<LoginResponse>
                     ) {
-                        Globals.saveStringToPreferences(applicationContext, Constants.USER_AUTH_TOKEN, response.body()!!.accessToken)
-                        (application as MyApplication).userAccessToken = response.body()!!.accessToken
+                        if(response?.body() != null) {
+                            Globals.saveStringToPreferences(
+                                applicationContext,
+                                Constants.USER_AUTH_TOKEN,
+                                response.body()!!.accessToken
+                            )
+                            (application as MyApplication).userAccessToken =
+                                response.body()!!.accessToken
+                        }
                         progressLyot.visibility = View.GONE
                         loginOrRegisterBtn.visibility = View.VISIBLE
 

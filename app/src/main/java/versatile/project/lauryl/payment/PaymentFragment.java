@@ -428,8 +428,13 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     }
 
     private void processUpiService() {
-        showLoading();
-        paymentViewModel.validateVPA(paymentFragmentBinding.paymentUPI.inputUPI.getText().toString());
+
+        if (paymentViewModel.basicInputValidation(paymentFragmentBinding.paymentUPI.inputUPI.getText().toString(), paymentFragmentBinding.paymentUPI.inputUPI.getText().toString().length())) {
+            showLoading();
+            paymentViewModel.validateVPA(paymentFragmentBinding.paymentUPI.inputUPI.getText().toString());
+        } else {
+            Toast.makeText(getActivity(), "Entered Vpa not valid", Toast.LENGTH_SHORT).show();
+        }
         setVpaValidationObserver();
     }
 

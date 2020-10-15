@@ -24,16 +24,16 @@ public class CnfPickupResponse implements Serializable {
 
         @SerializedName("totalCount")
         @Expose
-        private Integer totalCount;
+        private String totalCount;
         @SerializedName("list")
         @Expose
         private java.util.List<DateTimeList> list = null;
 
-        public Integer getTotalCount() {
+        public String getTotalCount() {
             return totalCount;
         }
 
-        public void setTotalCount(Integer totalCount) {
+        public void setTotalCount(String totalCount) {
             this.totalCount = totalCount;
         }
 
@@ -60,19 +60,19 @@ public class CnfPickupResponse implements Serializable {
         private String pickUpTime;
         @SerializedName("noOfSlots")
         @Expose
-        private Integer noOfSlots;
+        private String noOfSlots;
         @SerializedName("createdBy")
         @Expose
         private String createdBy;
         @SerializedName("createdAt")
         @Expose
-        private Integer createdAt;
+        private String createdAt;
         @SerializedName("modifiedBy")
         @Expose
         private String modifiedBy;
         @SerializedName("modifiedAt")
         @Expose
-        private Integer modifiedAt;
+        private String modifiedAt;
         @SerializedName("sellerId")
         @Expose
         private String sellerId;
@@ -113,11 +113,11 @@ public class CnfPickupResponse implements Serializable {
             this.pickUpTime = pickUpTime;
         }
 
-        public Integer getNoOfSlots() {
+        public String getNoOfSlots() {
             return noOfSlots;
         }
 
-        public void setNoOfSlots(Integer noOfSlots) {
+        public void setNoOfSlots(String noOfSlots) {
             this.noOfSlots = noOfSlots;
         }
 
@@ -129,11 +129,11 @@ public class CnfPickupResponse implements Serializable {
             this.createdBy = createdBy;
         }
 
-        public Integer getCreatedAt() {
+        public String getCreatedAt() {
             return createdAt;
         }
 
-        public void setCreatedAt(Integer createdAt) {
+        public void setCreatedAt(String createdAt) {
             this.createdAt = createdAt;
         }
 
@@ -145,11 +145,11 @@ public class CnfPickupResponse implements Serializable {
             this.modifiedBy = modifiedBy;
         }
 
-        public Integer getModifiedAt() {
+        public String getModifiedAt() {
             return modifiedAt;
         }
 
-        public void setModifiedAt(Integer modifiedAt) {
+        public void setModifiedAt(String modifiedAt) {
             this.modifiedAt = modifiedAt;
         }
 
