@@ -117,7 +117,7 @@ class HomeScreen : BaseActivity() {
         // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
         //selectMyOrdersDashboard()
     }
-    fun selectChangeAddressDashBoard() {
+    private fun selectChangeAddressDashBoard() {
         homeNameMdlVwTxt.text = getString(R.string.change_address)
         homeNameMdlVwTxt.visibility = View.VISIBLE
         homeNameTxt.visibility = View.GONE
@@ -132,6 +132,22 @@ class HomeScreen : BaseActivity() {
         // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
         //selectMyOrdersDashboard()
     }
+    private fun selectManageAddressDashBoard() {
+        homeNameMdlVwTxt.text = getString(R.string.manage_address)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+    }
+
+    fun displayManageAddressFragment() {
+        val fragment = ManageAddressFragment()
+        loadMyFragment(fragment)
+        selectManageAddressDashBoard()
+        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        //selectMyOrdersDashboard()
+    }
+
 
     fun displayMyOrdersFragment() {
         val fragment = MyOrdersFragment()

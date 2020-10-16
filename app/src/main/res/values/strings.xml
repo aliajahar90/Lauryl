@@ -96,6 +96,7 @@
     <string name="chose_servcs_txt">Choose Services</string>
     <string name="set_location">Set Location</string>
     <string name="change_address">Change Addresses</string>
+    <string name="manage_address">Manage Addresses</string>
     <string name="no_services">No services found</string>
     <string name="empty" />
     <string name="no_orders">No orders found</string>
