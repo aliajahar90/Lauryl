@@ -32,7 +32,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sri ram nagar colony"
+            android:text=""
+            android:id="@+id/city_name"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_18"
             android:textStyle="bold" />
@@ -48,11 +49,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:id="@+id/address_geo"
                 android:drawableLeft="@drawable/location_white_icon"
                 android:drawablePadding="@dimen/dp_10"
                 android:drawableTint="@color/orange"
                 android:padding="3dp"
-                android:text="Sri ram nagar colony"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 android:textStyle="bold" />

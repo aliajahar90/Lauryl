@@ -4,9 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
+import android.location.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +20,7 @@ import kotlinx.android.synthetic.main.map_location_fragment.*
 import timber.log.Timber
 import versatile.project.lauryl.R
 import versatile.project.lauryl.screens.HomeScreen
+import java.util.*
 
 
 open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListener {
@@ -42,8 +41,10 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
         savedInstanceState: Bundle?
     ): View? {
         val inview = inflater.inflate(R.layout.map_location_fragment, container, false)
-        (childFragmentManager.findFragmentById(R.id.googleMap) as SupportMapFragment).getMapAsync(this)
-           return inview
+        (childFragmentManager.findFragmentById(R.id.googleMap) as SupportMapFragment).getMapAsync(
+            this
+        )
+        return inview
     }
 
 
@@ -69,8 +70,13 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
                 return
             }
             googleMap?.isMyLocationEnabled = true
-            locationManager =context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            locationManager!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this)
+            locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            locationManager!!.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER,
+                MIN_TIME,
+                MIN_DISTANCE,
+                this
+            )
         }
     }
 
@@ -87,6 +93,36 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     }
 
 
+    fun fetchAddress(location: Location?) {
+        val addresses: List<Address>
+        val geoCoder: Geocoder = Geocoder(context!!, Locale.getDefault())
+
+        addresses = geoCoder.getFromLocation(
+            location?.latitude!!,
+            location.longitude,
+            1
+        ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+        val address: String = addresses[0]
+            .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+
+        val city: String = addresses[0].locality
+        val state: String = addresses[0].adminArea
+        val country: String = addresses[0].countryName
+        val postalCode: String = addresses[0].postalCode
+        val knownName: String = addresses[0].featureName
+        city_name.text = city
+        address_geo.text = address
+
+        Timber.e(
+            " address : $address, " +
+                    "city : $city, " +
+                    "state : $state, " +
+                    " country : $country," +
+                    " postalcode :  $postalCode," +
+                    " known address :  $knownName"
+        )
+    }
 
     override fun onMapReady(p0: GoogleMap?) {
         googleMap = p0
@@ -95,12 +131,16 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     }
 
     override fun onLocationChanged(location: Location?) {
+        fetchAddress(location)
         location.let {
-            val latLng = it?.latitude?.let { it1 -> location?.longitude?.let { it2 ->
-                LatLng(it1,
-                    it2
-                )
-            } }
+            val latLng = it?.latitude?.let { it1 ->
+                location?.longitude?.let { it2 ->
+                    LatLng(
+                        it1,
+                        it2
+                    )
+                }
+            }
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
             googleMap?.animateCamera(cameraUpdate)
             locationManager!!.removeUpdates(this)
