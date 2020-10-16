@@ -15,8 +15,8 @@ class RetrofitObj {
 
         var retrofit: Retrofit? = null
         var versatileRetrofit: Retrofit? = null
-        private const val BASE_URL_GENERAL = "http://108.129.42.62:8080/Lauryl/"
-        private const val BASE_URL_VERSATILE_GENERAL = "https://apiqa.versatilecommerce.co.uk/vcApi/"
+        private const val BASE_URL_GENERAL = "https://api.lauryl.in:8080/Lauryl/"
+        private const val BASE_URL_VERSATILE_GENERAL = "https://api.versatilecommerce.co.uk/vcApi/"
 
         fun getApiObj(): ApiServices? {
             val interceptor = HttpLoggingInterceptor()

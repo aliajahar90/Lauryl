@@ -90,9 +90,9 @@ class OTPVerificationScreen : BaseActivity() {
 
                 Log.d("otp_","${it.data}")
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    Globals.showNotifInOreoAll(this,"${it.data}")
+                   Globals.showNotifInOreoAll(this,"Otp Sent to mobile")
                 } else {
-                    Globals.sendNotification(this,"${it.data}")
+                   Globals.sendNotification(this,"Otp Sent to mobile")
                 }
 
             }else{

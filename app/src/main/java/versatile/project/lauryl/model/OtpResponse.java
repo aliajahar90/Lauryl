@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class OtpResponse {
 
-    @SerializedName("data")
+    @SerializedName("status")
     @Expose
     private String data;
 
