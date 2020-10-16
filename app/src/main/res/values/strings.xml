@@ -132,4 +132,5 @@
     <string name="transaction_failed">Transaction failed</string>
     <string name="reson">Reson:</string>
     <string name="transaction_id">Transaction ID:</string>
+    <string name="google_maps_key">AIzaSyDG-S0lW8l_svOcX3HuTOn2X_170l2mJA0</string>
 </resources>
