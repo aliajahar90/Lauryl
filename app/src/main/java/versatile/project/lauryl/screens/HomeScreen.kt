@@ -1,6 +1,7 @@
 package versatile.project.lauryl.screens
 
 import android.content.pm.ActivityInfo
+import android.location.Address
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -225,6 +226,10 @@ class HomeScreen : BaseActivity() {
         }
     }
 
+    fun setLocation(address: String)
+    {
+        homelocTxt.text=address
+    }
     fun selectPayment() {
         homeNameMdlVwTxt.text = getString(R.string.payment_details)
         homeNameMdlVwTxt.visibility = View.VISIBLE

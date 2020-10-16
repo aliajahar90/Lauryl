@@ -113,6 +113,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
         val knownName: String = addresses[0].featureName
         city_name.text = city
         address_geo.text = address
+        (activity as HomeScreen).setLocation(city)
 
         Timber.e(
             " address : $address, " +
