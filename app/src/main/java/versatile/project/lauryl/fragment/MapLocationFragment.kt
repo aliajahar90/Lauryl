@@ -16,10 +16,13 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.map_location_fragment.*
 import timber.log.Timber
 import versatile.project.lauryl.R
 import versatile.project.lauryl.screens.HomeScreen
+import java.lang.Exception
 import java.util.*
 
 
@@ -78,6 +81,22 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
                 this
             )
         }
+
+        googleMap?.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
+            override fun onMarkerDragStart(marker: Marker) {
+
+            }
+
+            override fun onMarkerDragEnd(marker: Marker) {
+                googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.position, 15f))
+                fetchAddress(marker.position.latitude, marker.position.longitude)
+            }
+
+            override fun onMarkerDrag(arg0: Marker?) {
+                //  val message = arg0!!.position.latitude.toString() + "" + arg0.position.longitude.toString()
+                // Log.d(TAG + "_DRAG", message)
+            }
+        })
     }
 
     override fun onRequestPermissionsResult(
@@ -93,36 +112,41 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     }
 
 
-    fun fetchAddress(location: Location?) {
+    fun fetchAddress(latitude: Double?, longitude: Double?) {
         val addresses: List<Address>
         val geoCoder: Geocoder = Geocoder(context!!, Locale.getDefault())
 
         addresses = geoCoder.getFromLocation(
-            location?.latitude!!,
-            location.longitude,
+            latitude!!,
+            longitude!!,
             1
         ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        try {
 
-        val address: String = addresses[0]
-            .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-        val city: String = addresses[0].locality
-        val state: String = addresses[0].adminArea
-        val country: String = addresses[0].countryName
-        val postalCode: String = addresses[0].postalCode
-        val knownName: String = addresses[0].featureName
-        city_name.text = city
-        address_geo.text = address
-        (activity as HomeScreen).setLocation(city)
+            val address: String = addresses[0]
+                .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-        Timber.e(
-            " address : $address, " +
-                    "city : $city, " +
-                    "state : $state, " +
-                    " country : $country," +
-                    " postalcode :  $postalCode," +
-                    " known address :  $knownName"
-        )
+            val city: String = addresses[0].locality
+            val state: String = addresses[0].adminArea
+            val country: String = addresses[0].countryName
+            val postalCode: String = addresses[0].postalCode
+            val knownName: String = addresses[0].featureName
+            city_name.text = city
+            address_geo.text = address
+            (activity as HomeScreen).setLocation(city)
+
+            Timber.e(
+                " address : $address, " +
+                        "city : $city, " +
+                        "state : $state, " +
+                        " country : $country," +
+                        " postalcode :  $postalCode," +
+                        " known address :  $knownName"
+            )
+        } catch (e: Exception) {
+
+        }
     }
 
     override fun onMapReady(p0: GoogleMap?) {
@@ -132,7 +156,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     }
 
     override fun onLocationChanged(location: Location?) {
-        fetchAddress(location)
+        fetchAddress(location?.latitude, location?.longitude)
         location.let {
             val latLng = it?.latitude?.let { it1 ->
                 location?.longitude?.let { it2 ->
@@ -140,10 +164,18 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
                         it1,
                         it2
                     )
+
                 }
             }
+            googleMap?.addMarker(
+                latLng?.let { it1 ->
+                    MarkerOptions()
+                        .position(it1).draggable(true)
+                }
+            )
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
             googleMap?.animateCamera(cameraUpdate)
+
             locationManager!!.removeUpdates(this)
         }
 
