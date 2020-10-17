@@ -111,7 +111,10 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                         call: Call<LoginResponse>,
                         response: Response<LoginResponse>
                     ) {
+
                         if(response?.body() != null) {
+                            response.body()
+
                             Globals.saveStringToPreferences(
                                 applicationContext,
                                 Constants.USER_AUTH_TOKEN,
@@ -145,27 +148,29 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                                         if (response != null) {
 
                                             if (response.isSuccessful) {
-
+                                                Globals.saveStringToPreferences(applicationContext, Constants.MOBILE_NUMBER, mblNumEdtVal)
                                                 Globals.saveStringToPreferences(applicationContext, Constants.AUTH_TOKEN, response.body()!!.accessToken)
                                                 (application as MyApplication).accessToken = response.body()!!.accessToken
-                                                Globals.showPopoUpDialog(this@SignUpOrLoginScreen,
-                                                    getString(R.string.lauryl),
-                                                    getString(
-                                                        R.string.user_login_successful
-                                                    ),
-                                                    true,
-                                                    object :
-                                                        OnRegistrationCallback {
-                                                        override fun userRegisteredSuccessfully() {
-                                                            startActivity(
-                                                                Intent(
-                                                                    this@SignUpOrLoginScreen,
-                                                                    HomeScreen::class.java
-                                                                )
-                                                            )
-                                                            finish()
-                                                        }
-                                                    })
+                                                (application as MyApplication).mobileNumber =mblNumEdtVal
+                                                startActivity(
+                                                    Intent(
+                                                        this@SignUpOrLoginScreen,
+                                                        HomeScreen::class.java
+                                                    )
+                                                )
+                                                finish()
+//                                                Globals.showPopoUpDialog(this@SignUpOrLoginScreen,
+//                                                    getString(R.string.lauryl),
+//                                                    getString(
+//                                                        R.string.user_login_successful
+//                                                    ),
+//                                                    true,
+//                                                    object :
+//                                                        OnRegistrationCallback {
+//                                                        override fun userRegisteredSuccessfully() {
+//
+//                                                        }
+//                                                    })
 
                                             } else {
                                                 val errorResponse = Gson().fromJson(

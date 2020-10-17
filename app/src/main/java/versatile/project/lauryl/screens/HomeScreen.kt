@@ -10,7 +10,9 @@ import versatile.project.lauryl.R
 import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.base.HomeNavigationController
 import versatile.project.lauryl.fragment.*
+import versatile.project.lauryl.home.HomeFragment
 import versatile.project.lauryl.pickup.CnfSchedulePckUpFragment
+import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
 
@@ -46,7 +48,7 @@ class HomeScreen : BaseActivity() {
             }
 
             R.id.myOrdersId -> {
-                displayMyOrdersFragment()
+                displayMyOrdersFragment(0)
                 return@OnNavigationItemSelectedListener true
             }
 
@@ -95,8 +97,12 @@ class HomeScreen : BaseActivity() {
         botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
     }
 
-    fun displayMyOrdersFragment() {
-        val fragment = MyOrdersFragment()
+    fun displayMyOrdersFragment(initPosition: Int) {
+        val bundle=Bundle()
+        bundle.putInt(AllConstants.Orders.initTabSelection,initPosition)
+        val myOrdersFragment=MyOrdersFragment()
+        myOrdersFragment.arguments=bundle
+        val fragment =myOrdersFragment
         loadMyFragment(fragment)
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
         selectMyOrdersDashboard()

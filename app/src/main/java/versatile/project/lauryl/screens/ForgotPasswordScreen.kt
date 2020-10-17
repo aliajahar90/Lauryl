@@ -30,7 +30,7 @@ class ForgotPasswordScreen : BaseActivity() {
         sendBtn.setOnClickListener {
 
             val mblNumberTxt = mblNumberEdt.text.toString()
-            if (mblNumberTxt == null || mblNumberTxt.isEmpty()) {
+            if (mblNumberTxt == null || mblNumberTxt.isEmpty()|| mblNumberTxt.length <10) {
                 Globals.showPopoUpDialog(
                     this,
                     getString(R.string.validation),
@@ -54,13 +54,13 @@ class ForgotPasswordScreen : BaseActivity() {
 
         forgotPswrdViewModel.getOtpResponseToObserve().observe(this, Observer {
             hideLoading()
-            if (it.data != null) {
+            if (it.data != null && it.data.equals("true")) {
 
                 Log.d("otp_", it.data)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    Globals.showNotifInOreoAll(this, it.data)
+                    Globals.showNotifInOreoAll(this,"Otp Sent to mobile")
                 } else {
-                    Globals.sendNotification(this, it.data)
+                    Globals.sendNotification(this,"Otp Sent to mobile")
                 }
 
                 val navToOtpVerfyIntent =

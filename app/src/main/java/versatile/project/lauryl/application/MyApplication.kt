@@ -10,6 +10,8 @@ open class MyApplication: MultiDexApplication() {
 
     var accessToken = "135693eb-f0ea-4377-bd3a-88c4196628dd"
     var userAccessToken = "135693eb-f0ea-4377-bd3a-88c4196628dd"
+    var mobileNumber = ""
+
 
     override fun onCreate() {
         super.onCreate()
