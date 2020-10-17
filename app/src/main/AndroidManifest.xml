@@ -17,8 +17,9 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:name=".application.MyApplication">
 
-        <activity android:name=".screens.ResetPasswordScreen"
-            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".screens.ResetPasswordScreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".screens.ForgotPasswordScreen"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".screens.OTPVerificationScreen"
@@ -26,7 +27,7 @@
         <activity android:name=".screens.HomeScreen"
             android:screenOrientation="portrait"
             android:configChanges="orientation"/>
-        <activity android:name=".screens.IntroScreen"></activity>
+        <activity android:name=".screens.IntroScreen" />
         <activity android:name=".screens.SignUpOrLoginScreen"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".screens.SplashScreen">
