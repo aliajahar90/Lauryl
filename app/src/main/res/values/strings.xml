@@ -36,7 +36,7 @@
     <string name="didnt_rcv_otp_txt">Didn\'t receive OTP?</string>
     <string name="send_otp_again_txt">Send Again?</string>
     <string name="code_verify_txt">Verification Code</string>
-    <string name="mbl_valid_num_txt">Please Enter Your Mobile Number</string>
+    <string name="mbl_valid_num_txt">Please Enter a Valid Mobile Number</string>
     <string name="mbl_valid_pswrd_txt">Please enter the Password</string>
     <string name="grant_type_txt">password</string>
     <string name="versatile_user_name_txt">lauryl</string>
@@ -99,7 +99,7 @@
     <string name="no_orders">No orders found</string>
     <string name="model_awaiting_pckup">Awaiting Pickup</string>
     <string name="model_awaiting_dlvry">Awaiting Delivery</string>
-    <string name="model_awaiting_cmpltd">Completed</string>
+    <string name="model_awaiting_cmpltd">Completed Delivery</string>
     <string name="no_data">No data found</string>
     <string name="bank_account">Bank Account</string>
     <string name="pay_now">PAY NOW</string>
@@ -133,4 +133,5 @@
     <string name="manage_address">Manage Address</string>
     <string name="logout">Logout</string>
     <string name="my_profile">My Profile</string>
+    <string name="pickup_process">Pickup Process</string>
 </resources>

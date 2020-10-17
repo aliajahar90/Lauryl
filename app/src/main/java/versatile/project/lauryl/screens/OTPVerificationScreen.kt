@@ -33,9 +33,11 @@ class OTPVerificationScreen : BaseActivity() {
 
         otpVerificationViewModel = ViewModelProvider(this).get(OtpVerificationViewModel::class.java)
         val mblNum = intent.getStringExtra(Constants.MOBILE_NUMBER) as String
-        val first2Chars = "${mblNum.substring(0,2)}"
-        val last2Chars = "${mblNum.substring(8,10)}"
-        mblNumTxt.text = "${getString(R.string.otp_txt)} ${first2Chars}xxxxxx${last2Chars}"
+        if(mblNum.length>=10) {
+            val first2Chars = "${mblNum.substring(0, 2)}"
+            val last2Chars = "${mblNum.substring(8, 10)}"
+            mblNumTxt.text = "${getString(R.string.otp_txt)} ${first2Chars}xxxxxx${last2Chars}"
+        }
         verifyBtn.setOnClickListener{
 
             val otpOneTxt = otpOneEdt.text.toString()
@@ -86,7 +88,7 @@ class OTPVerificationScreen : BaseActivity() {
 
         otpVerificationViewModel.getOtpResponseToObserve().observe(this, Observer {
             hideLoading()
-            if(it.data != null){
+            if(it.data != null && it.data.equals("true")){
 
                 Log.d("otp_","${it.data}")
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
