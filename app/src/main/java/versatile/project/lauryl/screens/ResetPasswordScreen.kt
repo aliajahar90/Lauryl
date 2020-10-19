@@ -65,7 +65,8 @@ class ResetPasswordScreen : AppCompatActivity() {
         resetPswrdViewModel.getResetPswrdToObserve().observe(this, Observer {
             if(it.data != null){
 
-                Globals.showPopoUpDialog(this,getString(R.string.reset_pswrd_hdng_txt),"${it.data}",true,object :OnRegistrationCallback{
+                Globals.showPopoUpDialog(this,getString(R.string.reset_pswrd_hdng_txt),
+                    it.data,true,object :OnRegistrationCallback{
 
                     override fun userRegisteredSuccessfully() {
                         var navtToRestPswrdIntent = Intent(this@ResetPasswordScreen,SignUpOrLoginScreen::class.java)
