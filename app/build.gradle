@@ -16,7 +16,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "versatile.project.lauryl"
+        applicationId "versatilecommerce.project.lauryl"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
