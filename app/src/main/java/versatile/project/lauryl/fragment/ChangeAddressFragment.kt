@@ -11,6 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.change_address_fragment.*
 import versatile.project.lauryl.R
 import versatile.project.lauryl.adapter.AddressSpinnerAdapter
+import versatile.project.lauryl.application.MyApplication
+import versatile.project.lauryl.utils.Constants
+import versatile.project.lauryl.utils.Globals
 import versatile.project.lauryl.view.model.ChangeAddressViewModel
 
 
@@ -24,7 +27,13 @@ class ChangeAddressFragment : Fragment() {
         changeAddressViewModel = ViewModelProvider(this)[ChangeAddressViewModel::class.java]
         observeDataSources()
         changeAddressViewModel.getStates()
-        changeAddressViewModel.getAddress()
+        val myApplication: MyApplication = (activity?.applicationContext as MyApplication)
+        changeAddressViewModel.getAddress(
+            access = myApplication.accessToken, number = Globals.getStringFromPreferences(
+                myApplication,
+                Constants.MOBILE_NUMBER
+            )
+        )
         changeAddressViewModel.getCities()
     }
 
@@ -40,7 +49,7 @@ class ChangeAddressFragment : Fragment() {
         })
         changeAddressViewModel.getStatesToObserve().observe(this, Observer {
 
-            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            val adapter: ArrayAdapter<String> = ArrayAdapter(
                 this.context!!,
                 R.layout.state_spinner_item,
                 it

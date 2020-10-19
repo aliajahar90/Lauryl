@@ -49,6 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:maxLines="2"
                 android:id="@+id/address_geo"
                 android:drawableLeft="@drawable/location_white_icon"
                 android:drawablePadding="@dimen/dp_10"
@@ -84,7 +85,7 @@
             android:paddingEnd="@dimen/dp_20"
             android:text="CONFIRM LOCATION"
             android:textColor="@color/white"
-            android:textSize="16dp" />
+            android:textSize="14dp" />
     </LinearLayout>
 
 </LinearLayout>

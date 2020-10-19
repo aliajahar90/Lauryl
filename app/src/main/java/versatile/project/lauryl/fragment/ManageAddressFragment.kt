@@ -17,6 +17,9 @@ import versatile.project.lauryl.R
 import versatile.project.lauryl.adapter.AddressSpinnerAdapter
 import versatile.project.lauryl.adapter.EditAddressAdapter
 import versatile.project.lauryl.adapter.EditDeleteListener
+import versatile.project.lauryl.application.MyApplication
+import versatile.project.lauryl.utils.Constants
+import versatile.project.lauryl.utils.Globals
 import versatile.project.lauryl.view.model.ChangeAddressViewModel
 import versatile.project.lauryl.view.model.ManageAddressViewModel
 
@@ -29,7 +32,14 @@ class ManageAddressFragment : Fragment(), EditDeleteListener {
         super.onCreate(savedInstanceState)
         observeDataSources()
         manageAddressViewModel = ViewModelProvider(this)[ManageAddressViewModel::class.java]
-        manageAddressViewModel.getAddress()
+        val myApplication: MyApplication = (activity?.applicationContext as MyApplication)
+
+        manageAddressViewModel.getAddress(
+            access = myApplication.accessToken, number = Globals.getStringFromPreferences(
+                myApplication,
+                Constants.MOBILE_NUMBER
+            )
+        )
     }
 
     private fun observeDataSources() {

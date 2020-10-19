@@ -137,7 +137,7 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                                         if (response != null) {
 
                                             if (response.isSuccessful) {
-
+                                                Globals.saveStringToPreferences(applicationContext, Constants.MOBILE_NUMBER, mblNumEdtVal)
                                                 Globals.saveStringToPreferences(applicationContext, Constants.AUTH_TOKEN, response.body()!!.accessToken)
                                                 (application as MyApplication).accessToken = response.body()!!.accessToken
                                                 Globals.showPopoUpDialog(this@SignUpOrLoginScreen,

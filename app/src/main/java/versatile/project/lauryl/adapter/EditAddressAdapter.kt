@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import versatile.project.lauryl.R
-import versatile.project.lauryl.model.AddressModel
+import versatile.project.lauryl.model.address.AddressModel
 
 
 class EditAddressAdapter(
@@ -48,8 +48,8 @@ class EditAddressViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     }
 
     fun bind(addressModel: AddressModel) {
-        mTitleView?.text = addressModel.addressType
-        address?.text = addressModel.address
+        mTitleView?.text = addressModel.addresType
+        address?.text = addressModel.address1
     }
 
 }

@@ -113,8 +113,9 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
 
     fun fetchAddress(latitude: Double?, longitude: Double?) {
+        Timber.e("latitude $latitude longitude $longitude")
         val addresses: List<Address>
-        val geoCoder: Geocoder = Geocoder(context!!, Locale.getDefault())
+        val geoCoder: Geocoder = Geocoder(context!!, Locale.ENGLISH)
 
         addresses = geoCoder.getFromLocation(
             latitude!!,
@@ -126,26 +127,29 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
             val address: String = addresses[0]
                 .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            Timber.e(
+                " address : $address, " )
 
             val city: String = addresses[0].locality
-            val state: String = addresses[0].adminArea
-            val country: String = addresses[0].countryName
-            val postalCode: String = addresses[0].postalCode
-            val knownName: String = addresses[0].featureName
             city_name.text = city
             address_geo.text = address
             (activity as HomeScreen).setLocation(city)
+//            val state: String = addresses[0].adminArea
+//            val country: String = addresses[0].countryName
+//            val postalCode: String = addresses[0].postalCode
+//            val knownName: String = addresses[0].featureName
+//
 
-            Timber.e(
-                " address : $address, " +
-                        "city : $city, " +
-                        "state : $state, " +
-                        " country : $country," +
-                        " postalcode :  $postalCode," +
-                        " known address :  $knownName"
-            )
+//            Timber.e(
+//                " address : $address, " +
+//                        "city : $city, " +
+//                        "state : $state, " +
+//                        " country : $country," +
+//                        " postalcode :  $postalCode," +
+//                        " known address :  $knownName"
+//            )
         } catch (e: Exception) {
-
+            e.printStackTrace()
         }
     }
 

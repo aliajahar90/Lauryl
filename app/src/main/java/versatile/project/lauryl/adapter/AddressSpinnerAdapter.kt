@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import versatile.project.lauryl.R
-import versatile.project.lauryl.model.AddressModel
+import versatile.project.lauryl.model.address.AddressModel
 
 class AddressSpinnerAdapter(val context: Context, private var dataSource: List<AddressModel>) : BaseAdapter() {
 
@@ -25,8 +25,8 @@ class AddressSpinnerAdapter(val context: Context, private var dataSource: List<A
             view = convertView
             vh = view.tag as ItemHolder
         }
-        vh.type.text = dataSource[position].addressType
-        vh.address.text = dataSource[position].address
+        vh.type.text = dataSource[position].addresType
+        vh.address.text = dataSource[position].address1
 
 
 

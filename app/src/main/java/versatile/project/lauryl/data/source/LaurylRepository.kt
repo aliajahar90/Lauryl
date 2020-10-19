@@ -7,6 +7,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import versatile.project.lauryl.model.*
+import versatile.project.lauryl.model.address.AddressModel
+import versatile.project.lauryl.model.address.AddressResponse
 import versatile.project.lauryl.network.api.ApiServices
 import versatile.project.lauryl.network.api.RetrofitObj
 
@@ -238,12 +240,22 @@ open class LaurylRepository {
         statesLiveData.postValue(list)
     }
 
-    fun getAddresses(){
-        val list = ArrayList<AddressModel>()
-        list.add(AddressModel("Home","5-206, Shapoorji palangi, Kolkata,\n West Bengal"))
-        list.add(AddressModel("Work","5-206, Shapoorji palangi, Kolkata,\n West Bengal"))
-        list.add(AddressModel("Other","5-206, Shapoorji palangi, Kolkata,\n West Bengal"))
-        addressLiveData.postValue(list)
+    fun getAddresses(accessToken: String,number: String ){
+
+       apiVersatileServices.getAddresses(accessToken = accessToken, number = number).enqueue(object:Callback<AddressResponse>{
+           override fun onFailure(call: Call<AddressResponse>, t: Throwable) {
+               addressLiveData.postValue(null)
+
+           }
+
+           override fun onResponse(
+               call: Call<AddressResponse>,
+               response: Response<AddressResponse>
+           ) {
+               addressLiveData.postValue(response.body()?.data?.list as ArrayList<AddressModel>?)
+           }
+
+       })
     }
 
 }

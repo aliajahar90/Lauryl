@@ -1,13 +1,11 @@
 package versatile.project.lauryl.view.model
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.JsonObject
+import timber.log.Timber
+import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.data.source.LaurylRepository
-import versatile.project.lauryl.model.AddressModel
-import versatile.project.lauryl.model.OtpResponse
-import versatile.project.lauryl.model.BooleanResponse
+import versatile.project.lauryl.model.address.AddressModel
 
 class ChangeAddressViewModel: ViewModel() {
 
@@ -41,8 +39,9 @@ class ChangeAddressViewModel: ViewModel() {
     fun getStates(){
         laurylRepository.getStates()
     }
-    fun getAddress(){
-        laurylRepository.getAddresses()
+    fun getAddress(access:String,number:String){
+        Timber.e("number $number")
+        laurylRepository.getAddresses(access,"7382129781")
     }
 
 

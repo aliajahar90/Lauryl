@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
 import versatile.project.lauryl.model.*
+import versatile.project.lauryl.model.address.AddressResponse
 
 interface ApiServices {
 
@@ -62,4 +63,6 @@ interface ApiServices {
     @POST("api/v1/order/list")
     fun getMyOrders(@Query("access_token") accessToken: String,@Body inputJsonBody: JsonObject): Call<MyOrdersResponse>
 
+    @GET("api/v1/user/address/list/{number}")
+    fun getAddresses(@Path("number") number: String,@Query("access_token") accessToken: String):Call<AddressResponse>
 }
