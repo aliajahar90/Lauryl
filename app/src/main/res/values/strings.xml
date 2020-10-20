@@ -124,7 +124,7 @@
     <string name="pickup_date_time"><![CDATA[Pickup Date & Time]]></string>
     <string name="payment_method">Payment Method</string>
     <string name="order_status">Order Status</string>
-    <string name="cancle_payment">Cancle payment</string>
+    <string name="cancle_payment">Cancel payment</string>
     <string name="retry_payment">Retry Payment</string>
     <string name="transaction_failed">Transaction failed</string>
     <string name="reson">Reson:</string>

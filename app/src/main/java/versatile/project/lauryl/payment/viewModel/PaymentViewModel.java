@@ -94,10 +94,10 @@ public class PaymentViewModel extends BaseViewModel {
         return paymentRepository.getPaymentMethodLoadError();
     }
     public LiveData<PaymentBaseShareData.PaymentSuccess> getPaymentSuccess() {
-        return paymentRepository.getPaymentSuccessMutableLiveData();
+        return paymentRepository.getPaymentSuccessSingleLiveEvent();
     }
     public LiveData<PaymentBaseShareData.PaymentError> getPaymentError() {
-        return paymentRepository.getPaymentErrorMutableLiveData();
+        return paymentRepository.getPaymentErrorSingleLiveEvent();
     }
     public void validateVPA(String vpa) {
         if (basicInputValidation(vpa, vpa.length())) {

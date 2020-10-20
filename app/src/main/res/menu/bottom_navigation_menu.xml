@@ -9,7 +9,7 @@
         android:id="@+id/myOrdersId"
         android:icon="@drawable/my_order_icon"/>
 
-    <item android:title="@string/shedule_pck_up_txt"
+    <item android:title="@string/schedule_pckup_txt"
         android:id="@+id/schedulePckUpId"
         android:icon="@drawable/schedule_pick_up_icon"/>
 

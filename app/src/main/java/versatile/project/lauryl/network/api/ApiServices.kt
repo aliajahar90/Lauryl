@@ -5,6 +5,8 @@ import retrofit2.Call
 import retrofit2.http.*
 import versatile.project.lauryl.model.*
 import versatile.project.lauryl.model.address.AddressResponse
+import versatile.project.lauryl.pickup.data.CnfPickupResponse
+import versatile.project.lauryl.profile.data.GetProfileResponse
 
 interface ApiServices {
 
@@ -65,4 +67,10 @@ interface ApiServices {
 
     @GET("api/v1/user/address/list/{number}")
     fun getAddresses(@Path("number") number: String,@Query("access_token") accessToken: String):Call<AddressResponse>
+    @POST("api/v1/schedulerPickUp/list")
+    fun getPickUpDateAndTime(@Query("access_token") accessToken: String,@Body inputJsonBody: JsonObject): Call<CnfPickupResponse>
+    @GET("api/v1/user/info")
+    fun getMyProfile(@Query("access_token") accessToken: String): Call<GetProfileResponse>
+
+
 }

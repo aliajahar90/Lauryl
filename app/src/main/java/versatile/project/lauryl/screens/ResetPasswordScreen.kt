@@ -1,5 +1,8 @@
 package versatile.project.lauryl.screens
 
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.ActivityInfo
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -62,9 +65,14 @@ class ResetPasswordScreen : AppCompatActivity() {
         resetPswrdViewModel.getResetPswrdToObserve().observe(this, Observer {
             if(it.data != null){
 
-                Globals.showPopoUpDialog(this,getString(R.string.reset_pswrd_hdng_txt),"${it.data}",true,object :OnRegistrationCallback{
+                Globals.showPopoUpDialog(this,getString(R.string.reset_pswrd_hdng_txt),
+                    it.data,true,object :OnRegistrationCallback{
 
                     override fun userRegisteredSuccessfully() {
+                        var navtToRestPswrdIntent = Intent(this@ResetPasswordScreen,SignUpOrLoginScreen::class.java)
+                        navtToRestPswrdIntent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+                        navtToRestPswrdIntent.addFlags(FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(navtToRestPswrdIntent)
                         finish()
                     }
 

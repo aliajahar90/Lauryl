@@ -17,6 +17,7 @@ class Constants {
         val IS_LOGIN = "IsLogin"
         val IS_PREFS_EXISTED = "IsPrefsExisted"
         val AUTH_TOKEN = "Auth_Token"
+        val USER_AUTH_TOKEN = "User_Auth_Token"
         var CURRENT_AUTH_TOKEN = ""
     }
 

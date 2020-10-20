@@ -18,6 +18,9 @@ import versatile.project.lauryl.R
 import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.base.HomeNavigationController
 import versatile.project.lauryl.fragment.*
+import versatile.project.lauryl.home.HomeFragment
+import versatile.project.lauryl.pickup.CnfSchedulePckUpFragment
+import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
 import java.lang.Exception
@@ -63,10 +66,10 @@ class HomeScreen : BaseActivity() , LocationListener {
                     return@OnNavigationItemSelectedListener true
                 }
 
-                R.id.myOrdersId -> {
-                    displayMyOrdersFragment()
-                    return@OnNavigationItemSelectedListener true
-                }
+            R.id.myOrdersId -> {
+                displayMyOrdersFragment(0)
+                return@OnNavigationItemSelectedListener true
+            }
 
                 R.id.schedulePckUpId -> {
                     displaySPFragment()
@@ -89,9 +92,8 @@ class HomeScreen : BaseActivity() , LocationListener {
         }
 
     private fun displayProfileFragment() {
-        bckBtn.visibility = View.VISIBLE;
-        val fragment = ProfileFragment()
-        loadMyFragment(fragment)
+        selectProfile()
+        homeNavigationController.addProfileFragment();
     }
 
     private fun displayPaymentFragment() {
@@ -162,8 +164,12 @@ class HomeScreen : BaseActivity() , LocationListener {
     }
 
 
-    fun displayMyOrdersFragment() {
-        val fragment = MyOrdersFragment()
+    fun displayMyOrdersFragment(initPosition: Int) {
+        val bundle=Bundle()
+        bundle.putInt(AllConstants.Orders.initTabSelection,initPosition)
+        val myOrdersFragment=MyOrdersFragment()
+        myOrdersFragment.arguments=bundle
+        val fragment =myOrdersFragment
         loadMyFragment(fragment)
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
         selectMyOrdersDashboard()
@@ -202,9 +208,9 @@ class HomeScreen : BaseActivity() , LocationListener {
     }
 
 
-    fun displayCnfPckUpFragment() {
-        selectCnfPckUp()
-        val fragment = CnfSchedulePckUpFragment()
+    fun displayCnfPckUpFragment(){
+       selectCnfPckUp()
+        val fragment = CnfSchedulePckUpFragment.newInstance()
         loadMyFragment(fragment)
     }
 
@@ -242,6 +248,18 @@ class HomeScreen : BaseActivity() , LocationListener {
     {
         homelocTxt.text=address
     }
+    fun selectProfile() {
+        homeNameMdlVwTxt.text = getString(R.string.my_profile)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        rlChange.visibility=View.VISIBLE
+        homeLocHdngTxt.text=getString(R.string.loc_hdng_txt)
+        homelocTxt.text="Hydrabad"
+     //   imgLoc.setImageResource(R.drawable.ic_name)
+        botmNavVw.menu.findItem(R.id.profileId).isChecked = true
+        bckBtn.visibility = View.VISIBLE;
+    }
     fun selectPayment() {
         homeNameMdlVwTxt.text = getString(R.string.payment_details)
         homeNameMdlVwTxt.visibility = View.VISIBLE
@@ -253,6 +271,14 @@ class HomeScreen : BaseActivity() , LocationListener {
         imgLoc.setImageResource(R.drawable.location_white_icon)
         botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
+    }
+    fun hideBackButton(){
+        bckBtn.visibility = View.GONE;
+
+    }
+    fun showBackButton(){
+        bckBtn.visibility = View.VISIBLE;
+
     }
 
 

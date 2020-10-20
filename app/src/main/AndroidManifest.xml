@@ -20,17 +20,28 @@
         <activity
             android:name=".screens.ResetPasswordScreen"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".screens.ForgotPasswordScreen"
+               <activity
+            android:screenOrientation="portrait"
+            android:name=".screens.ForgotPasswordScreen"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".screens.OTPVerificationScreen"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".screens.OTPVerificationScreen"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".screens.HomeScreen"
+        <activity
+            android:name=".screens.HomeScreen"
             android:screenOrientation="portrait"
             android:configChanges="orientation"/>
-        <activity android:name=".screens.IntroScreen" />
-        <activity android:name=".screens.SignUpOrLoginScreen"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".screens.IntroScreen"></activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".screens.SignUpOrLoginScreen"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".screens.SplashScreen">
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".screens.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

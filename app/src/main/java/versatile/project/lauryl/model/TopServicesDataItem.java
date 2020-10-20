@@ -9,6 +9,10 @@ public class TopServicesDataItem {
     @SerializedName("Product Title")
     @Expose
     private String productTitle;
+
+    @SerializedName("Product Main Image Url")
+    @Expose
+    private String imgUrl;
     @SerializedName("Description")
     @Expose
     private String description;
@@ -161,4 +165,7 @@ public class TopServicesDataItem {
         this.isDeleted = isDeleted;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
 }
