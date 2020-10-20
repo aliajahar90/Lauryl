@@ -65,6 +65,8 @@ class ChangeAddressFragment : Fragment() {
                 if (landMark != null && landMark.isNotEmpty()) {
                     if (pin_code != null && pin_code.isNotEmpty()) {
                         if (pin_code != null && pin_code.length == 6) {
+
+
                             Timber.e("validation success")
                             val inputJson = JsonObject()
                             inputJson.addProperty("phoneNumber", number)
@@ -86,9 +88,14 @@ class ChangeAddressFragment : Fragment() {
                             mAddress.country = state.country
                             mAddress.addresType = addressType
 
-                            if (isAddressTypeUsed(addressType)!="-") {
-                                //address type not used to save address
-                                addressObj.addProperty("id",isAddressTypeUsed(addressType))
+                            if (isEditing) {
+                                //updating address
+                                addressObj.addProperty("id", addressModel.id)
+                            } else {
+                                if (isAddressTypeUsed(addressType) != "-") {
+                                    //overriding previos address
+                                    addressObj.addProperty("id", isAddressTypeUsed(addressType))
+                                }
                             }
                             val addresList = JsonArray()
                             addresList.add(addressObj)
@@ -144,6 +151,10 @@ class ChangeAddressFragment : Fragment() {
             if (it.status) {
                 emptyFields()
                 //continue to order use mAddress
+                if(isEditing) {
+                    shout("Address Updated")
+                    activity?.onBackPressed()
+                }
             } else {
                 Globals.showPopoUpDialog(
                     context!!,
@@ -225,10 +236,10 @@ class ChangeAddressFragment : Fragment() {
                     if (mSpinnerInitialized) {
                         mAddress = addreList[position]
                         emptyFields()
-                        shouldValidte=false
+                        shouldValidte = false
                         shout("Previous address selected so continue to order")
                     }
-                    mSpinnerInitialized=true
+                    mSpinnerInitialized = true
                 }
             }
         })
@@ -238,6 +249,7 @@ class ChangeAddressFragment : Fragment() {
     var addressModel: AddressModel = AddressModel()
     private var mSpinnerInitialized = false
     private var shouldValidte = true
+    private var isEditing = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -252,10 +264,28 @@ class ChangeAddressFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         continue_location_btn.setOnClickListener {
             if (shouldValidte)
-            validateFields()
-            else
-            {
+                validateFields()
+            else {
                 //address selected so continue to order user mAddress as address
+            }
+        }
+        if (addressModel.id != null) {
+            isEditing = true
+            continue_location_btn.text="Update address"
+            address_spinner.visibility=View.GONE
+        }
+
+        addressType = addressModel.addresType.toString()
+        when (addressModel.addresType.toString()) {
+            "Home" -> {
+                address_type_radio.check(R.id.home)
+            }
+            "Work" -> {
+                address_type_radio.check(R.id.work)
+            }
+            else -> {
+                address_type_radio.check(R.id.other)
+
             }
         }
         addressModel.pinCode.let {

@@ -2,6 +2,7 @@ package versatile.project.lauryl.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,6 +33,7 @@ open class LaurylRepository {
     var statesLiveData: MutableLiveData<ArrayList<String>> = MutableLiveData()
     var addressLiveData: MutableLiveData<ArrayList<AddressModel>> = MutableLiveData()
     var saveAddressLiveData: MutableLiveData<BooleanResponse> = MutableLiveData()
+    var deleteAddressLiveData: MutableLiveData<BooleanResponse> = MutableLiveData()
     fun getMyOrdersLiveDta(): LiveData<MyOrdersResponse> {
         return myOrdersLiveData
     }
@@ -298,6 +300,24 @@ open class LaurylRepository {
                 response: Response<BooleanResponse>
             ) {
                 saveAddressLiveData.postValue(response.body())
+            }
+
+        })
+    }
+
+    fun deleteAddress(accessToken: String, id: String) {
+        val array = JsonArray()
+        array.add(id)
+        apiServices.deleteAddress(accessToken, array).enqueue(object : Callback<BooleanResponse> {
+            override fun onFailure(call: Call<BooleanResponse>, t: Throwable) {
+                deleteAddressLiveData.postValue(null)
+            }
+
+            override fun onResponse(
+                call: Call<BooleanResponse>,
+                response: Response<BooleanResponse>
+            ) {
+                deleteAddressLiveData.postValue(response.body())
             }
 
         })

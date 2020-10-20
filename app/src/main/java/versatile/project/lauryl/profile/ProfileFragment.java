@@ -29,6 +29,7 @@ import versatile.project.lauryl.payment.data.PaymentBaseShareData;
 import versatile.project.lauryl.profile.data.GetProfileResponse;
 import versatile.project.lauryl.profile.data.ProfileSharedData;
 import versatile.project.lauryl.profile.viewmodel.ProfileViewModel;
+import versatile.project.lauryl.screens.HomeScreen;
 import versatile.project.lauryl.screens.ResetPasswordScreen;
 import versatile.project.lauryl.screens.SignUpOrLoginScreen;
 import versatile.project.lauryl.utils.AllConstants;
@@ -82,6 +83,10 @@ public class ProfileFragment extends BaseBinding<ProfileViewModel, FragmentProfi
             Intent navtToRestPswrdIntent = new Intent(getActivity(), ResetPasswordScreen.class);
             navtToRestPswrdIntent.putExtra(AllConstants.Profile.MOBILE_NUMBER, profileBinding.txtNumber.getText().toString());
             startActivity(navtToRestPswrdIntent);
+        });
+        profileBinding.rlAddress.setOnClickListener(view -> {
+            HomeScreen activity=(HomeScreen) getMyActivity();
+            activity.displayManageAddressFragment();
         });
         profileBinding.rlLogout.setOnClickListener(view -> {
             Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getUSER_AUTH_TOKEN(), "");

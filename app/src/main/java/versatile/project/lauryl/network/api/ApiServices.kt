@@ -1,5 +1,6 @@
 package versatile.project.lauryl.network.api
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
@@ -101,5 +102,9 @@ interface ApiServices {
     @POST("api/v1/user/address/save")
     fun saveAddress(@Query("access_token") accessToken: String,
                     @Body inputJsonBody: JsonObject):Call<BooleanResponse>
+     @POST("api/v1/user/address/delete")
+    fun deleteAddress(@Query("access_token") accessToken: String,
+                    @Body idArray :JsonArray ):Call<BooleanResponse>
+
 
 }

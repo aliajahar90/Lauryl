@@ -23,7 +23,7 @@ class EditAddressAdapter(
         val addressModel: AddressModel = list[position]
         holder.bind(addressModel)
         holder.editBtn?.setOnClickListener { editDeleteListener.editClicked(position) }
-        holder.deleteBtn?.setOnClickListener { editDeleteListener.deleteClicked(position) }
+        holder.deleteBtn?.setOnClickListener { editDeleteListener.deleteClicked(addressModel.id!!,position) }
     }
 
     override fun getItemCount(): Int {
@@ -49,7 +49,7 @@ class EditAddressViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
 
     fun bind(addressModel: AddressModel) {
         mTitleView?.text = addressModel.addresType
-        address?.text = addressModel.address1
+        address?.text = addressModel.toString()
     }
 
 }
