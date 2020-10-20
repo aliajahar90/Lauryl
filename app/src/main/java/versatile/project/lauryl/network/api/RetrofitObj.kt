@@ -17,16 +17,12 @@ class RetrofitObj {
         var versatileRetrofit: Retrofit? = null
         private const val BASE_URL_GENERAL = "https://api.lauryl.in:8080/Lauryl/"
         private const val BASE_URL_VERSATILE_GENERAL = "https://api.versatilecommerce.co.uk/vcApi/"
+
         fun getApiObj(): ApiServices? {
             val interceptor = HttpLoggingInterceptor()
             interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(
-                    BasicAuthInterceptor(
-                        Constants.API_BASIC_AUTH_USER_NAME,
-                        Constants.API_BASIC_AUTH_PASSWORD
-                    )
-                )
+                .addInterceptor(BasicAuthInterceptor(Constants.API_BASIC_AUTH_USER_NAME,Constants.API_BASIC_AUTH_PASSWORD))
                 .addInterceptor(interceptor)
                 .readTimeout(120, TimeUnit.SECONDS)
                 .writeTimeout(120, TimeUnit.SECONDS)
@@ -47,12 +43,7 @@ class RetrofitObj {
             val interceptor = HttpLoggingInterceptor()
             interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(
-                    BasicAuthInterceptor(
-                        Constants.API_BASIC_AUTH_USER_NAME_VERSATILE,
-                        Constants.API_BASIC_AUTH_PASSWORD_VERSATILE
-                    )
-                )
+                .addInterceptor(BasicAuthInterceptor(Constants.API_BASIC_AUTH_USER_NAME_VERSATILE,Constants.API_BASIC_AUTH_PASSWORD_VERSATILE))
                 .addInterceptor(interceptor)
                 .readTimeout(120, TimeUnit.SECONDS)
                 .writeTimeout(120, TimeUnit.SECONDS)
