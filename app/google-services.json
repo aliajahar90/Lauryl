@@ -30,6 +30,49 @@
             {
               "client_id": "745459690561-7kmepj1qhhgg0ro4g1usn3fpvp9322g8.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "745459690561-b5oj7o0f7239btvijcg2n29s1tgc3cen.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.VersatileCommerce.Lauryl"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:745459690561:android:484dec28df9a6a2e966ac0",
+        "android_client_info": {
+          "package_name": "versatilecommerce.project.lauryl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "745459690561-7kmepj1qhhgg0ro4g1usn3fpvp9322g8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG-S0lW8l_svOcX3HuTOn2X_170l2mJA0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "745459690561-7kmepj1qhhgg0ro4g1usn3fpvp9322g8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "745459690561-b5oj7o0f7239btvijcg2n29s1tgc3cen.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.VersatileCommerce.Lauryl"
+              }
             }
           ]
         }
