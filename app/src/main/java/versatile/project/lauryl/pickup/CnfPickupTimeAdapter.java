@@ -27,11 +27,13 @@ public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdap
     OnTimeClickListener onDateClickListener;
     Context context;
     private int selectedPosition = -1;
+    private String date;
 
-    public CnfPickupTimeAdapter(Context context, List<String> stringList, OnTimeClickListener onDateClickListener) {
+    public CnfPickupTimeAdapter(Context context, List<String> stringList, OnTimeClickListener onDateClickListener,String date) {
         this.context = context;
         this.stringList = stringList;
         this.onDateClickListener = onDateClickListener;
+        this.date=date;
     }
 
     @NonNull
@@ -73,8 +75,14 @@ public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdap
                     listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.orange));
                 }
             } else {
-                listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.grey_bckgrnd_with_radius);
-                listItemCnfSchedulePickupBinding.txtTime.setTextColor(Color.WHITE);
+                if(isFuture(date)) {
+                    listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.white_bckgrnd_with_radius);
+                    listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.orange));
+                }
+                else {
+                    listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.grey_bckgrnd_with_radius);
+                    listItemCnfSchedulePickupBinding.txtTime.setTextColor(Color.WHITE);
+                }
             }
             listItemCnfSchedulePickupBinding.linTime.setOnClickListener(view -> {
                 selectedPosition = position;
@@ -110,7 +118,20 @@ public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdap
         }
         return false;
     }
+    boolean isFuture(String stringDate) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+            LocalDate dateToCompare = formatter.parseLocalDate(stringDate);
+            LocalDate currentDate = LocalDate.now();
+            DateTimeFormatter currentDateFormat = DateTimeFormat.forPattern("MM/dd/yyyy");
+            String str = currentDate.toString(currentDateFormat);
+            LocalDate localCurrentDate = formatter.parseLocalDate(str);
+            return  dateToCompare.isAfter(localCurrentDate);
+        } catch (Exception e) {
 
+        }
+        return false;
+    }
     String getReadableMonth(String stringDate) {
         try {
             DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");

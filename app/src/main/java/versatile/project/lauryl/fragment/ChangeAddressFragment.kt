@@ -59,8 +59,10 @@ class ChangeAddressFragment : Fragment() {
         })
 
         changeAddressViewModel.getAddressesToObserve().observe(this, Observer {
-            val adapter = AddressSpinnerAdapter(this.context!!, it)
-            address_spinner.adapter = adapter
+            if(it!=null) {
+                val adapter = AddressSpinnerAdapter(this.context!!, it)
+                address_spinner.adapter = adapter
+            }
 
         })
 
