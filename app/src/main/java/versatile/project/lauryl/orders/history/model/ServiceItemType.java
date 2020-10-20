@@ -5,6 +5,19 @@ import android.os.Parcelable;
 
 public class ServiceItemType implements Parcelable {
     private String scannedItemType;
+
+    public void setScannedItemType(String scannedItemType) {
+        this.scannedItemType = scannedItemType;
+    }
+
+    public void setQtyPurchased(String qtyPurchased) {
+        this.qtyPurchased = qtyPurchased;
+    }
+
+    public void setProductPrice(String productPrice) {
+        this.productPrice = productPrice;
+    }
+
     private String qtyPurchased;
     private String productPrice;
 

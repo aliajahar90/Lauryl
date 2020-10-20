@@ -26,9 +26,10 @@ class AwaitingPckUpsAdapter(var activity: FragmentActivity?, var context: Contex
 
     override fun onBindViewHolder(requiredViewHolder: MyViewHolder, position: Int) {
         requiredViewHolder.bindDta(awtngPckUpList!![position])
-        requiredViewHolder.mainLyot.setOnClickListener {
-            (activity as HomeScreen).displayOrderHstryFragment()
-        }
+//        requiredViewHolder.mainLyot.setOnClickListener {
+//
+//            (activity as HomeScreen).displayOrderHstryFragment()
+//        }
         requiredViewHolder.reschedule_pickup_btn.setOnClickListener {
             (activity as HomeScreen).displayCnfPckUpFragment()
         }

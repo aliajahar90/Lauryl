@@ -156,9 +156,12 @@ class HomeScreen : BaseActivity() {
         botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
     }
 
-    fun displayOrderHstryFragment(){
-        val fragment =
-            OrderHistoryFragment()
+    fun displayOrderHstryFragment(jsonString: String){
+        val bundle=Bundle()
+        bundle.putString(AllConstants.Orders.orderData,jsonString)
+        val orderHistoryFragment=OrderHistoryFragment();
+        orderHistoryFragment.arguments=bundle
+        val fragment = orderHistoryFragment
         loadMyFragment(fragment)
         selectOrderHistory()
     }

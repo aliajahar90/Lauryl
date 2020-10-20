@@ -217,7 +217,7 @@ class MyOrdersFragment : Fragment() {
         myOrdrsRcyclrVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
         if (awtngCmpltdAdapter == null) {
             awtngCmpltdAdapter =
-                AwaitingCompleteAdapter(activity!!.applicationContext, awaitingPckUpCompletedDtaLst)
+                AwaitingCompleteAdapter(activity,activity!!.applicationContext, awaitingPckUpCompletedDtaLst)
         } else {
             awtngCmpltdAdapter!!.setNewAwaitingCmpltdList(awaitingPckUpCompletedDtaLst)
         }
@@ -239,7 +239,7 @@ class MyOrdersFragment : Fragment() {
         myOrdrsRcyclrVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
         if (awtngDlvryAdapter == null) {
             awtngDlvryAdapter =
-                AwaitingDevliveryAdapter(activity!!.applicationContext, awaitingPckUpDevryDtaLst)
+                AwaitingDevliveryAdapter(activity,activity!!.applicationContext, awaitingPckUpDevryDtaLst)
         } else {
             awtngDlvryAdapter!!.setNewAwaitingPckUpsList(awaitingPckUpDevryDtaLst)
         }

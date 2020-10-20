@@ -11,6 +11,7 @@
         android:background="@android:color/white">
 
         <RelativeLayout
+            android:visibility="invisible"
             android:id="@+id/monthSpnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,6 +30,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:visibility="invisible"
             android:id="@+id/srvcsSpnr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,6 +50,7 @@
 
 
         <ImageView
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -80,18 +83,20 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/txtOrderNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Order Id. 2884"
+                        android:text=""
                         android:textColor="@android:color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
 
                     <TextView
+                        android:id="@+id/txtOrderDateTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="08 Dec 2019 &amp; 11:00 - 12:30 PM"
+                        android:text="xzxz"
                         android:textColor="@android:color/darker_gray"
                         android:textSize="12sp" />
 
@@ -105,13 +110,14 @@
                     android:layout_alignParentRight="true">
 
                     <TextView
+                        android:id="@+id/txtOrderStage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:background="@color/lit_pink_red"
+                        android:background="@color/lit_green"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="Pickup Process"
+                        android:text=""
                         android:textColor="@android:color/white"
                         android:textSize="10sp" />
 
@@ -517,6 +523,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/relTotal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp">
@@ -530,11 +537,12 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/txtTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:text="\u20B9 300"
+                    android:text=""
                     android:textColor="@android:color/black" />
 
             </RelativeLayout>
