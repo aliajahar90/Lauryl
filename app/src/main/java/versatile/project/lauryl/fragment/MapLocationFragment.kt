@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.map_location_fragment.*
 import timber.log.Timber
 import versatile.project.lauryl.R
+import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.screens.HomeScreen
 import java.lang.Exception
 import java.util.*
@@ -32,6 +33,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     private var locationManager: LocationManager? = null
     private val MIN_TIME: Long = 400
     private val MIN_DISTANCE = 1000f
+    private var addressModel: AddressModel = AddressModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +56,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         confirm_location_btn.setOnClickListener {
-            (activity as HomeScreen).displayChangeAddressFragment()
+            (activity as HomeScreen).displayChangeAddressFragment(addressModel)
         }
     }
 
@@ -127,9 +129,35 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
             val address: String = addresses[0]
                 .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-            Timber.e(
-                " address : $address, " )
+            addresses[0].locality.let {
+                addressModel.city = it
+                Timber.e("city ${addressModel.city}")
+            }
+            addresses[0].adminArea.let {
+                addressModel.state = it
+                Timber.e("state ${addressModel.state}")
+            }
+            addresses[0].countryName.let {
+                addressModel.country = it
+                Timber.e("country ${addressModel.country}")
 
+            }
+            addresses[0].postalCode.let {
+                addressModel.pinCode = it
+                Timber.e("pinCode ${addressModel.pinCode}")
+
+            }
+            addresses[0].featureName.let {
+                addressModel.landmark = it
+                Timber.e("landmark ${addressModel.landmark}")
+
+            }
+            addresses[0].thoroughfare.let {
+                addressModel.streetName = it
+                Timber.e("streetName ${addressModel.streetName}")
+
+            }
+           // Toast.makeText(context, address, Toast.LENGTH_SHORT).show()
             val city: String = addresses[0].locality
             city_name.text = city
             address_geo.text = address

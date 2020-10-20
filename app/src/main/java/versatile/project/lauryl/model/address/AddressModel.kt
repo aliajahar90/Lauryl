@@ -2,15 +2,16 @@ package versatile.project.lauryl.model.address
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-class AddressModel {
+class AddressModel : Serializable {
     @SerializedName("createdBy")
     @Expose
     var createdBy: Any? = null
 
     @SerializedName("createdAt")
     @Expose
-    var createdAt: Int? = null
+    var createdAt: Long? = null
 
     @SerializedName("modifiedBy")
     @Expose
@@ -18,7 +19,7 @@ class AddressModel {
 
     @SerializedName("modifiedAt")
     @Expose
-    var modifiedAt: Int? = null
+    var modifiedAt: Long? = null
 
     @SerializedName("isDeleted")
     @Expose
@@ -82,6 +83,11 @@ class AddressModel {
 
     @SerializedName("phoneNumber")
     @Expose
-    var phoneNumber: Int? = null
+    var phoneNumber: Long? = null
+
+
+    override fun toString(): String {
+        return "$streetName, $landmark, $city, $state, $pinCode"
+    }
 
 }

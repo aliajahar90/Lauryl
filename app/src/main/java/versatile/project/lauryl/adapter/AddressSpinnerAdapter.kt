@@ -26,7 +26,7 @@ class AddressSpinnerAdapter(val context: Context, private var dataSource: List<A
             vh = view.tag as ItemHolder
         }
         vh.type.text = dataSource[position].addresType
-        vh.address.text = dataSource[position].address1
+        vh.address.text = dataSource[position].toString()
 
 
 
