@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
 import versatile.project.lauryl.model.*
+import versatile.project.lauryl.orders.history.model.OrderItemsResponse
 import versatile.project.lauryl.pickup.data.CnfPickupResponse
 import versatile.project.lauryl.profile.data.GetProfileResponse
 
@@ -68,6 +69,9 @@ interface ApiServices {
     fun getPickUpDateAndTime(@Query("access_token") accessToken: String,@Body inputJsonBody: JsonObject): Call<CnfPickupResponse>
     @GET("api/v1/user/info")
     fun getMyProfile(@Query("access_token") accessToken: String): Call<GetProfileResponse>
+    @POST("api/v1/order/item/list")
+    fun getOrderItems(@Query("access_token") accessToken: String,@Body inputJsonBody: JsonObject): Call<OrderItemsResponse>
+
 
 
 }

@@ -11,6 +11,7 @@ import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.base.HomeNavigationController
 import versatile.project.lauryl.fragment.*
 import versatile.project.lauryl.home.HomeFragment
+import versatile.project.lauryl.orders.history.OrderHistoryFragment
 import versatile.project.lauryl.pickup.CnfSchedulePckUpFragment
 import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Constants
@@ -156,7 +157,8 @@ class HomeScreen : BaseActivity() {
     }
 
     fun displayOrderHstryFragment(){
-        val fragment = OrderHistoryFragment()
+        val fragment =
+            OrderHistoryFragment()
         loadMyFragment(fragment)
         selectOrderHistory()
     }
