@@ -134,5 +134,7 @@
     <string name="logout">Logout</string>
     <string name="my_profile">My Profile</string>
     <string name="pickup_process">Pickup Process</string>
-    <string name="order_item_error">Error fetching order item</string>
-</resources>
+    <string name="google_maps_key">AIzaSyDG-S0lW8l_svOcX3HuTOn2X_170l2mJA0</string>
+    <string name="set_location">Set Location</string>
+    <string name="change_address">Change Addresses</string>
+ </resources>

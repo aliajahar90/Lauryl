@@ -63,7 +63,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     CnfPickupDateAdapter adapter = null;
     CnfPickupTimeAdapter cnfPickupTimeAdapter = null;
     EndlessRecyclerViewScrollListener scrollListener;
-    String selectedTime=null;
+    String selectedTime = null;
 
     public static CnfSchedulePckUpFragment newInstance() {
         CnfSchedulePckUpFragment cnfSchedulePckUpFragment = new CnfSchedulePckUpFragment();
@@ -101,18 +101,16 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         if (adapter == null) {
             adapter = new CnfPickupDateAdapter(uniqueDates, this);
             cnfSchdulePckupFragmentBinding.horztlScrlVw.setAdapter(adapter);
-        }
-        cnfSchedulePickupViewModel.observePickupDateTimeSuccessResponse().observe(this, cnfPickupResponse -> {
-            hideLoader();
             // horizontal RecyclerView
             cnfSchdulePckupFragmentBinding.horztlScrlVw.setHasFixedSize(true);
             mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
             cnfSchdulePckupFragmentBinding.horztlScrlVw.setLayoutManager(mLayoutManager);
             cnfSchdulePckupFragmentBinding.horztlScrlVw.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.HORIZONTAL));
             cnfSchdulePckupFragmentBinding.horztlScrlVw.setItemAnimator(new DefaultItemAnimator());
-            for (String s : cnfPickupResponse) {
-                rawDates.add(s);
-            }
+        }
+        cnfSchedulePickupViewModel.observePickupDateTimeSuccessResponse().observe(this, cnfPickupResponse -> {
+            hideLoader();
+            rawDates.addAll(cnfPickupResponse);
             Set<String> uniqueDateSet = new LinkedHashSet<>(rawDates);
             for (String s : uniqueDateSet) {
                 //uniqueDates.clear();
@@ -122,9 +120,9 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
                     }
                 }
             }
-                adapter.notifyDataSetChanged();
-                //adapter.notifyItemRangeInserted(adapter.getItemCount(), uniqueDates.size() - 1);
-                //((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(0, adapter.getItemCount());
+            adapter.notifyDataSetChanged();
+            //adapter.notifyItemRangeInserted(adapter.getItemCount(), uniqueDates.size() - 1);
+            //((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(0, adapter.getItemCount());
 
             listenOnScroll();
 
@@ -142,13 +140,13 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         });
 
         cnfSchdulePckupFragmentBinding.schdlePckUpBtn.setOnClickListener(view -> {
-            if(selectedTime!=null) {
+            if (selectedTime != null) {
                 if (getActivity() instanceof HomeScreen) {
                     ((HomeScreen) getActivity()).selectPayment();
                 }
                 HomeNavigationController.getInstance(getActivity()).addPaymentFragment();
-            }else{
-                    Globals.Companion.showToastMsg(getActivity(),"Please select pickup time");
+            } else {
+                Globals.Companion.showToastMsg(getActivity(), "Please select pickup time");
             }
         });
     }
@@ -163,7 +161,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     }
 
     private void listenOnScroll() {
-         scrollListener= new EndlessRecyclerViewScrollListener((LinearLayoutManager) mLayoutManager) {
+        scrollListener = new EndlessRecyclerViewScrollListener((LinearLayoutManager) mLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (!isLastPage) {
@@ -212,7 +210,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
 
     @Override
     public void onTimeClicked(String time) {
-selectedTime=time;
+        selectedTime = time;
     }
 
     boolean isTodayOrFuture(String stringDate) {
@@ -229,14 +227,15 @@ selectedTime=time;
         }
         return false;
     }
-    void resetState(){
-        selectedTime=null;
-        adapter=null;
-        CURRENT_PAGE=1;
-        isLastPage=false;
+
+    void resetState() {
+        selectedTime = null;
+        adapter = null;
+        CURRENT_PAGE = 1;
+        isLastPage = false;
         rawDates.clear();
         uniqueDates.clear();
-        if(scrollListener!=null){
+        if (scrollListener != null) {
             scrollListener.resetState();
         }
     }

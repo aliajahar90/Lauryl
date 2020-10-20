@@ -1,11 +1,19 @@
 package versatile.project.lauryl.screens
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
+import android.location.*
 import android.os.Bundle
 import android.view.View
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home_screen.*
+import timber.log.Timber
 import versatile.project.lauryl.R
 import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.base.HomeNavigationController
@@ -16,9 +24,15 @@ import versatile.project.lauryl.pickup.CnfSchedulePckUpFragment
 import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
+import java.lang.Exception
+import java.util.*
 
-class HomeScreen : BaseActivity() {
-    lateinit var homeNavigationController: HomeNavigationController;
+class HomeScreen : BaseActivity() , LocationListener {
+    lateinit var homeNavigationController: HomeNavigationController
+    private val REQUEST_CODE = 101
+    private var locationManager: LocationManager? = null
+    private val MIN_TIME: Long = 400
+    private val MIN_DISTANCE = 1000f
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
@@ -37,6 +51,10 @@ class HomeScreen : BaseActivity() {
             }
 
         }
+        changeLocation.setOnClickListener {
+            displayMapLocationFragment()
+        }
+        fetchLocation()
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
@@ -97,6 +115,54 @@ class HomeScreen : BaseActivity() {
         bckBtn.visibility = View.GONE
         botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
     }
+
+    fun selectMapLocationPickUpDashBoard() {
+        homeNameMdlVwTxt.text = getString(R.string.set_location)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+        // botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
+    }
+
+    private fun displayMapLocationFragment() {
+        val fragment = MapLocationFragment()
+        loadMyFragment(fragment)
+        selectMapLocationPickUpDashBoard()
+        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        //selectMyOrdersDashboard()
+    }
+    private fun selectChangeAddressDashBoard() {
+        homeNameMdlVwTxt.text = getString(R.string.change_address)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+    }
+
+    fun displayChangeAddressFragment() {
+        val fragment = ChangeAddressFragment()
+        loadMyFragment(fragment)
+        selectChangeAddressDashBoard()
+        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        //selectMyOrdersDashboard()
+    }
+    private fun selectManageAddressDashBoard() {
+        homeNameMdlVwTxt.text = getString(R.string.manage_address)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+    }
+
+    fun displayManageAddressFragment() {
+        val fragment = ManageAddressFragment()
+        loadMyFragment(fragment)
+        selectManageAddressDashBoard()
+        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        //selectMyOrdersDashboard()
+    }
+
 
     fun displayMyOrdersFragment(initPosition: Int) {
         val bundle=Bundle()
@@ -181,6 +247,11 @@ class HomeScreen : BaseActivity() {
             finish()
         }
     }
+
+    fun setLocation(address: String)
+    {
+        homelocTxt.text=address
+    }
     fun selectProfile() {
         homeNameMdlVwTxt.text = getString(R.string.my_profile)
         homeNameMdlVwTxt.visibility = View.VISIBLE
@@ -212,5 +283,95 @@ class HomeScreen : BaseActivity() {
     fun showBackButton(){
         bckBtn.visibility = View.VISIBLE;
 
+    }
+
+
+    fun fetchLocation() {
+        this.let {
+            if (ActivityCompat.checkSelfPermission(
+                    it, Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    it, Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    it as Activity,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE
+                )
+                return
+            }
+            //  googleMap?.isMyLocationEnabled = true
+            locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            locationManager!!.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER,
+                MIN_TIME,
+                MIN_DISTANCE,
+                this
+            )
+        }
+    }
+
+    fun fetchAddress(latitude: Double?, longitude: Double?) {
+        Timber.e("latitude $latitude longitude $longitude")
+        val addresses: List<Address>
+        val geoCoder: Geocoder = Geocoder(this, Locale.getDefault())
+
+        addresses = geoCoder.getFromLocation(
+            latitude!!,
+            longitude!!,
+            1
+        ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        try {
+
+            val address: String = addresses[0]
+                .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            Timber.e(
+                " address : $address, " )
+
+            val city: String = addresses[0].locality
+            setLocation(city)
+
+            val state: String = addresses[0].adminArea
+            val country: String = addresses[0].countryName
+            val postalCode: String = addresses[0].postalCode
+            val knownName: String = addresses[0].featureName
+
+            Timber.e(
+                " address : $address, " +
+                        "city : $city, " +
+                        "state : $state, " +
+                        " country : $country," +
+                        " postalcode :  $postalCode," +
+                        " known address :  $knownName"
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
+    override fun onLocationChanged(location: Location?) {
+        fetchAddress(location?.latitude, location?.longitude)
+        location.let {
+            val latLng = it?.latitude?.let { it1 ->
+                location?.longitude?.let { it2 ->
+                    LatLng(
+                        it1,
+                        it2
+                    )
+
+                }
+            }
+            locationManager!!.removeUpdates(this)
+        }
+    }
+
+    override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+    }
+
+    override fun onProviderEnabled(p0: String?) {
+    }
+
+    override fun onProviderDisabled(p0: String?) {
     }
 }

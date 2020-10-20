@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.firebase.crashlytics.internal.common.CrashlyticsCore
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.splash_screen.*
 import versatile.project.lauryl.R
@@ -31,6 +32,7 @@ class SplashScreen : AppCompatActivity() {
         }
 
         Handler().postDelayed({
+
             startActivity(Intent(this@SplashScreen, IntroScreen::class.java))
             finish()
         },6000)

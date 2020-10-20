@@ -1,21 +1,17 @@
-
-package versatile.project.lauryl.model;
+package versatile.project.lauryl.model.address;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class OtpResponse {
-
+public class AddressResponse {
     @SerializedName("data")
     @Expose
-    private String data;
+    private AddressData data;
 
-    public String getData() {
+    public AddressData getData() {
         return data;
     }
-
-    public void setData(String data) {
+    public void setData(AddressData data) {
         this.data = data;
     }
-
 }

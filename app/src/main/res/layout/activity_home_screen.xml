@@ -87,6 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="1"
+            android:id="@+id/changeLocation"
             android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
@@ -170,15 +171,25 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/botmNavVw"
+        android:background="@color/dark_grey"/>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/botmNavVw"
         android:layout_gravity="bottom"
+        android:background="#fff"
         app:menu="@menu/bottom_navigation_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:labelVisibilityMode="labeled"
+        android:elevation="@dimen/dp_10"
         app:itemIconSize="24dp"
-        app:elevation="10dp"
         app:itemTextColor="@color/bottom_navigation_item_txt_colors"
         app:itemBackground="@drawable/bottom_navigation_item_backgrnd_colors"
         app:itemIconTint="@drawable/bottom_navigation_item_colors"

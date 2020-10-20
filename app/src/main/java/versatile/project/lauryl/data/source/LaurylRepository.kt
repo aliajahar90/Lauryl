@@ -7,6 +7,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import versatile.project.lauryl.model.*
+import versatile.project.lauryl.model.address.AddressModel
+import versatile.project.lauryl.model.address.AddressResponse
 import versatile.project.lauryl.network.api.ApiServices
 import versatile.project.lauryl.network.api.RetrofitObj
 
@@ -23,6 +25,9 @@ open class LaurylRepository {
     var versatileLoginLiveData: MutableLiveData<VersatileLoginResponse> = MutableLiveData()
     var topServicesLiveData: MutableLiveData<TopServicesResponse> = MutableLiveData()
     var myOrdersLiveData: MutableLiveData<MyOrdersResponse> = MutableLiveData()
+    var citiesLiveData:MutableLiveData<ArrayList<String>> = MutableLiveData()
+    var statesLiveData:MutableLiveData<ArrayList<String>> = MutableLiveData()
+    var addressLiveData:MutableLiveData<ArrayList<AddressModel>> = MutableLiveData()
 
     fun getMyOrdersLiveDta(): LiveData<MyOrdersResponse>{
         return myOrdersLiveData
@@ -217,6 +222,39 @@ open class LaurylRepository {
 
         })
 
+    }
+
+    fun getCities(){
+        val list = ArrayList<String>()
+        list.add("Hyderabad")
+        list.add("Pune")
+        list.add("Kolkata")
+        citiesLiveData.postValue(list)
+    }
+    fun getStates(){
+        val list = ArrayList<String>()
+        list.add("Andhra")
+        list.add("Telangana")
+        list.add("Kerala")
+        list.add("West Bangal")
+        statesLiveData.postValue(list)
+    }
+
+    fun getAddresses(accessToken: String,number: String ){
+
+       apiServices.getAddresses(accessToken = "037f43f9-8c93-4a18-a389-942945d55250", number = number).enqueue(object:Callback<AddressResponse>{
+           override fun onFailure(call: Call<AddressResponse>, t: Throwable) {
+               addressLiveData.postValue(null)
+
+           }
+           override fun onResponse(
+               call: Call<AddressResponse>,
+               response: Response<AddressResponse>
+           ) {
+               addressLiveData.postValue(response.body()?.data?.list as ArrayList<AddressModel>?)
+           }
+
+       })
     }
 
 }

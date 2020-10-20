@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "745459690561",
+    "firebase_url": "https://lauryl-android.firebaseio.com",
+    "project_id": "lauryl-android",
+    "storage_bucket": "lauryl-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:745459690561:android:9c498291c4e29c45966ac0",
+        "android_client_info": {
+          "package_name": "versatile.project.lauryl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "745459690561-7kmepj1qhhgg0ro4g1usn3fpvp9322g8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG-S0lW8l_svOcX3HuTOn2X_170l2mJA0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "745459690561-7kmepj1qhhgg0ro4g1usn3fpvp9322g8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

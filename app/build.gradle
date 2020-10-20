@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
 
@@ -16,7 +17,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "versatile.project.lauryl"
+        applicationId "versatilecommerce.project.lauryl"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
@@ -103,5 +104,11 @@ dependencies {
    // implementation 'com.thoughtbot:expandablerecyclerview:1.4'
     implementation 'com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1'
 
+
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
+
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.6.0'
 
 }
