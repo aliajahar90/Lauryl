@@ -19,6 +19,7 @@ import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.base.HomeNavigationController
 import versatile.project.lauryl.fragment.*
 import versatile.project.lauryl.home.HomeFragment
+import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.orders.history.OrderHistoryFragment
 import versatile.project.lauryl.pickup.CnfSchedulePckUpFragment
 import versatile.project.lauryl.utils.AllConstants
@@ -27,7 +28,7 @@ import versatile.project.lauryl.utils.Globals
 import java.lang.Exception
 import java.util.*
 
-class HomeScreen : BaseActivity() , LocationListener {
+class HomeScreen : BaseActivity(), LocationListener {
     lateinit var homeNavigationController: HomeNavigationController
     private val REQUEST_CODE = 101
     private var locationManager: LocationManager? = null
@@ -41,12 +42,12 @@ class HomeScreen : BaseActivity() , LocationListener {
         Constants.CURRENT_AUTH_TOKEN = Globals.getStringFromPreferences(this, Constants.AUTH_TOKEN)
         botmNavVw.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         displayHomeFragment()
-        homeNavigationController= HomeNavigationController.getInstance(this)
-                bckBtn.setOnClickListener {
+        homeNavigationController = HomeNavigationController.getInstance(this)
+        bckBtn.setOnClickListener {
 
-            if (supportFragmentManager.backStackEntryCount > 1){
+            if (supportFragmentManager.backStackEntryCount > 1) {
                 supportFragmentManager.popBackStack()
-            }else{
+            } else {
                 finish()
             }
 
@@ -66,10 +67,10 @@ class HomeScreen : BaseActivity() , LocationListener {
                 return@OnNavigationItemSelectedListener true
             }
 
-            R.id.myOrdersId -> {
-                displayMyOrdersFragment(0)
-                return@OnNavigationItemSelectedListener true
-            }
+                R.id.myOrdersId -> {
+                    displayMyOrdersFragment(0)
+                    return@OnNavigationItemSelectedListener true
+                }
 
             R.id.schedulePckUpId -> {
                 displaySPFragment()
@@ -132,6 +133,7 @@ class HomeScreen : BaseActivity() , LocationListener {
         // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
         //selectMyOrdersDashboard()
     }
+
     private fun selectChangeAddressDashBoard() {
         homeNameMdlVwTxt.text = getString(R.string.change_address)
         homeNameMdlVwTxt.visibility = View.VISIBLE
@@ -140,13 +142,15 @@ class HomeScreen : BaseActivity() , LocationListener {
         bckBtn.visibility = View.VISIBLE
     }
 
-    fun displayChangeAddressFragment() {
+    fun displayChangeAddressFragment(addressModel: AddressModel) {
+        val bundle = Bundle()
+        bundle.putSerializable("address", addressModel)
         val fragment = ChangeAddressFragment()
+        fragment.arguments = bundle
         loadMyFragment(fragment)
         selectChangeAddressDashBoard()
-        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
-        //selectMyOrdersDashboard()
     }
+
     private fun selectManageAddressDashBoard() {
         homeNameMdlVwTxt.text = getString(R.string.manage_address)
         homeNameMdlVwTxt.visibility = View.VISIBLE
@@ -165,11 +169,11 @@ class HomeScreen : BaseActivity() , LocationListener {
 
 
     fun displayMyOrdersFragment(initPosition: Int) {
-        val bundle=Bundle()
-        bundle.putInt(AllConstants.Orders.initTabSelection,initPosition)
-        val myOrdersFragment=MyOrdersFragment()
-        myOrdersFragment.arguments=bundle
-        val fragment =myOrdersFragment
+        val bundle = Bundle()
+        bundle.putInt(AllConstants.Orders.initTabSelection, initPosition)
+        val myOrdersFragment = MyOrdersFragment()
+        myOrdersFragment.arguments = bundle
+        val fragment = myOrdersFragment
         loadMyFragment(fragment)
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
         selectMyOrdersDashboard()
@@ -208,8 +212,8 @@ class HomeScreen : BaseActivity() , LocationListener {
     }
 
 
-    fun displayCnfPckUpFragment(){
-       selectCnfPckUp()
+    fun displayCnfPckUpFragment() {
+        selectCnfPckUp()
         val fragment = CnfSchedulePckUpFragment.newInstance()
         loadMyFragment(fragment)
     }
@@ -248,22 +252,23 @@ class HomeScreen : BaseActivity() , LocationListener {
         }
     }
 
-    fun setLocation(address: String)
-    {
-        homelocTxt.text=address
+    fun setLocation(address: String) {
+        homelocTxt.text = address
     }
+
     fun selectProfile() {
         homeNameMdlVwTxt.text = getString(R.string.my_profile)
         homeNameMdlVwTxt.visibility = View.VISIBLE
         homeNameTxt.visibility = View.GONE
         filterTxt.visibility = View.GONE
-        rlChange.visibility=View.VISIBLE
-        homeLocHdngTxt.text=getString(R.string.loc_hdng_txt)
-        homelocTxt.text="Hydrabad"
-     //   imgLoc.setImageResource(R.drawable.ic_name)
+        rlChange.visibility = View.VISIBLE
+        homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
+        homelocTxt.text = "Hydrabad"
+        //   imgLoc.setImageResource(R.drawable.ic_name)
         botmNavVw.menu.findItem(R.id.profileId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
     }
+
     fun selectPayment() {
         homeNameMdlVwTxt.text = getString(R.string.payment_details)
         homeNameMdlVwTxt.visibility = View.VISIBLE
@@ -276,11 +281,13 @@ class HomeScreen : BaseActivity() , LocationListener {
         botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
     }
-    fun hideBackButton(){
+
+    fun hideBackButton() {
         bckBtn.visibility = View.GONE;
 
     }
-    fun showBackButton(){
+
+    fun showBackButton() {
         bckBtn.visibility = View.VISIBLE;
 
     }
@@ -326,7 +333,8 @@ class HomeScreen : BaseActivity() , LocationListener {
             val address: String = addresses[0]
                 .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
             Timber.e(
-                " address : $address, " )
+                " address : $address, "
+            )
 
             val city: String = addresses[0].locality
             setLocation(city)
