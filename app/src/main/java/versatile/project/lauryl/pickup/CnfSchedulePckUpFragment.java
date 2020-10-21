@@ -56,7 +56,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     private boolean isLoading = false;
     private boolean isLastPage = false;
     private int TOTAL_PAGE_SIZE = 0;
-    private int PAGE_SIZE = 200;
+    private int PAGE_SIZE = 400;
     private int CURRENT_PAGE = 1;
     List<String> rawDates = new ArrayList<>();
     List<String> uniqueDates = new ArrayList<>();
@@ -203,7 +203,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         for (String s : uniqueTimeSet) {
             uniqueTimes.add(s);
         }
-        cnfPickupTimeAdapter = new CnfPickupTimeAdapter(getActivity(), uniqueTimes, this);
+        cnfPickupTimeAdapter = new CnfPickupTimeAdapter(getActivity(), uniqueTimes, this,date);
         cnfSchdulePckupFragmentBinding.gridPickUpTimer.setAdapter(cnfPickupTimeAdapter);
     }
 

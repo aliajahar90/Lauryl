@@ -116,17 +116,15 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
     fun fetchAddress(latitude: Double?, longitude: Double?) {
         Timber.e("latitude $latitude longitude $longitude")
-        val addresses: List<Address>
-        val geoCoder: Geocoder = Geocoder(context!!, Locale.ENGLISH)
 
-        addresses = geoCoder.getFromLocation(
-            latitude!!,
-            longitude!!,
-            1
-        ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
         try {
-
-
+            val addresses: List<Address>
+            val geoCoder = Geocoder(context!!, Locale.ENGLISH)
+            addresses = geoCoder.getFromLocation(
+                latitude!!,
+                longitude!!,
+                1
+            ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             val address: String = addresses[0]
                 .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
             addresses[0].locality.let {

@@ -37,6 +37,8 @@ public class AllConstants {
     public  static  class Orders{
         public static final String orderData = "orderData";
         public static final String initTabSelection = "initTabSelection";
+        public static final String ORDER_ITEM_ERROR_EMPTY = "No Order item found";
+        public static final String ORDER_ITEM_ERROR_API = "Error fetching order item";
         public class OrderStage{
             public static final String Awaiting_Pickup = "Awaiting Pickup";
             public static final String Awaiting_Delivery = "Awaiting Delivery";

@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
 import versatile.project.lauryl.model.*
+import versatile.project.lauryl.orders.history.model.OrderItemsResponse
 import versatile.project.lauryl.model.address.AddressResponse
 import versatile.project.lauryl.model.city.CitiResponse
 import versatile.project.lauryl.pickup.data.CnfPickupResponse
@@ -95,6 +96,9 @@ interface ApiServices {
 
     @GET("api/v1/user/info")
     fun getMyProfile(@Query("access_token") accessToken: String): Call<GetProfileResponse>
+    @POST("api/v1/order/item/list")
+    fun getOrderItems(@Query("access_token") accessToken: String,@Body inputJsonBody: JsonObject): Call<OrderItemsResponse>
+
 
     @GET("api/v1/country/list")
     fun getCities(@Query("access_token") accessToken: String): Call<CitiResponse>
