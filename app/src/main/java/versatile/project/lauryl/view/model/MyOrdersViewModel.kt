@@ -27,7 +27,6 @@ class MyOrdersViewModel:ViewModel() {
     }
 
     fun addAwaitingPckUpDta(awaitingPickUpModel: AwaitingPickUpModel){
-        Timber.e("Adding pickup")
         this.awaitingPckUpDtaLst.add(awaitingPickUpModel)
     }
 
@@ -36,8 +35,6 @@ class MyOrdersViewModel:ViewModel() {
     }
 
     fun addAwaitingDlvryDta(awaitingPickUpDlvryModel: AwaitingDeliveryModel){
-        Timber.e("Adding delivey")
-
         this.awaitingPckUpDevryDtaLst.add(awaitingPickUpDlvryModel)
     }
 
