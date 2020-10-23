@@ -54,7 +54,7 @@ class ForgotPasswordScreen : BaseActivity() {
 
         forgotPswrdViewModel.getOtpResponseToObserve().observe(this, Observer {
             hideLoading()
-            if (it.data != null && it.data.equals("true")) {
+            if (it.data != null && it.data == "true") {
 
                 Log.d("otp_", it.data)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

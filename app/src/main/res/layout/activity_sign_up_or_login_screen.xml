@@ -166,6 +166,7 @@
                     <EditText
                         android:id="@+id/firstNamEdt"
                         android:layout_width="match_parent"
+                        android:backgroundTint="@color/colorPrimary"
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:inputType="text"/>
@@ -191,6 +192,7 @@
                     <EditText
                         android:id="@+id/lastNameEdt"
                         android:layout_width="match_parent"
+                        android:backgroundTint="@color/colorPrimary"
                         android:layout_height="wrap_content"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:inputType="text"/>
@@ -215,6 +217,7 @@
                     <EditText
                         android:id="@+id/mblNumEdt"
                         android:layout_width="match_parent"
+                        android:backgroundTint="@color/colorPrimary"
                         android:layout_height="wrap_content"
                         android:maxLength="10"
                         android:inputType="number"/>
@@ -239,7 +242,7 @@
                         android:id="@+id/pswrdEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/darker_gray"
+                        android:backgroundTint="@color/colorPrimary"
                         android:textColor="@android:color/black"
                         android:inputType="textPassword"/>
 
@@ -265,7 +268,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:backgroundTint="@android:color/darker_gray"
+                        android:backgroundTint="@color/colorPrimary"
                         android:textColor="@android:color/black"
                         android:inputType="textPassword"/>
 
