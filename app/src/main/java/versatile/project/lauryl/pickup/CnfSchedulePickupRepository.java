@@ -19,10 +19,11 @@ import retrofit2.Response;
 import versatile.project.lauryl.base.SingleLiveEvent;
 import versatile.project.lauryl.data.source.LaurylRepository;
 import versatile.project.lauryl.model.TopServicesResponse;
+import versatile.project.lauryl.orders.create.CreateOrderRepository;
 import versatile.project.lauryl.pickup.data.CnfPickupResponse;
 import versatile.project.lauryl.pickup.data.DateTimeMap;
 
-public class CnfSchedulePickupRepository extends LaurylRepository {
+public class CnfSchedulePickupRepository extends CreateOrderRepository {
 
     private SingleLiveEvent<Set<String>> cnfPickupResponseSingleLiveEvent=new SingleLiveEvent<>();
     private SingleLiveEvent<String> cnfPickupErrorLiveEvent=new SingleLiveEvent<>();

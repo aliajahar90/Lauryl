@@ -310,8 +310,7 @@ class HomeFragment : Fragment() {
     private fun getOrderDate(date: String): CharSequence? {
         try {
             val milliseconds = date
-            val someDate =
-                DateTime(java.lang.Long.valueOf(milliseconds), DateTimeZone.forID("Asia/Kolkata"))
+            val someDate = DateTime(java.lang.Long.valueOf(milliseconds), DateTimeZone.forID("Asia/Kolkata"))
             val dateTimeFormate = DateTimeFormat.forPattern("MMM dd,yyyy")
             return "Placed on " + someDate.toString(dateTimeFormate)
         } catch (e: Exception) {

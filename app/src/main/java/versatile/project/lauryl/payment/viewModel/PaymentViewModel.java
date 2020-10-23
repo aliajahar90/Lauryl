@@ -14,12 +14,13 @@ import org.json.JSONObject;
 import java.util.List;
 
 import versatile.project.lauryl.base.BaseViewModel;
+import versatile.project.lauryl.orders.create.CreateOrderViewModel;
 import versatile.project.lauryl.payment.data.NetBanking;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
 import versatile.project.lauryl.payment.data.repsitory.PaymentRepository;
 import versatile.project.lauryl.utils.AllConstants;
 
-public class PaymentViewModel extends BaseViewModel {
+public class PaymentViewModel extends CreateOrderViewModel {
     private Razorpay razorpay;
     PaymentRepository paymentRepository;
     MutableLiveData<String> cardPaymentValidationError=new MutableLiveData<>();

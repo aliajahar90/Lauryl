@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_home_screen.*
 import timber.log.Timber
 import versatile.project.lauryl.R
@@ -58,7 +59,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         changeLocation.setOnClickListener {
             displayMapLocationFragment(Constants.CHANGE_LOCATION_ACTION)
         }
-        fetchLocation()
+
     }
 
     private val mOnNavigationItemSelectedListener =
@@ -267,7 +268,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         filterTxt.visibility = View.GONE
         rlChange.visibility = View.VISIBLE
         homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
-        homelocTxt.text = "Hydrabad"
         //   imgLoc.setImageResource(R.drawable.ic_name)
         botmNavVw.menu.findItem(R.id.profileId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
@@ -280,7 +280,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         filterTxt.visibility = View.GONE
         rlChange.visibility = View.VISIBLE
         homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
-        homelocTxt.text = "Hydrabad"
         imgLoc.setImageResource(R.drawable.location_white_icon)
         botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
@@ -388,6 +387,12 @@ class HomeScreen : BaseActivity(), LocationListener {
     }
 
     fun updateUserName(profileResponse: GetProfileResponse){
+        (application as MyApplication).createOrderSerializdedProfile =Gson().toJson(profileResponse)
         homeNameTxt.text="Hello, " + profileResponse.profileData.firstName
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchLocation()
     }
 }

@@ -39,10 +39,13 @@ import versatile.project.lauryl.base.BaseActivity;
 import versatile.project.lauryl.base.BaseBinding;
 import versatile.project.lauryl.base.HomeNavigationController;
 import versatile.project.lauryl.databinding.CnfSchdulePckupFragmentBinding;
+import versatile.project.lauryl.model.address.AddressModel;
+import versatile.project.lauryl.orders.create.model.CreateOrderData;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
 import versatile.project.lauryl.pickup.data.CnfPickupResponse;
 import versatile.project.lauryl.pickup.data.PickUpSharedData;
 import versatile.project.lauryl.pickup.viewmodel.CnfSchedulePickupViewModel;
+import versatile.project.lauryl.profile.data.GetProfileResponse;
 import versatile.project.lauryl.screens.HomeScreen;
 import versatile.project.lauryl.utils.AllConstants;
 import versatile.project.lauryl.utils.EndlessRecyclerViewScrollListener;
@@ -141,12 +144,28 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
 
         cnfSchdulePckupFragmentBinding.schdlePckUpBtn.setOnClickListener(view -> {
             if (selectedTime != null) {
-                if (getActivity() instanceof HomeScreen) {
-                    ((HomeScreen) getActivity()).selectPayment();
-                }
-                HomeNavigationController.getInstance(getActivity()).addPaymentFragment();
+                CreateOrderData.Details details=new CreateOrderData.Details();
+                GetProfileResponse getProfileResponse=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(),GetProfileResponse.class);
+                AddressModel addressModel=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(),AddressModel.class);
+                details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
+                details.setOrderStage("On Hold");
+                details.setEmailId(getProfileResponse.getProfileData().getEmail());
+                details.setPickupCity(addressModel.getCity());
+                details.setPickupState(addressModel.getState());
+                details.setPickupCountry(addressModel.getCountry());
+                details.setPickupAddress2(addressModel.getAddress1());
+                details.setShippingPostCode(addressModel.getPinCode());
+                details.setTransactionId("");
+                cnfSchedulePickupViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(),details);
+
             } else {
                 Globals.Companion.showToastMsg(getActivity(), "Please select pickup time");
+            }
+        });
+        cnfSchedulePickupViewModel.getCreateOrderSuccessEvent().observe(this, it->{
+            if (getActivity() instanceof HomeScreen) {
+                ((HomeScreen) getActivity()).selectPayment();
+                HomeNavigationController.getInstance(getActivity()).addPaymentFragment();
             }
         });
     }

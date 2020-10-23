@@ -8,6 +8,7 @@ import versatile.project.lauryl.model.*
 import versatile.project.lauryl.orders.history.model.OrderItemsResponse
 import versatile.project.lauryl.model.address.AddressResponse
 import versatile.project.lauryl.model.city.CitiResponse
+import versatile.project.lauryl.orders.create.model.CreateOrderResponse
 import versatile.project.lauryl.pickup.data.CnfPickupResponse
 import versatile.project.lauryl.profile.data.GetProfileResponse
 
@@ -110,5 +111,10 @@ interface ApiServices {
     fun deleteAddress(@Query("access_token") accessToken: String,
                     @Body idArray :JsonArray ):Call<BooleanResponse>
 
+    @POST("api/v1/order/createOrder")
+    fun createOrder(
+        @Query("access_token") accessToken: String,
+        @Body inputJsonBody: JsonObject
+    ): Call<CreateOrderResponse>
 
 }

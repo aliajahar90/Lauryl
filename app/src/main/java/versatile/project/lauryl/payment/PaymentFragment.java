@@ -37,17 +37,21 @@ import java.util.Queue;
 import java.util.logging.Logger;
 
 import versatile.project.lauryl.R;
+import versatile.project.lauryl.application.MyApplication;
 import versatile.project.lauryl.base.BaseActivity;
 import versatile.project.lauryl.base.BaseBinding;
 import versatile.project.lauryl.base.DeferredFragmentTransaction;
 import versatile.project.lauryl.base.HomeNavigationController;
 import versatile.project.lauryl.databinding.PaymentFragmentBinding;
+import versatile.project.lauryl.model.address.AddressModel;
+import versatile.project.lauryl.orders.create.model.CreateOrderData;
 import versatile.project.lauryl.payment.adapter.NetBankAdapter;
 import versatile.project.lauryl.payment.data.NetBanking;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
 import versatile.project.lauryl.payment.util.CardFormattingTextWatcher;
 import versatile.project.lauryl.payment.util.PaymentDefferedFragmentTransaction;
 import versatile.project.lauryl.payment.viewModel.PaymentViewModel;
+import versatile.project.lauryl.profile.data.GetProfileResponse;
 import versatile.project.lauryl.utils.AllConstants;
 
 public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragmentBinding> {
@@ -137,7 +141,19 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         });
         paymentViewModel.getPaymentSuccess().observe(this, paymentSuccess -> {
             hideLoading();
-
+            CreateOrderData.Details details=new CreateOrderData.Details();
+            GetProfileResponse getProfileResponse=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(),GetProfileResponse.class);
+            AddressModel addressModel=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(),AddressModel.class);
+            details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
+            details.setOrderStage(AllConstants.Orders.OrderStage.Awaiting_Pickup);
+            details.setEmailId(getProfileResponse.getProfileData().getEmail());
+            details.setPickupCity(addressModel.getCity());
+            details.setPickupState(addressModel.getState());
+            details.setPickupCountry(addressModel.getCountry());
+            details.setPickupAddress2(addressModel.getAddress1());
+            details.setShippingPostCode(addressModel.getPinCode());
+            details.setTransactionId(paymentSuccess.getPaymentTransactionId());
+            paymentViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(),details);
             HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment();
         });
         paymentViewModel.getPaymentError().observe(this, paymentError -> {
@@ -149,7 +165,9 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             }
             HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment();
         });
-
+        paymentViewModel.getCreateOrderSuccessEvent().observe(this,it->{
+            //HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment();
+        });
     }
 
     void controlViewVisibility() {
