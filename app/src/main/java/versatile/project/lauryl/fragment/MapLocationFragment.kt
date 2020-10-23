@@ -25,6 +25,7 @@ import versatile.project.lauryl.R
 import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.screens.HomeScreen
+import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.view.model.MapLocationViewModel
 import java.lang.Exception
 import java.util.*
@@ -41,6 +42,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     lateinit var myApplication: MyApplication
     lateinit var mapLocationViewModel: MapLocationViewModel
     var pinCodes = ArrayList<String>()
+   lateinit var action :String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,11 +51,12 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
         myApplication = (activity?.applicationContext as MyApplication)
         mapLocationViewModel.getCities(myApplication.userAccessToken)
         (activity as HomeScreen).showLoading()
+        action = arguments?.getString(Constants.ACTION) as String
+
     }
 
     private fun observeDataSources() {
         mapLocationViewModel.getCitiesToObserve().observe(this, androidx.lifecycle.Observer {
-
             for (city in it) {
                 for (pin in city.pinCode)
                     pinCodes.add(pin)
@@ -78,8 +81,13 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         confirm_location_btn.setOnClickListener {
+            if (action==Constants.CHANGE_LOCATION_ACTION)
+            {
+                (activity as HomeScreen).onBackPressed()
+            }else{
+                (activity as HomeScreen).displayChangeAddressFragment(addressModel)
+            }
            // if (isServiceable)
-            (activity as HomeScreen).displayChangeAddressFragment(addressModel)
 //            else{
 //                (activity as HomeScreen).scream("Our services are not available in this province !!")
 //

@@ -18,6 +18,7 @@ import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.model.TopServicesDataItem
 import versatile.project.lauryl.model.TopServicesResponse
 import versatile.project.lauryl.screens.HomeScreen
+import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
 import versatile.project.lauryl.view.model.SchedulePickUpFragmentViewModel
 
@@ -68,7 +69,7 @@ class SchedulePickUpFragment: Fragment(), SchedulePickUpAdapterJava.OnItemClickL
         (activity as HomeScreen).selectShedulePckUpDashBoard()
         schdlePckUpBtn.setOnClickListener {
             if(selectedItems.size()>0) {
-                (activity as HomeScreen).displayCnfPckUpFragment()
+                (activity as HomeScreen).displayMapLocationFragment(Constants.ADD_LOCATION_ACTION)
             }else{
                 Globals.showToastMsg(activity!!.applicationContext,"Please select a service")
             }
