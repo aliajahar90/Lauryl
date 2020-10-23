@@ -24,33 +24,6 @@ public class ProfileRepository extends LaurylRepository {
 
         return single_instance;
     }
-    private MutableLiveData<GetProfileResponse> getProfileResponseLiveData = new MutableLiveData<>();
-    private MutableLiveData<Throwable> throwableMutableLiveData = new MutableLiveData<>();
 
-    public void getProfileInformation(String accessToken) {
-        getApiServices().getMyProfile(accessToken).enqueue(new Callback<GetProfileResponse>() {
-            @Override
-            public void onResponse(Call<GetProfileResponse> call, Response<GetProfileResponse> response) {
-                if (response.isSuccessful() && response.code() == 200) {
-                    GetProfileResponse getProfileResponse=response.body();
-                    getProfileResponseLiveData.postValue(getProfileResponse);
-                }else {
-                    getProfileResponseLiveData.postValue(null);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<GetProfileResponse> call, Throwable t) {
-               throwableMutableLiveData.postValue(t);
-            }
-        });
-    }
-
-    public MutableLiveData<GetProfileResponse> getGetProfileResponseLiveData() {
-        return getProfileResponseLiveData;
-    }
-
-    public MutableLiveData<Throwable> getThrowableMutableLiveData() {
-        return throwableMutableLiveData;
-    }
 }

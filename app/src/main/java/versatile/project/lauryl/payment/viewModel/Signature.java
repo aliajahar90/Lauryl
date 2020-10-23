@@ -44,7 +44,7 @@ public class Signature {
             byte[] rawHmac = mac.doFinal(data.getBytes());
 
             // base64-encode the hmac
-            String hash = Base64.encodeBase64String(rawHmac);
+            String hash = new String(Base64.encodeBase64(rawHmac)).toLowerCase();
 
             result = hash;
 

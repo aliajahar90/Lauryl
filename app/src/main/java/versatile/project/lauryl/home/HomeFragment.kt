@@ -18,6 +18,7 @@ import versatile.project.lauryl.R
 import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.home.viewmodel.HomeFragmentViewModel
 import versatile.project.lauryl.model.TopServicesResponse
+import versatile.project.lauryl.profile.data.GetProfileResponse
 import versatile.project.lauryl.screens.HomeScreen
 import versatile.project.lauryl.utils.Globals
 
@@ -179,37 +180,50 @@ class HomeFragment : Fragment() {
 
         })
         homeFragmentViewModel.getAwaitingPickupList()?.observe(this, Observer {
+            linAwatingPickup.visibility = View.VISIBLE
             if (it != null && it.isNotEmpty()) {
-                linAwatingPickup.visibility = View.VISIBLE
                 val ordersDataItem = it[0]
-                txtOrderId.text = "Order Id: " + ordersDataItem.id
+                txtPickUpProcess.visibility=View.VISIBLE
+                txtNoAwaitingPickups.visibility=View.GONE
+                txtOrderId.text = "Order Id: " + ordersDataItem.orderNumber
                 txtOrderDate.text = getOrderDate(ordersDataItem.orderDateTime.toString())
                 txtOrderTime.text = getOrderTime(ordersDataItem.orderDateTime.toString())
+            }else{
+                txtPickUpProcess.visibility=View.GONE
+                txtNoAwaitingPickups.visibility=View.VISIBLE
             }
         })
         homeFragmentViewModel.getAwaitingDeliveryList()?.observe(this, Observer {
             if (it != null && it.isNotEmpty()) {
-                linAwatingDelivery.visibility = View.VISIBLE
                 val ordersDataItem = it[0]
-                txtOrderDeliveryId.text = "Order Id: " + ordersDataItem.id
+                txtOrderDeliveryId.text = "Order Id: " + ordersDataItem.orderNumber
                 txtOrderDeliveryDate.text = getOrderDate(ordersDataItem.orderDateTime.toString())
                 txtOrderDeliveryTime.text = getOrderTime(ordersDataItem.orderDateTime.toString())
+            }else{
+                txtDeliveryProcess.visibility=View.GONE
+                txtNoAwaitingDeliveryOrders.visibility=View.VISIBLE
             }
         })
         homeFragmentViewModel.getCompletedDeliveryList()?.observe(this, Observer {
             if (it != null && it.isNotEmpty()) {
-                linCompletedDelivery.visibility = View.VISIBLE
+                txtCompleted.visibility=View.VISIBLE
+                txtNoCompletedDelivery.visibility=View.GONE
                 val ordersDataItem = it[0]
-                txtCompletedId.text = "Order Id: " + ordersDataItem.id
+                txtCompletedId.text = "Order Id: " + ordersDataItem.orderNumber
                 txtCompletedDate.text = getOrderDate(ordersDataItem.orderDateTime.toString())
                 txtCompletedTime.text = getOrderTime(ordersDataItem.orderDateTime.toString())
+            }else{
+                txtCompleted.visibility=View.GONE
+                txtNoCompletedDelivery.visibility=View.VISIBLE
             }
         })
         homeFragmentViewModel.getMyOrderFetchError()?.observe(this, Observer {
-            Globals.showToastMsg(
-                activity!!.applicationContext,
-                "${resources.getString(R.string.no_orders)}"
-            )
+            txtPickUpProcess.visibility=View.GONE
+            txtNoAwaitingPickups.visibility=View.VISIBLE
+            txtDeliveryProcess.visibility=View.GONE
+            txtNoAwaitingDeliveryOrders.visibility=View.VISIBLE
+            txtCompleted.visibility=View.GONE
+            txtNoCompletedDelivery.visibility=View.VISIBLE
         })
     }
 
@@ -224,6 +238,18 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as HomeScreen).selectHomeDashboard()
+        linServiceOne.setOnClickListener {
+            (activity as HomeScreen).displaySPFragment()
+        }
+        linServiceTwo.setOnClickListener {
+            (activity as HomeScreen).displaySPFragment()
+        }
+        linServiceThree.setOnClickListener {
+            (activity as HomeScreen).displaySPFragment()
+        }
+        linServiceFour.setOnClickListener {
+            (activity as HomeScreen).displaySPFragment()
+        }
         serviceVwAlHdngTxt.setOnClickListener {
             (activity as HomeScreen).displaySPFragment()
         }
@@ -243,8 +269,21 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        getProfile()
         getTopServices()
-        getAllOrders();
+        getAllOrders()
+    }
+
+    private fun getProfile() {
+        val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
+        homeFragmentViewModel.getProfileInformation(myApplication.userAccessToken)
+        homeFragmentViewModel.profileFetchSuccessHandler().observe(this,
+            Observer { getProfileResponse: GetProfileResponse? ->
+                if (getProfileResponse != null) {
+                    (activity as HomeScreen).updateUserName(getProfileResponse)
+                }
+            }
+        )
     }
 
     private fun getAllOrders() {
