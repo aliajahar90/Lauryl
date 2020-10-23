@@ -38,7 +38,7 @@ class MyOrdersFragment : Fragment() {
     private var awtngDlvryAdapter: AwaitingDevliveryAdapter? = null
     private var awtngCmpltdAdapter: AwaitingCompleteAdapter? = null
     lateinit var myOrdersViewModel: MyOrdersViewModel
-    private var seletectTab = 0;
+    private var seletectTab = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,11 +51,7 @@ class MyOrdersFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        try {
-            seletectTab = arguments?.getInt(AllConstants.Orders.initTabSelection, 0)!!
-        } catch (e: Exception) {
-            Log.d("MY Orders", "Exception in init selection.switching to default view")
-        }
+        seletectTab = (activity as HomeScreen).myApplication.selectedOrderTab
         return inflater.inflate(R.layout.my_orders_fragment, container, false)
     }
 
@@ -65,7 +61,7 @@ class MyOrdersFragment : Fragment() {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 // Handle tab select
-                when (tab!!.position) {
+                when (tab?.position) {
                     0 -> {
                         setUpAwaitingPckUps(myOrdersViewModel.awaitingPckUpDtaLst)
                     }
@@ -149,7 +145,9 @@ class MyOrdersFragment : Fragment() {
     }
 
     private fun setUpMyOrdersData(myOrdersDtaLst: MutableList<MyOrdersDataItem>) {
-        Timber.e("Seeting orders.")
+        myOrdersViewModel.clearAwaitingPckUpCmpltdDta()
+        myOrdersViewModel.clearAwaitingPckUpDlvryDta()
+        myOrdersViewModel.clearAwaitingPckUpDta()
         for (dataItem in myOrdersDtaLst) {
             when (dataItem.orderStage) {
 
@@ -217,7 +215,11 @@ class MyOrdersFragment : Fragment() {
         myOrdrsRcyclrVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
         if (awtngCmpltdAdapter == null) {
             awtngCmpltdAdapter =
-                AwaitingCompleteAdapter(activity,activity!!.applicationContext, awaitingPckUpCompletedDtaLst)
+                AwaitingCompleteAdapter(
+                    activity,
+                    activity!!.applicationContext,
+                    awaitingPckUpCompletedDtaLst
+                )
         } else {
             awtngCmpltdAdapter!!.setNewAwaitingCmpltdList(awaitingPckUpCompletedDtaLst)
         }
@@ -239,7 +241,11 @@ class MyOrdersFragment : Fragment() {
         myOrdrsRcyclrVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
         if (awtngDlvryAdapter == null) {
             awtngDlvryAdapter =
-                AwaitingDevliveryAdapter(activity,activity!!.applicationContext, awaitingPckUpDevryDtaLst)
+                AwaitingDevliveryAdapter(
+                    activity,
+                    activity!!.applicationContext,
+                    awaitingPckUpDevryDtaLst
+                )
         } else {
             awtngDlvryAdapter!!.setNewAwaitingPckUpsList(awaitingPckUpDevryDtaLst)
         }
@@ -249,7 +255,6 @@ class MyOrdersFragment : Fragment() {
     }
 
     private fun setUpAwaitingPckUps(awaitingPckUpDtaLst: ArrayList<AwaitingPickUpModel>) {
-
         if (awaitingPckUpDtaLst.size == 0) {
             myOrdrsRcyclrVw.visibility = View.GONE
             noDtaTxt.visibility = View.VISIBLE
@@ -269,12 +274,13 @@ class MyOrdersFragment : Fragment() {
         awtngPckUpAdapter!!.notifyDataSetChanged()
     }
 
+    override fun onPause() {
+        super.onPause()
+        (activity as HomeScreen).myApplication.selectedOrderTab = tabLyot.selectedTabPosition
+    }
+
     override fun onResume() {
         super.onResume()
-        Timber.e("fetching orders....")
-        myOrdersViewModel.clearAwaitingPckUpDta()
-        myOrdersViewModel.clearAwaitingPckUpDlvryDta()
-        myOrdersViewModel.clearAwaitingPckUpCmpltdDta()
         (activity as BaseActivity).showLoading()
         getMyOrdersData()
     }

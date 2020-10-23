@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home_screen.*
 import timber.log.Timber
 import versatile.project.lauryl.R
+import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.base.HomeNavigationController
 import versatile.project.lauryl.fragment.*
@@ -34,11 +35,12 @@ class HomeScreen : BaseActivity(), LocationListener {
     private var locationManager: LocationManager? = null
     private val MIN_TIME: Long = 400
     private val MIN_DISTANCE = 1000f
+    lateinit var myApplication: MyApplication
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
+        myApplication = MyApplication()
         Constants.CURRENT_AUTH_TOKEN = Globals.getStringFromPreferences(this, Constants.AUTH_TOKEN)
         botmNavVw.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         displayHomeFragment()
@@ -173,12 +175,9 @@ class HomeScreen : BaseActivity(), LocationListener {
 
 
     fun displayMyOrdersFragment(initPosition: Int) {
-        val bundle = Bundle()
-        bundle.putInt(AllConstants.Orders.initTabSelection, initPosition)
+        myApplication.selectedOrderTab=initPosition
         val myOrdersFragment = MyOrdersFragment()
-        myOrdersFragment.arguments = bundle
-        val fragment = myOrdersFragment
-        loadMyFragment(fragment)
+        loadMyFragment(myOrdersFragment)
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
         selectMyOrdersDashboard()
     }
