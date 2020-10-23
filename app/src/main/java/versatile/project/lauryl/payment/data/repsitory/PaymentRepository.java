@@ -26,6 +26,7 @@ import java.util.Map;
 import versatile.project.lauryl.base.SingleLiveEvent;
 import versatile.project.lauryl.base.asyncjob.TaskRunner;
 import versatile.project.lauryl.data.source.LaurylRepository;
+import versatile.project.lauryl.orders.create.CreateOrderRepository;
 import versatile.project.lauryl.payment.backgroundjob.PaymentBackgroundTask;
 import versatile.project.lauryl.payment.data.NetBanking;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
@@ -39,7 +40,7 @@ import static versatile.project.lauryl.utils.AllConstants.Payment.HotBanks.ICIC;
 import static versatile.project.lauryl.utils.AllConstants.Payment.HotBanks.KKBK;
 import static versatile.project.lauryl.utils.AllConstants.Payment.HotBanks.SBIN;
 
-public class PaymentRepository extends LaurylRepository {
+public class PaymentRepository extends CreateOrderRepository {
     // static variable single_instance of type Singleton
     private static PaymentRepository single_instance = null;
     private Razorpay razorpay;
