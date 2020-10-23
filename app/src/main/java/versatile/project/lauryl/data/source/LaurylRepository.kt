@@ -8,6 +8,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import versatile.project.lauryl.base.SingleLiveEvent
 import versatile.project.lauryl.model.*
 import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.model.address.AddressResponse
@@ -15,6 +16,7 @@ import versatile.project.lauryl.model.city.CitiResponse
 import versatile.project.lauryl.model.city.CityModel
 import versatile.project.lauryl.network.api.ApiServices
 import versatile.project.lauryl.network.api.RetrofitObj
+import versatile.project.lauryl.profile.data.GetProfileResponse
 
 open class LaurylRepository {
 
@@ -34,6 +36,10 @@ open class LaurylRepository {
     var addressLiveData: MutableLiveData<ArrayList<AddressModel>> = MutableLiveData()
     var saveAddressLiveData: MutableLiveData<BooleanResponse> = MutableLiveData()
     var deleteAddressLiveData: MutableLiveData<BooleanResponse> = MutableLiveData()
+    private val getProfileResponseLiveData =
+        SingleLiveEvent<GetProfileResponse>()
+    private val throwableMutableLiveData =
+        SingleLiveEvent<Throwable>()
     fun getMyOrdersLiveDta(): LiveData<MyOrdersResponse> {
         return myOrdersLiveData
     }
@@ -321,6 +327,36 @@ open class LaurylRepository {
             }
 
         })
+    }
+    open fun getProfileInformation(accessToken: String?) {
+        apiServices.getMyProfile(accessToken!!)
+            .enqueue(object : Callback<GetProfileResponse?> {
+                override fun onResponse(
+                    call: Call<GetProfileResponse?>,
+                    response: Response<GetProfileResponse?>
+                ) {
+                    if (response.isSuccessful && response.code() == 200) {
+                        val getProfileResponse = response.body()
+                        getProfileResponseLiveData.postValue(getProfileResponse)
+                    } else {
+                        getProfileResponseLiveData.postValue(null)
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<GetProfileResponse?>,
+                    t: Throwable
+                ) {
+                    throwableMutableLiveData.postValue(t)
+                }
+            })
+    }
+    open fun getGetProfileResponseLiveData(): SingleLiveEvent<GetProfileResponse> {
+        return getProfileResponseLiveData
+    }
+
+    open fun getThrowableMutableLiveData(): SingleLiveEvent<Throwable> {
+        return throwableMutableLiveData
     }
 }
 

@@ -22,6 +22,7 @@ import versatile.project.lauryl.home.HomeFragment
 import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.orders.history.OrderHistoryFragment
 import versatile.project.lauryl.pickup.CnfSchedulePckUpFragment
+import versatile.project.lauryl.profile.data.GetProfileResponse
 import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
@@ -381,5 +382,9 @@ class HomeScreen : BaseActivity(), LocationListener {
     }
 
     override fun onProviderDisabled(p0: String?) {
+    }
+
+    fun updateUserName(profileResponse: GetProfileResponse){
+        homeNameTxt.text="Hello, " + profileResponse.profileData.firstName
     }
 }

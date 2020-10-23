@@ -62,6 +62,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     public static int activePaymentType = PaymentTypeUpi;
     private NetBanking activeBankForCheckout = null;
     public static final String TAG = PaymentFragment.class.getName();
+    private String paymentMethod;
 
 
     public static PaymentFragment newInstance(int viewType) {
@@ -136,6 +137,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         });
         paymentViewModel.getPaymentSuccess().observe(this, paymentSuccess -> {
             hideLoading();
+
             HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment();
         });
         paymentViewModel.getPaymentError().observe(this, paymentError -> {
@@ -228,7 +230,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         paymentFragmentBinding.rlPaymentButton.setOnClickListener(view -> {
             switch (activePaymentType) {
                 case PaymentTypeUpi:
-                    processUpiService();
+                     processUpiService();
                     break;
                 case PaymentTypeCards:
                     processCardPaymentService();
@@ -433,7 +435,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             showLoading();
             paymentViewModel.validateVPA(paymentFragmentBinding.paymentUPI.inputUPI.getText().toString());
         } else {
-            Toast.makeText(getActivity(), "Entered Vpa not valid", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), AllConstants.Payment.Errors.ERROR_VPA_MSG, Toast.LENGTH_SHORT).show();
         }
         setVpaValidationObserver();
     }
@@ -442,6 +444,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         paymentViewModel.onVpaValidationSuccess().observe(this, aBoolean -> {
             if (aBoolean) {
                 try {
+                    paymentMethod="upi";
                     JSONObject payload = new JSONObject("{currency: 'INR'}");
                     payload.put("amount", "100");
                     payload.put("contact", "9999999999");
@@ -477,6 +480,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         paymentViewModel.getCardPaymentValidationSuccess().observe(this, aBoolean -> {
             if (aBoolean) {
                 try {
+                    paymentMethod="card";
                     JSONObject data = new JSONObject("{currency: 'INR'}");
                     data.put("amount", 1 * 100);
                     data.put("email", "gaurav.kumar@example.com");
@@ -502,6 +506,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
 
     private void processNetBankPaymentService() {
         if (activeBankForCheckout != null) {
+            paymentMethod="netbanking";
             showLoading();
             try {
                 JSONObject data = new JSONObject("{currency: 'INR'}");
