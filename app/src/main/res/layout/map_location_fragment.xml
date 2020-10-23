@@ -5,7 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     android:orientation="vertical">
-
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    android:textColor="@color/lit_red"
+    android:id="@+id/availabiltyMessage"
+    android:padding="@dimen/dp_10"/>
     <fragment
         android:id="@+id/googleMap"
         android:name="com.google.android.gms.maps.SupportMapFragment"

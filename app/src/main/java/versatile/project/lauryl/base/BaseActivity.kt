@@ -44,6 +44,7 @@ open class BaseActivity : AppCompatActivity() {
             progressDialog?.show()
     }
 
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (currentFocus != null) {
             val imm: InputMethodManager =

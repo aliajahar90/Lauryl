@@ -70,8 +70,7 @@ class ManageAddressFragment : Fragment(), EditDeleteListener {
         manageAddressViewModel.deleteObserver.observe(this, Observer {
             if (it.status) {
                 shout("Address deleted")
-                addressList.removeAt(position)
-                editAddressAdapter.notifyDataSetChanged()
+                manageAddressViewModel.getAddress(access = myApplication.userAccessToken, number = myApplication.mobileNumber)
             }
         })
     }

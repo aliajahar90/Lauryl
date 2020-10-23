@@ -20,6 +20,7 @@ import versatile.project.lauryl.adapter.AddressSpinnerAdapter
 import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.model.city.CityModel
+import versatile.project.lauryl.screens.HomeScreen
 import versatile.project.lauryl.utils.Globals
 import versatile.project.lauryl.view.model.ChangeAddressViewModel
 
@@ -35,6 +36,8 @@ class ChangeAddressFragment : Fragment() {
     var addressType: String = "Home"
     var addreList = ArrayList<AddressModel>()
     var mAddress = AddressModel()
+    var pinCodes = ArrayList<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         changeAddressViewModel = ViewModelProvider(this)[ChangeAddressViewModel::class.java]
@@ -65,45 +68,52 @@ class ChangeAddressFragment : Fragment() {
                 if (landMark != null && landMark.isNotEmpty()) {
                     if (pin_code != null && pin_code.isNotEmpty()) {
                         if (pin_code != null && pin_code.length == 6) {
+                            if (validateServiceAvailability(pin_code)) {
 
+                                Timber.e("validation success")
+                                val inputJson = JsonObject()
+                                inputJson.addProperty("phoneNumber", number)
+                                val addressObj = JsonObject()
+                                addressObj.addProperty("addresType", addressType)
+                                addressObj.addProperty("address1", "${addressType}1")
+                                addressObj.addProperty("streetName", streetName)
+                                addressObj.addProperty("landmark", landMark)
+                                addressObj.addProperty("city", city.city)
+                                addressObj.addProperty("state", state.state)
+                                addressObj.addProperty("country", state.country)
+                                addressObj.addProperty("pinCode", pin_code)
 
-                            Timber.e("validation success")
-                            val inputJson = JsonObject()
-                            inputJson.addProperty("phoneNumber", number)
-                            val addressObj = JsonObject()
-                            addressObj.addProperty("addresType", addressType)
-                            addressObj.addProperty("address1", "${addressType}1")
-                            addressObj.addProperty("streetName", streetName)
-                            addressObj.addProperty("landmark", landMark)
-                            addressObj.addProperty("city", city.city)
-                            addressObj.addProperty("state", state.state)
-                            addressObj.addProperty("country", state.country)
-                            addressObj.addProperty("pinCode", pin_code)
+                                mAddress.landmark = landMark
+                                mAddress.streetName = streetName
+                                mAddress.city = city.city
+                                mAddress.state = state.state
+                                mAddress.pinCode = pin_code
+                                mAddress.country = state.country
+                                mAddress.addresType = addressType
 
-                            mAddress.landmark = landMark
-                            mAddress.streetName = streetName
-                            mAddress.city = city.city
-                            mAddress.state = state.state
-                            mAddress.pinCode = pin_code
-                            mAddress.country = state.country
-                            mAddress.addresType = addressType
-
-                            if (isEditing) {
-                                //updating address
-                                addressObj.addProperty("id", addressModel.id)
-                            } else {
-                                if (isAddressTypeUsed(addressType) != "-") {
-                                    //overriding previos address
-                                    addressObj.addProperty("id", isAddressTypeUsed(addressType))
+                                if (isEditing) {
+                                    //updating address
+                                    addressObj.addProperty("id", addressModel.id)
+                                } else {
+                                    if (isAddressTypeUsed(addressType) != "-") {
+                                        //overriding previos address
+                                        addressObj.addProperty("id", isAddressTypeUsed(addressType))
+                                    }
                                 }
+                                val addresList = JsonArray()
+                                addresList.add(addressObj)
+                                inputJson.add("addressList", addresList)
+                                changeAddressViewModel.saveAddress(
+                                    myApplication.userAccessToken,
+                                    inputJson
+                                )
+                            } else {
+                                Globals.showPopoUpDialog(
+                                    context!!,
+                                    getString(R.string.validation), "Our services are not available in this province !!\n" +
+                                            "Please enter different pincode.."
+                                )
                             }
-                            val addresList = JsonArray()
-                            addresList.add(addressObj)
-                            inputJson.add("addressList", addresList)
-                            changeAddressViewModel.saveAddress(
-                                myApplication.userAccessToken,
-                                inputJson
-                            )
 
                         } else {
                             Globals.showPopoUpDialog(
@@ -151,10 +161,11 @@ class ChangeAddressFragment : Fragment() {
             if (it.status) {
                 emptyFields()
                 //continue to order use mAddress
-                if(isEditing) {
+                if (isEditing) {
                     shout("Address Updated")
                     activity?.onBackPressed()
                 }
+                changeAddressViewModel.getAddress(access = myApplication.userAccessToken, number = myApplication.mobileNumber)
             } else {
                 Globals.showPopoUpDialog(
                     context!!,
@@ -165,6 +176,10 @@ class ChangeAddressFragment : Fragment() {
 
         changeAddressViewModel.getCitiesToObserve().observe(this, Observer { list ->
             cityList = list
+            for (city in list) {
+                for (pin in city.pinCode)
+                    pinCodes.add(pin)
+            }
             val adapter: ArrayAdapter<String> = ArrayAdapter(
                 this.context!!,
                 R.layout.state_spinner_item, list.map { it.city }
@@ -271,8 +286,8 @@ class ChangeAddressFragment : Fragment() {
         }
         if (addressModel.id != null) {
             isEditing = true
-            continue_location_btn.text="Update address"
-            address_spinner.visibility=View.GONE
+            continue_location_btn.text = "Update address"
+            address_spinner.visibility = View.GONE
         }
 
         addressType = addressModel.addresType.toString()
@@ -311,6 +326,11 @@ class ChangeAddressFragment : Fragment() {
 
     private fun shout(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun validateServiceAvailability(pinCode: String): Boolean {
+        return pinCodes.contains(pinCode)
+
     }
 
 }
