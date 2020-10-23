@@ -54,31 +54,36 @@ class ForgotPasswordScreen : BaseActivity() {
 
         forgotPswrdViewModel.getOtpResponseToObserve().observe(this, Observer {
             hideLoading()
-            if (it.data != null && it.data == "true") {
+            it?.let {
+                if (it.data != null && it.data == "true") {
 
-                Log.d("otp_", it.data)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    Globals.showNotifInOreoAll(this,"Otp Sent to mobile")
+                    Log.d("otp_", it.data)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        Globals.showNotifInOreoAll(this, "Otp Sent to mobile")
+                    } else {
+                        Globals.sendNotification(this, "Otp Sent to mobile")
+                    }
+
+                    val navToOtpVerfyIntent =
+                        Intent(this@ForgotPasswordScreen, OTPVerificationScreen::class.java)
+                    navToOtpVerfyIntent.putExtra(
+                        Constants.FORGOT_PASSWORD_SOURCE_TYPE,
+                        EnumOTPSource.ENUM_TYPE_FORGOT_PASSWORD
+                    )
+                    navToOtpVerfyIntent.putExtra(
+                        Constants.MOBILE_NUMBER,
+                        mblNumberEdt.text.toString()
+                    )
+                    startActivity(navToOtpVerfyIntent)
+                    finish()
+
                 } else {
-                    Globals.sendNotification(this,"Otp Sent to mobile")
+                    Globals.showPopoUpDialog(
+                        this,
+                        getString(R.string.otp_validation),
+                        getString(R.string.otp_not_sent)
+                    )
                 }
-
-                val navToOtpVerfyIntent =
-                    Intent(this@ForgotPasswordScreen, OTPVerificationScreen::class.java)
-                navToOtpVerfyIntent.putExtra(
-                    Constants.FORGOT_PASSWORD_SOURCE_TYPE,
-                    EnumOTPSource.ENUM_TYPE_FORGOT_PASSWORD
-                )
-                navToOtpVerfyIntent.putExtra(Constants.MOBILE_NUMBER, mblNumberEdt.text.toString())
-                startActivity(navToOtpVerfyIntent)
-                finish()
-
-            } else {
-                Globals.showPopoUpDialog(
-                    this,
-                    getString(R.string.otp_validation),
-                    getString(R.string.otp_not_sent)
-                )
             }
 
         })

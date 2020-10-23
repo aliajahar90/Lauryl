@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home_screen.*
 import timber.log.Timber
 import versatile.project.lauryl.R
+import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.base.HomeNavigationController
 import versatile.project.lauryl.fragment.*
@@ -35,11 +36,12 @@ class HomeScreen : BaseActivity(), LocationListener {
     private var locationManager: LocationManager? = null
     private val MIN_TIME: Long = 400
     private val MIN_DISTANCE = 1000f
+    lateinit var myApplication: MyApplication
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
+        myApplication = MyApplication()
         Constants.CURRENT_AUTH_TOKEN = Globals.getStringFromPreferences(this, Constants.AUTH_TOKEN)
         botmNavVw.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         displayHomeFragment()
@@ -54,44 +56,45 @@ class HomeScreen : BaseActivity(), LocationListener {
 
         }
         changeLocation.setOnClickListener {
-            displayMapLocationFragment()
+            displayMapLocationFragment(Constants.CHANGE_LOCATION_ACTION)
         }
         fetchLocation()
     }
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
+    private val mOnNavigationItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
 
-        when (menuItem.itemId) {
+            when (menuItem.itemId) {
 
-            R.id.homeId -> {
-                displayHomeFragment()
-                return@OnNavigationItemSelectedListener true
-            }
+                R.id.homeId -> {
+                    displayHomeFragment()
+                    return@OnNavigationItemSelectedListener true
+                }
 
                 R.id.myOrdersId -> {
                     displayMyOrdersFragment(0)
                     return@OnNavigationItemSelectedListener true
                 }
 
-            R.id.schedulePckUpId -> {
-                displaySPFragment()
-                return@OnNavigationItemSelectedListener true
-            }
+                R.id.schedulePckUpId -> {
+                    displaySPFragment()
+                    return@OnNavigationItemSelectedListener true
+                }
 
-            R.id.paymentId -> {
-                displayPaymentFragment()
-                return@OnNavigationItemSelectedListener true
-            }
+                R.id.paymentId -> {
+                    displayPaymentFragment()
+                    return@OnNavigationItemSelectedListener true
+                }
 
-            R.id.profileId -> {
-                displayProfileFragment()
-                return@OnNavigationItemSelectedListener true
+                R.id.profileId -> {
+                    displayProfileFragment()
+                    return@OnNavigationItemSelectedListener true
+                }
+
             }
+            false
 
         }
-        false
-
-    }
 
     private fun displayProfileFragment() {
         selectProfile()
@@ -100,7 +103,7 @@ class HomeScreen : BaseActivity(), LocationListener {
 
     private fun displayPaymentFragment() {
         selectPayment()
-       homeNavigationController.addPaymentFragment()
+        homeNavigationController.addPaymentFragment()
     }
 
     fun displaySPFragment() {
@@ -127,8 +130,11 @@ class HomeScreen : BaseActivity(), LocationListener {
         // botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
     }
 
-    private fun displayMapLocationFragment() {
+    fun displayMapLocationFragment(action: String) {
+        val bundle = Bundle()
+        bundle.putString(Constants.ACTION, action)
         val fragment = MapLocationFragment()
+        fragment.arguments = bundle
         loadMyFragment(fragment)
         selectMapLocationPickUpDashBoard()
         // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
@@ -170,12 +176,9 @@ class HomeScreen : BaseActivity(), LocationListener {
 
 
     fun displayMyOrdersFragment(initPosition: Int) {
-        val bundle = Bundle()
-        bundle.putInt(AllConstants.Orders.initTabSelection, initPosition)
+        myApplication.selectedOrderTab=initPosition
         val myOrdersFragment = MyOrdersFragment()
-        myOrdersFragment.arguments = bundle
-        val fragment = myOrdersFragment
-        loadMyFragment(fragment)
+        loadMyFragment(myOrdersFragment)
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
         selectMyOrdersDashboard()
     }
@@ -227,17 +230,17 @@ class HomeScreen : BaseActivity(), LocationListener {
         botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
     }
 
-    fun displayOrderHstryFragment(jsonString: String){
-        val bundle=Bundle()
-        bundle.putString(AllConstants.Orders.orderData,jsonString)
-        val orderHistoryFragment=OrderHistoryFragment();
-        orderHistoryFragment.arguments=bundle
+    fun displayOrderHstryFragment(jsonString: String) {
+        val bundle = Bundle()
+        bundle.putString(AllConstants.Orders.orderData, jsonString)
+        val orderHistoryFragment = OrderHistoryFragment();
+        orderHistoryFragment.arguments = bundle
         val fragment = orderHistoryFragment
         loadMyFragment(fragment)
         selectOrderHistory()
     }
 
-    fun selectOrderHistory(){
+    fun selectOrderHistory() {
         homeNameMdlVwTxt.text = getString(R.string.order_histry_txt)
         homeNameMdlVwTxt.visibility = View.VISIBLE
         homeNameTxt.visibility = View.GONE
@@ -246,9 +249,9 @@ class HomeScreen : BaseActivity(), LocationListener {
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 1){
+        if (supportFragmentManager.backStackEntryCount > 1) {
             supportFragmentManager.popBackStack()
-        }else{
+        } else {
             finish()
         }
     }
@@ -275,9 +278,9 @@ class HomeScreen : BaseActivity(), LocationListener {
         homeNameMdlVwTxt.visibility = View.VISIBLE
         homeNameTxt.visibility = View.GONE
         filterTxt.visibility = View.GONE
-        rlChange.visibility=View.VISIBLE
-        homeLocHdngTxt.text=getString(R.string.loc_hdng_txt)
-        homelocTxt.text="Hydrabad"
+        rlChange.visibility = View.VISIBLE
+        homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
+        homelocTxt.text = "Hydrabad"
         imgLoc.setImageResource(R.drawable.location_white_icon)
         botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
