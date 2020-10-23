@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,10 +22,13 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.map_location_fragment.*
 import timber.log.Timber
 import versatile.project.lauryl.R
+import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.screens.HomeScreen
+import versatile.project.lauryl.view.model.MapLocationViewModel
 import java.lang.Exception
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListener {
@@ -34,10 +38,28 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     private val MIN_TIME: Long = 400
     private val MIN_DISTANCE = 1000f
     private var addressModel: AddressModel = AddressModel()
+    lateinit var myApplication: MyApplication
+    lateinit var mapLocationViewModel: MapLocationViewModel
+    var pinCodes = ArrayList<String>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mapLocationViewModel = ViewModelProvider(this)[MapLocationViewModel::class.java]
+        myApplication = (activity?.applicationContext as MyApplication)
+        mapLocationViewModel.getCities(myApplication.userAccessToken)
+        (activity as HomeScreen).showLoading()
+    }
 
+    private fun observeDataSources() {
+        mapLocationViewModel.getCitiesToObserve().observe(this, androidx.lifecycle.Observer {
+
+            for (city in it) {
+                for (pin in city.pinCode)
+                    pinCodes.add(pin)
+            }
+        })
+        (activity as HomeScreen).hideLoading()
     }
 
     override fun onCreateView(
@@ -56,8 +78,14 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         confirm_location_btn.setOnClickListener {
+           // if (isServiceable)
             (activity as HomeScreen).displayChangeAddressFragment(addressModel)
+//            else{
+//                (activity as HomeScreen).scream("Our services are not available in this province !!")
+//
+//            }
         }
+        observeDataSources()
     }
 
     private fun fetchLocation() {
@@ -113,6 +141,17 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
         }
     }
 
+    var isServiceable = false
+    private fun validateServiceAvailability(pinCode: String) {
+        if (pinCodes.contains(pinCode)) {
+            isServiceable = true
+            availabiltyMessage.visibility = View.GONE
+        } else {
+            isServiceable = false
+            availabiltyMessage.visibility = View.VISIBLE
+            availabiltyMessage.text = "Our services are not available in this province !!"
+        }
+    }
 
     fun fetchAddress(latitude: Double?, longitude: Double?) {
         Timber.e("latitude $latitude longitude $longitude")
@@ -143,7 +182,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
             addresses[0].postalCode.let {
                 addressModel.pinCode = it
                 Timber.e("pinCode ${addressModel.pinCode}")
-
+                validateServiceAvailability(pinCode = it)
             }
             addresses[0].featureName.let {
                 addressModel.landmark = it
@@ -155,7 +194,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
                 Timber.e("streetName ${addressModel.streetName}")
 
             }
-           // Toast.makeText(context, address, Toast.LENGTH_SHORT).show()
+            // Toast.makeText(context, address, Toast.LENGTH_SHORT).show()
             val city: String = addresses[0].locality
             city_name.text = city
             address_geo.text = address
