@@ -58,7 +58,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         changeLocation.setOnClickListener {
             displayMapLocationFragment(Constants.CHANGE_LOCATION_ACTION)
         }
-        fetchLocation()
+
     }
 
     private val mOnNavigationItemSelectedListener =
@@ -267,7 +267,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         filterTxt.visibility = View.GONE
         rlChange.visibility = View.VISIBLE
         homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
-        homelocTxt.text = "Hydrabad"
         //   imgLoc.setImageResource(R.drawable.ic_name)
         botmNavVw.menu.findItem(R.id.profileId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
@@ -280,7 +279,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         filterTxt.visibility = View.GONE
         rlChange.visibility = View.VISIBLE
         homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
-        homelocTxt.text = "Hydrabad"
         imgLoc.setImageResource(R.drawable.location_white_icon)
         botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
@@ -389,5 +387,10 @@ class HomeScreen : BaseActivity(), LocationListener {
 
     fun updateUserName(profileResponse: GetProfileResponse){
         homeNameTxt.text="Hello, " + profileResponse.profileData.firstName
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchLocation()
     }
 }
