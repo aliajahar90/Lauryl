@@ -1,5 +1,6 @@
 package versatile.project.lauryl.application
 
+import android.util.SparseBooleanArray
 import androidx.multidex.MultiDexApplication
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -17,6 +18,7 @@ open class MyApplication : MultiDexApplication() {
     var createOrderSerializdedAddressData=""
     var createOrderSerializdedProfile=""
 
+    var selectedServiceArray: SparseBooleanArray = SparseBooleanArray()
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {

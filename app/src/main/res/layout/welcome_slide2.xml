@@ -38,17 +38,17 @@
         android:id="@+id/subHdngTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:textSize="14sp"
-        android:visibility="invisible"
-        android:gravity="center"
-        android:text="@string/schedule_pckup_sub_txt"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="30sp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="30sp"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/mainHdngTxt"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Your laundry bag is full, our Pickup slots are waiting, choose a time that is convenient for you, we will be there to pick your laundry stack."
+        android:textSize="14sp"
+        android:visibility="visible"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mainHdngTxt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
