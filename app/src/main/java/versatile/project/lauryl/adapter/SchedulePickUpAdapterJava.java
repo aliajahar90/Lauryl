@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+import java.util.Timer;
 
+import timber.log.Timber;
 import versatile.project.lauryl.R;
 
 import versatile.project.lauryl.databinding.SchedulePickUpLstItemBinding;
@@ -20,14 +22,16 @@ import versatile.project.lauryl.model.TopServicesDataItem;
 
 
 public class SchedulePickUpAdapterJava extends RecyclerView.Adapter<SchedulePickUpAdapterJava.SchedulePickupViewHolder>{
-    private SparseBooleanArray selectedItems = new SparseBooleanArray();
+    private SparseBooleanArray selectedItems;
     private List<TopServicesDataItem> topServicesDataItems;
     private OnItemClickListener onItemClickListener;
     private int selectedPosition=-1;
 
-    public SchedulePickUpAdapterJava(List<TopServicesDataItem> netBankingList,OnItemClickListener itemClickListener) {
+    public SchedulePickUpAdapterJava(List<TopServicesDataItem> netBankingList,OnItemClickListener itemClickListener,SparseBooleanArray selectedItems) {
         this.topServicesDataItems = netBankingList;
         this.onItemClickListener = itemClickListener;
+        this.selectedItems=selectedItems;
+        Timber.e("selected items count : "+selectedItems.size());
     }
 
     @NonNull
