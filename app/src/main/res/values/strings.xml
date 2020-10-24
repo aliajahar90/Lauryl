@@ -138,4 +138,5 @@
     <string name="set_location">Set Location</string>
     <string name="change_address">Change Addresses</string>
     <string name="logout_message">Are you sure you want to logout?</string>
+    <string name="create_order_message">You have not selected any service.Proceed to home screen?</string>
 </resources>

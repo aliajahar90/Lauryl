@@ -24,6 +24,7 @@ import versatile.project.lauryl.utils.Globals
 
 
 class HomeFragment : Fragment() {
+
     lateinit var homeFragmentViewModel: HomeFragmentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -331,4 +332,5 @@ class HomeFragment : Fragment() {
         }
         return "";
     }
+
 }

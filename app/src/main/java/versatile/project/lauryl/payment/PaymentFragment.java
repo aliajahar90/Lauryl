@@ -1,6 +1,8 @@
 package versatile.project.lauryl.payment;
 
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,6 +47,7 @@ import versatile.project.lauryl.base.BaseBinding;
 import versatile.project.lauryl.base.DeferredFragmentTransaction;
 import versatile.project.lauryl.base.HomeNavigationController;
 import versatile.project.lauryl.databinding.PaymentFragmentBinding;
+import versatile.project.lauryl.home.HomeFragment;
 import versatile.project.lauryl.model.address.AddressModel;
 import versatile.project.lauryl.orders.create.model.CreateOrderData;
 import versatile.project.lauryl.payment.adapter.NetBankAdapter;
@@ -52,7 +57,11 @@ import versatile.project.lauryl.payment.util.CardFormattingTextWatcher;
 import versatile.project.lauryl.payment.util.PaymentDefferedFragmentTransaction;
 import versatile.project.lauryl.payment.viewModel.PaymentViewModel;
 import versatile.project.lauryl.profile.data.GetProfileResponse;
+import versatile.project.lauryl.screens.HomeScreen;
+import versatile.project.lauryl.screens.SignUpOrLoginScreen;
 import versatile.project.lauryl.utils.AllConstants;
+import versatile.project.lauryl.utils.Constants;
+import versatile.project.lauryl.utils.Globals;
 
 public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragmentBinding> {
     private PaymentFragmentBinding paymentFragmentBinding;
@@ -246,16 +255,20 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             displayView(PaymentFragment.PaymentTypeNetBanking);
         });
         paymentFragmentBinding.rlPaymentButton.setOnClickListener(view -> {
-            switch (activePaymentType) {
-                case PaymentTypeUpi:
-                     processUpiService();
-                    break;
-                case PaymentTypeCards:
-                    processCardPaymentService();
-                    break;
-                case PaymentTypeNetBanking:
-                    processNetBankPaymentService();
-                    break;
+            if(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()){
+                showCreateOrderDialog();
+                }else {
+                switch (activePaymentType) {
+                    case PaymentTypeUpi:
+                        processUpiService();
+                        break;
+                    case PaymentTypeCards:
+                        processCardPaymentService();
+                        break;
+                    case PaymentTypeNetBanking:
+                        processNetBankPaymentService();
+                        break;
+                }
             }
         });
         paymentFragmentBinding.paymentCard.inputCardNumber.addTextChangedListener(new CardFormattingTextWatcher(paymentFragmentBinding.paymentCard.inputCardNumber, new CardFormattingTextWatcher.CardType() {
@@ -597,4 +610,18 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         Log.d("Payment","OnDestroyDetach");
         super.onDetach();
     }
+    void showCreateOrderDialog(){
+           new AlertDialog.Builder(getActivity())
+                   .setTitle(getString(R.string.lauryl))
+                   .setMessage(R.string.create_order_message)
+                   .setPositiveButton("Yes", (dialog, which) -> {
+                       FragmentManager fm = getActivity().getSupportFragmentManager();
+                       fm.popBackStack(HomeFragment.class.getName(),FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                       HomeNavigationController.getInstance(getActivity()).addHomeFragment(new HomeFragment());
+
+                   })
+                   .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss())
+                   .show();
+    }
+
 }
