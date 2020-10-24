@@ -12,6 +12,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 import versatile.project.lauryl.R;
+import versatile.project.lauryl.home.HomeFragment;
 import versatile.project.lauryl.payment.PaymentErrorFragment;
 import versatile.project.lauryl.payment.PaymentFragment;
 import versatile.project.lauryl.payment.PaymentSuccessFragment;
@@ -58,6 +59,15 @@ public class HomeNavigationController implements FragmentManager.OnBackStackChan
         fragmentTransaction.replace(R.id.fragContainer, ProfileFragment.newInstance(),ProfileFragment.TAG);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+    public void addHomeFragment(HomeFragment homeFragment){
+        FragmentTransaction fragmentTransaction=mFragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer,homeFragment,HomeFragment.class.getName());
+        fragmentTransaction.addToBackStack(HomeFragment.class.getName());
+        fragmentTransaction.commit();
+        if((context instanceof HomeScreen)){
+            ((HomeScreen)context).selectHomeDashboard();
+        }
     }
 
     private HomeNavigationController() {

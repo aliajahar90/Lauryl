@@ -28,7 +28,6 @@ import versatile.project.lauryl.profile.data.GetProfileResponse
 import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
-import java.lang.Exception
 import java.util.*
 
 class HomeScreen : BaseActivity(), LocationListener {
@@ -45,8 +44,8 @@ class HomeScreen : BaseActivity(), LocationListener {
         myApplication = MyApplication()
         Constants.CURRENT_AUTH_TOKEN = Globals.getStringFromPreferences(this, Constants.AUTH_TOKEN)
         botmNavVw.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        displayHomeFragment()
         homeNavigationController = HomeNavigationController.getInstance(this)
+        displayHomeFragment()
         bckBtn.setOnClickListener {
 
             if (supportFragmentManager.backStackEntryCount > 1) {
@@ -194,9 +193,8 @@ class HomeScreen : BaseActivity(), LocationListener {
     }
 
     private fun displayHomeFragment() {
-        val fragment = HomeFragment()
-        loadMyFragment(fragment)
-        selectHomeDashboard()
+        val homeFragment = HomeFragment()
+        homeNavigationController.addHomeFragment(homeFragment)
     }
 
     fun selectHomeDashboard() {
