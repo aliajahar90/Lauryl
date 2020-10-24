@@ -14,6 +14,10 @@ open class MyApplication : MultiDexApplication() {
     var userAccessToken = "135693eb-f0ea-4377-bd3a-88c4196628dd"
     var mobileNumber = ""
     var selectedOrderTab = 0
+    var createOrderSerializedService=""
+    var createOrderSerializdedAddressData=""
+    var createOrderSerializdedProfile=""
+
     var selectedServiceArray: SparseBooleanArray = SparseBooleanArray()
     override fun onCreate() {
         super.onCreate()

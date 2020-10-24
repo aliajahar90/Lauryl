@@ -185,9 +185,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <LinearLayout
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/linAwatingPickup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -284,6 +286,7 @@
                             android:text=""/>
 
                         <TextView
+                            android:id="@+id/txtPickUpProcess"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
@@ -387,6 +390,17 @@
                 </RelativeLayout>
 
             </LinearLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtNoAwaitingPickups"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:textColor="@color/orange"
+            android:text="@string/no_orders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+            </RelativeLayout>
 
 
 
@@ -395,11 +409,11 @@
 
 
 
-
-
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
             <LinearLayout
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/linAwatingDelivery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -496,6 +510,7 @@
                             android:text=""/>
 
                         <TextView
+                            android:id="@+id/txtDeliveryProcess"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
@@ -599,6 +614,17 @@
                 </RelativeLayout>
 
             </LinearLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+
+        android:id="@+id/txtNoAwaitingDeliveryOrders"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:textColor="@color/orange"
+        android:text="@string/no_orders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </androidx.appcompat.widget.AppCompatTextView>
+</RelativeLayout>
 
 
 
@@ -622,9 +648,11 @@
 
 
 
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
             <LinearLayout
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/linCompletedDelivery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -721,6 +749,7 @@
                             android:text=""/>
 
                         <TextView
+                            android:id="@+id/txtCompleted"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
@@ -824,7 +853,15 @@
                 </RelativeLayout>
 
             </LinearLayout>
-
+    <androidx.appcompat.widget.AppCompatTextView
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:textColor="@color/orange"
+        android:text="@string/no_orders"
+        android:id="@+id/txtNoCompletedDelivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
+</RelativeLayout>
 
 
 

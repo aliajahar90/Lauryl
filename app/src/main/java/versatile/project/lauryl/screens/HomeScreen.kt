@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_home_screen.*
 import timber.log.Timber
 import versatile.project.lauryl.R
@@ -23,10 +24,10 @@ import versatile.project.lauryl.home.HomeFragment
 import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.orders.history.OrderHistoryFragment
 import versatile.project.lauryl.pickup.CnfSchedulePckUpFragment
+import versatile.project.lauryl.profile.data.GetProfileResponse
 import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
-import java.lang.Exception
 import java.util.*
 
 class HomeScreen : BaseActivity(), LocationListener {
@@ -43,8 +44,8 @@ class HomeScreen : BaseActivity(), LocationListener {
         myApplication = MyApplication()
         Constants.CURRENT_AUTH_TOKEN = Globals.getStringFromPreferences(this, Constants.AUTH_TOKEN)
         botmNavVw.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        displayHomeFragment()
         homeNavigationController = HomeNavigationController.getInstance(this)
+        displayHomeFragment()
         bckBtn.setOnClickListener {
 
             if (supportFragmentManager.backStackEntryCount > 1) {
@@ -57,7 +58,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         changeLocation.setOnClickListener {
             displayMapLocationFragment(Constants.CHANGE_LOCATION_ACTION)
         }
-        fetchLocation()
+
     }
 
     private val mOnNavigationItemSelectedListener =
@@ -192,9 +193,8 @@ class HomeScreen : BaseActivity(), LocationListener {
     }
 
     private fun displayHomeFragment() {
-        val fragment = HomeFragment()
-        loadMyFragment(fragment)
-        selectHomeDashboard()
+        val homeFragment = HomeFragment()
+        homeNavigationController.addHomeFragment(homeFragment)
     }
 
     fun selectHomeDashboard() {
@@ -266,7 +266,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         filterTxt.visibility = View.GONE
         rlChange.visibility = View.VISIBLE
         homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
-        homelocTxt.text = "Hydrabad"
         //   imgLoc.setImageResource(R.drawable.ic_name)
         botmNavVw.menu.findItem(R.id.profileId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
@@ -279,7 +278,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         filterTxt.visibility = View.GONE
         rlChange.visibility = View.VISIBLE
         homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
-        homelocTxt.text = "Hydrabad"
         imgLoc.setImageResource(R.drawable.location_white_icon)
         botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
@@ -384,5 +382,15 @@ class HomeScreen : BaseActivity(), LocationListener {
     }
 
     override fun onProviderDisabled(p0: String?) {
+    }
+
+    fun updateUserName(profileResponse: GetProfileResponse){
+        (application as MyApplication).createOrderSerializdedProfile =Gson().toJson(profileResponse)
+        homeNameTxt.text="Hello, " + profileResponse.profileData.firstName
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchLocation()
     }
 }

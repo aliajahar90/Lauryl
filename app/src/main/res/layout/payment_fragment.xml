@@ -139,14 +139,8 @@
                 android:layout_height="wrap_content">
                 <androidx.appcompat.widget.AppCompatTextView
                     android:textColor="@color/white"
-                    android:text="Unit"
-                    android:id="@+id/txtSign"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:textColor="@color/white"
                     android:layout_marginLeft="@dimen/dp_5"
-                    android:text="67"
+                    android:text="\u20B9 100"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/txtAmount">

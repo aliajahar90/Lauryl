@@ -21,7 +21,7 @@
     <string name="skip_txt">Skip</string>
     <string name="verify_txt">VERIFY</string>
     <string name="search_txt">Search Services</string>
-    <string name="home_hdng_txt">Hello, Mr XYZ</string>
+    <string name="home_hdng_txt"></string>
     <string name="loc_hdng_txt">Your Location</string>
     <string name="loc_chnge_hdng_txt">CHANGE</string>
     <string name="top_svrc_hdng_txt">Top Services</string>
@@ -63,7 +63,7 @@
     <string name="home_txt">Lauryl</string>
     <string name="orders_txt">My Orders</string>
     <string name="order_histry_txt">Order Details</string>
-    <string name="shedule_pck_up_txt">Schedule Pickup</string>
+    <string name="shedule_pck_up_txt">Pickup</string>
     <string name="payment_txt">Payment</string>
     <string name="profile_txt">Profile</string>
     <string name="plz_login_txt">Please login</string>
@@ -117,7 +117,7 @@
     <string name="name_on_card">Name On Card</string>
     <string name="enter_card_number">Enter card number</string>
     <string name="todo">TODO</string>
-    <string name="thanks_for_choosing_us">Thanks for choosing us</string>
+    <string name="thanks_for_choosing_us">Thanks for choosing us!</string>
     <string name="payment_details">Payment Methods</string>
     <string name="order_id">Order Id</string>
     <string name="debited_amount">Debited Amount</string>
@@ -137,4 +137,6 @@
     <string name="google_maps_key">AIzaSyDG-S0lW8l_svOcX3HuTOn2X_170l2mJA0</string>
     <string name="set_location">Set Location</string>
     <string name="change_address">Change Addresses</string>
- </resources>
+    <string name="logout_message">Are you sure you want to logout?</string>
+    <string name="create_order_message">You have not selected any service.Proceed to home screen?</string>
+</resources>

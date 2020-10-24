@@ -3,9 +3,10 @@ package versatile.project.lauryl.profile.data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GetProfileResponse {
+public class GetProfileResponse implements Serializable {
     @SerializedName("data")
     @Expose
     private ProfileData data;
@@ -18,7 +19,7 @@ public class GetProfileResponse {
         this.data = data;
     }
 
-    public static class ProfileData {
+    public static class ProfileData  implements Serializable {
         @SerializedName("id")
         @Expose
         private String id;

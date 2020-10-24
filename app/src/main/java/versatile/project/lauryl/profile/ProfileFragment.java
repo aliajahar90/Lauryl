@@ -1,5 +1,7 @@
 package versatile.project.lauryl.profile;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -89,18 +91,26 @@ public class ProfileFragment extends BaseBinding<ProfileViewModel, FragmentProfi
             activity.displayManageAddressFragment();
         });
         profileBinding.rlLogout.setOnClickListener(view -> {
-            Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getUSER_AUTH_TOKEN(), "");
-            Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getAUTH_TOKEN(), "");
-            Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getMOBILE_NUMBER(), "");
-            MyApplication myApplication = (MyApplication) getActivity().getApplicationContext();
-            myApplication.setAccessToken("");
-            myApplication.setUserAccessToken("");
-            myApplication.setMobileNumber("");
-            Intent navtToRestPswrdIntent = new Intent(getActivity(), SignUpOrLoginScreen.class);
-            navtToRestPswrdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            navtToRestPswrdIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(navtToRestPswrdIntent);
-            getActivity().finish();
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.lauryl))
+                    .setMessage(R.string.logout_message)
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getUSER_AUTH_TOKEN(), "");
+                        Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getAUTH_TOKEN(), "");
+                        Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getMOBILE_NUMBER(), "");
+                        MyApplication myApplication = (MyApplication) getActivity().getApplicationContext();
+                        myApplication.setAccessToken("");
+                        myApplication.setUserAccessToken("");
+                        myApplication.setMobileNumber("");
+                        Intent navtToRestPswrdIntent = new Intent(getActivity(), SignUpOrLoginScreen.class);
+                        navtToRestPswrdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        navtToRestPswrdIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(navtToRestPswrdIntent);
+                        getActivity().finish();
+                    })
+                    .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss())
+                    .show();
+
         });
     }
 

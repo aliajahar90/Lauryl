@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
 import versatile.project.lauryl.base.SingleLiveEvent
-import versatile.project.lauryl.data.source.LaurylRepository
 import versatile.project.lauryl.home.HomeRepository
 import versatile.project.lauryl.model.MyOrdersDataItem
 import versatile.project.lauryl.model.TopServicesResponse
+import versatile.project.lauryl.profile.data.GetProfileResponse
 
 class HomeFragmentViewModel: ViewModel()  {
     private var laurylRepository: HomeRepository = HomeRepository()
@@ -43,6 +43,16 @@ class HomeFragmentViewModel: ViewModel()  {
     }
     fun getMyOrderFetchError(): LiveData<String>? {
         return laurylRepository.orderFetchErrorSingleLiveEvent;
+    }
+    fun getProfileInformation(accessToken: String){
+        return laurylRepository.getProfileInformation(accessToken);
+    }
+    fun profileFetchSuccessHandler(): SingleLiveEvent<GetProfileResponse> {
+        return laurylRepository.getProfileResponseLiveData
+    }
+
+    fun profileFetchErrorHandler(): LiveData<Throwable?>? {
+        return laurylRepository.throwableMutableLiveData
     }
 
 }

@@ -9,10 +9,11 @@ import java.util.Map;
 import java.util.Set;
 
 import versatile.project.lauryl.base.BaseViewModel;
+import versatile.project.lauryl.orders.create.CreateOrderViewModel;
 import versatile.project.lauryl.pickup.CnfSchedulePickupRepository;
 import versatile.project.lauryl.pickup.data.CnfPickupResponse;
 
-public class CnfSchedulePickupViewModel extends BaseViewModel {
+public class CnfSchedulePickupViewModel extends CreateOrderViewModel {
     CnfSchedulePickupRepository cnfSchedulePickupRepository;
     public CnfSchedulePickupViewModel() {
         cnfSchedulePickupRepository=new CnfSchedulePickupRepository();

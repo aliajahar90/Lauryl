@@ -1,6 +1,8 @@
 package versatile.project.lauryl.payment;
 
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,18 +41,27 @@ import java.util.Queue;
 import java.util.logging.Logger;
 
 import versatile.project.lauryl.R;
+import versatile.project.lauryl.application.MyApplication;
 import versatile.project.lauryl.base.BaseActivity;
 import versatile.project.lauryl.base.BaseBinding;
 import versatile.project.lauryl.base.DeferredFragmentTransaction;
 import versatile.project.lauryl.base.HomeNavigationController;
 import versatile.project.lauryl.databinding.PaymentFragmentBinding;
+import versatile.project.lauryl.home.HomeFragment;
+import versatile.project.lauryl.model.address.AddressModel;
+import versatile.project.lauryl.orders.create.model.CreateOrderData;
 import versatile.project.lauryl.payment.adapter.NetBankAdapter;
 import versatile.project.lauryl.payment.data.NetBanking;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
 import versatile.project.lauryl.payment.util.CardFormattingTextWatcher;
 import versatile.project.lauryl.payment.util.PaymentDefferedFragmentTransaction;
 import versatile.project.lauryl.payment.viewModel.PaymentViewModel;
+import versatile.project.lauryl.profile.data.GetProfileResponse;
+import versatile.project.lauryl.screens.HomeScreen;
+import versatile.project.lauryl.screens.SignUpOrLoginScreen;
 import versatile.project.lauryl.utils.AllConstants;
+import versatile.project.lauryl.utils.Constants;
+import versatile.project.lauryl.utils.Globals;
 
 public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragmentBinding> {
     private PaymentFragmentBinding paymentFragmentBinding;
@@ -62,6 +75,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     public static int activePaymentType = PaymentTypeUpi;
     private NetBanking activeBankForCheckout = null;
     public static final String TAG = PaymentFragment.class.getName();
+    private String paymentMethod;
 
 
     public static PaymentFragment newInstance(int viewType) {
@@ -136,6 +150,19 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         });
         paymentViewModel.getPaymentSuccess().observe(this, paymentSuccess -> {
             hideLoading();
+            CreateOrderData.Details details=new CreateOrderData.Details();
+            GetProfileResponse getProfileResponse=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(),GetProfileResponse.class);
+            AddressModel addressModel=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(),AddressModel.class);
+            details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
+            details.setOrderStage(AllConstants.Orders.OrderStage.Awaiting_Pickup);
+            details.setEmailId(getProfileResponse.getProfileData().getEmail());
+            details.setPickupCity(addressModel.getCity());
+            details.setPickupState(addressModel.getState());
+            details.setPickupCountry(addressModel.getCountry());
+            details.setPickupAddress2(addressModel.getAddress1());
+            details.setShippingPostCode(addressModel.getPinCode());
+            details.setTransactionId(paymentSuccess.getPaymentTransactionId());
+            paymentViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(),details);
             HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment();
         });
         paymentViewModel.getPaymentError().observe(this, paymentError -> {
@@ -147,7 +174,9 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             }
             HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment();
         });
-
+        paymentViewModel.getCreateOrderSuccessEvent().observe(this,it->{
+            //HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment();
+        });
     }
 
     void controlViewVisibility() {
@@ -226,16 +255,20 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             displayView(PaymentFragment.PaymentTypeNetBanking);
         });
         paymentFragmentBinding.rlPaymentButton.setOnClickListener(view -> {
-            switch (activePaymentType) {
-                case PaymentTypeUpi:
-                    processUpiService();
-                    break;
-                case PaymentTypeCards:
-                    processCardPaymentService();
-                    break;
-                case PaymentTypeNetBanking:
-                    processNetBankPaymentService();
-                    break;
+            if(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()){
+                showCreateOrderDialog();
+                }else {
+                switch (activePaymentType) {
+                    case PaymentTypeUpi:
+                        processUpiService();
+                        break;
+                    case PaymentTypeCards:
+                        processCardPaymentService();
+                        break;
+                    case PaymentTypeNetBanking:
+                        processNetBankPaymentService();
+                        break;
+                }
             }
         });
         paymentFragmentBinding.paymentCard.inputCardNumber.addTextChangedListener(new CardFormattingTextWatcher(paymentFragmentBinding.paymentCard.inputCardNumber, new CardFormattingTextWatcher.CardType() {
@@ -433,7 +466,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             showLoading();
             paymentViewModel.validateVPA(paymentFragmentBinding.paymentUPI.inputUPI.getText().toString());
         } else {
-            Toast.makeText(getActivity(), "Entered Vpa not valid", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), AllConstants.Payment.Errors.ERROR_VPA_MSG, Toast.LENGTH_SHORT).show();
         }
         setVpaValidationObserver();
     }
@@ -442,6 +475,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         paymentViewModel.onVpaValidationSuccess().observe(this, aBoolean -> {
             if (aBoolean) {
                 try {
+                    paymentMethod="upi";
                     JSONObject payload = new JSONObject("{currency: 'INR'}");
                     payload.put("amount", "100");
                     payload.put("contact", "9999999999");
@@ -477,6 +511,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         paymentViewModel.getCardPaymentValidationSuccess().observe(this, aBoolean -> {
             if (aBoolean) {
                 try {
+                    paymentMethod="card";
                     JSONObject data = new JSONObject("{currency: 'INR'}");
                     data.put("amount", 1 * 100);
                     data.put("email", "gaurav.kumar@example.com");
@@ -502,6 +537,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
 
     private void processNetBankPaymentService() {
         if (activeBankForCheckout != null) {
+            paymentMethod="netbanking";
             showLoading();
             try {
                 JSONObject data = new JSONObject("{currency: 'INR'}");
@@ -574,4 +610,18 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         Log.d("Payment","OnDestroyDetach");
         super.onDetach();
     }
+    void showCreateOrderDialog(){
+           new AlertDialog.Builder(getActivity())
+                   .setTitle(getString(R.string.lauryl))
+                   .setMessage(R.string.create_order_message)
+                   .setPositiveButton("Yes", (dialog, which) -> {
+                       FragmentManager fm = getActivity().getSupportFragmentManager();
+                       fm.popBackStack(HomeFragment.class.getName(),FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                       HomeNavigationController.getInstance(getActivity()).addHomeFragment(new HomeFragment());
+
+                   })
+                   .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss())
+                   .show();
+    }
+
 }

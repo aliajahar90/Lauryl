@@ -26,6 +26,7 @@ import java.util.Map;
 import versatile.project.lauryl.base.SingleLiveEvent;
 import versatile.project.lauryl.base.asyncjob.TaskRunner;
 import versatile.project.lauryl.data.source.LaurylRepository;
+import versatile.project.lauryl.orders.create.CreateOrderRepository;
 import versatile.project.lauryl.payment.backgroundjob.PaymentBackgroundTask;
 import versatile.project.lauryl.payment.data.NetBanking;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
@@ -39,7 +40,7 @@ import static versatile.project.lauryl.utils.AllConstants.Payment.HotBanks.ICIC;
 import static versatile.project.lauryl.utils.AllConstants.Payment.HotBanks.KKBK;
 import static versatile.project.lauryl.utils.AllConstants.Payment.HotBanks.SBIN;
 
-public class PaymentRepository extends LaurylRepository {
+public class PaymentRepository extends CreateOrderRepository {
     // static variable single_instance of type Singleton
     private static PaymentRepository single_instance = null;
     private Razorpay razorpay;
@@ -271,7 +272,11 @@ public class PaymentRepository extends LaurylRepository {
                                     public void onPaymentSuccess(String razorpayPaymentId, PaymentData paymentData) {
                                         Log.d("Payment", "success" + razorpayPaymentId);
                                         onSwitchDefaultView.setValue(true);
-                                        verifyPostPaymentSignature(result instanceof Order ? ((Order) result).get("id"):"",paymentData,"V1bFCk7Jurwyjm74cCO8KHHP",razorpayPaymentId);
+                                        PaymentBaseShareData.PaymentSuccess paymentSuccess = new PaymentBaseShareData.PaymentSuccess();
+                                        paymentSuccess.setPaymentTransactionId(razorpayPaymentId);
+                                        paymentSuccess.setPaymentData(paymentData);
+                                        paymentSuccessSingleLiveEvent.setValue(paymentSuccess);
+                                      //  verifyPostPaymentSignature(result instanceof Order ? ((Order) result).get("id"):"",paymentData,"V1bFCk7Jurwyjm74cCO8KHHP",razorpayPaymentId);
                                     }
 
                                     @Override
@@ -328,21 +333,21 @@ public class PaymentRepository extends LaurylRepository {
         }
     }
 
-    void verifyPostPaymentSignature(String orderId,PaymentData paymentData, String secretKey,String razorPayPaymentId){
-       // Utils.verifyPaymentSignature()
-        if( Signature.verifyPaymentSignature(orderId,paymentData.getPaymentId(),secretKey,paymentData.getSignature())){
-                PaymentBaseShareData.PaymentSuccess paymentSuccess=new PaymentBaseShareData.PaymentSuccess();
-                paymentSuccess.setPaymentTransactionId(razorPayPaymentId);
-                paymentSuccess.setPaymentData(paymentData);
-                paymentSuccessSingleLiveEvent.setValue(paymentSuccess);
-        }else {
-            PaymentBaseShareData.PaymentError paymentError=new PaymentBaseShareData.PaymentError();
-            paymentError.setCode(-1);
-            paymentError.setDescription(null);
-            paymentError.setPaymentData(paymentData);
-            paymentErrorSingleLiveEvent.setValue(paymentError);
-        }
-    }
+//    void verifyPostPaymentSignature(String orderId,PaymentData paymentData, String secretKey,String razorPayPaymentId){
+//       // Utils.verifyPaymentSignature()
+//        if( Signature.verifyPaymentSignature(orderId,paymentData.getPaymentId(),secretKey,paymentData.getSignature())){
+//                PaymentBaseShareData.PaymentSuccess paymentSuccess=new PaymentBaseShareData.PaymentSuccess();
+//                paymentSuccess.setPaymentTransactionId(razorPayPaymentId);
+//                paymentSuccess.setPaymentData(paymentData);
+//                paymentSuccessSingleLiveEvent.setValue(paymentSuccess);
+//        }else {
+//            PaymentBaseShareData.PaymentError paymentError=new PaymentBaseShareData.PaymentError();
+//            paymentError.setCode(-1);
+//            paymentError.setDescription(null);
+//            paymentError.setPaymentData(paymentData);
+//            paymentErrorSingleLiveEvent.setValue(paymentError);
+//        }
+//    }
 
     public SingleLiveEvent<String> getPaymentMethodLoadError() {
         return paymentMethodLoadError;

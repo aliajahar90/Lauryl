@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.change_address_fragment.*
@@ -161,6 +162,7 @@ class ChangeAddressFragment : Fragment() {
             if (it.status) {
                 emptyFields()
                 //continue to order use mAddress
+                (activity as HomeScreen).displayCnfPckUpFragment()
                 if (isEditing) {
                     shout("Address Updated")
                     activity?.onBackPressed()
@@ -281,6 +283,9 @@ class ChangeAddressFragment : Fragment() {
             if (shouldValidte)
                 validateFields()
             else {
+                val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
+                myApplication.createOrderSerializdedAddressData=Gson().toJson(mAddress)
+                (activity as HomeScreen).displayCnfPckUpFragment()
                 //address selected so continue to order user mAddress as address
             }
         }

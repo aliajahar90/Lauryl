@@ -3,38 +3,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        tools:ignore="MissingConstraints">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imgPaymentLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
-            android:contentDescription="@string/todo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/payment_success_logo" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_30"
+            android:src="@drawable/payment_success_logo" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_marginTop="@dimen/dp_30"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/imgPaymentLogo"
+            android:id="@+id/txtThanksForChoosing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/thanks_for_choosing_us"
+            android:textColor="@color/dark_grey"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <LinearLayout
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginRight="@dimen/dp_10"
-            android:id="@+id/linearLayout2"
+            android:layout_marginTop="@dimen/dp_20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
+            android:layout_below="@+id/txtThanksForChoosing"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
             android:background="@drawable/border_box"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.0">
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -50,13 +51,15 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:text="@string/payment_details"
-                    android:textColor="@color/dark_grey"></androidx.appcompat.widget.AppCompatTextView>
+                    android:textColor="@color/dark_grey">
+
+                </androidx.appcompat.widget.AppCompatTextView>
             </RelativeLayout>
 
-            <view
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="0.2dp"
-                android:background="@color/light_grey"></view>
+                android:layout_height="0.5dp"
+                android:background="@color/light_grey"></View>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -76,13 +79,15 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="@string/todo"></androidx.appcompat.widget.AppCompatTextView>
+                    android:text="@string/todo">
+
+                </androidx.appcompat.widget.AppCompatTextView>
             </RelativeLayout>
 
-            <view
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="0.2dp"
-                android:background="@color/light_grey"></view>
+                android:layout_height="0.5dp"
+                android:background="@color/light_grey"></View>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -102,13 +107,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="@string/todo"></androidx.appcompat.widget.AppCompatTextView>
+                    android:text="\u20B9 100"></androidx.appcompat.widget.AppCompatTextView>
             </RelativeLayout>
 
-            <view
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="0.2dp"
-                android:background="@color/light_grey"></view>
+                android:layout_height="0.5dp"
+                android:background="@color/light_grey"></View>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -120,7 +125,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:text="@string/pickup_date_time"></androidx.appcompat.widget.AppCompatTextView>
+                    android:text="@string/pickup_date_time">
+
+                </androidx.appcompat.widget.AppCompatTextView>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtDateTime"
@@ -128,13 +135,15 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="@string/todo"></androidx.appcompat.widget.AppCompatTextView>
+                    android:text="@string/todo">
+
+                </androidx.appcompat.widget.AppCompatTextView>
             </RelativeLayout>
 
-            <view
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="0.2dp"
-                android:background="@color/light_grey"></view>
+                android:layout_height="0.5dp"
+                android:background="@color/light_grey"></View>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -160,36 +169,18 @@
             </RelativeLayout>
 
         </LinearLayout>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtThanksForChoosing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="167dp"
-            android:text="@string/thanks_for_choosing_us"
-            android:textColor="@color/dark_grey"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
         <androidx.appcompat.widget.AppCompatButton
+            android:layout_marginBottom="@dimen/dp_10"
+            android:background="@drawable/blue_bckgrnd_round_corners_bckgrnd"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
             android:id="@+id/btnOderStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_style"
             android:paddingLeft="@dimen/dp_30"
             android:paddingRight="@dimen/dp_30"
             android:text="@string/order_status"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.473"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-            app:layout_constraintVertical_bias="0.954" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
 </layout>
