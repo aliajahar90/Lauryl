@@ -18,6 +18,7 @@ import versatile.project.lauryl.R
 import versatile.project.lauryl.adapter.AwaitingCompleteAdapter
 import versatile.project.lauryl.adapter.AwaitingDevliveryAdapter
 import versatile.project.lauryl.adapter.AwaitingPckUpsAdapter
+import versatile.project.lauryl.adapter.RescheduleCancelListener
 import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.model.AwaitingCompleteModel
@@ -266,7 +267,16 @@ class MyOrdersFragment : Fragment() {
         myOrdrsRcyclrVw.layoutManager = LinearLayoutManager(activity!!.applicationContext)
         if (awtngPckUpAdapter == null) {
             awtngPckUpAdapter =
-                AwaitingPckUpsAdapter(activity, activity!!.applicationContext, awaitingPckUpDtaLst)
+                AwaitingPckUpsAdapter(activity, activity!!.applicationContext, awaitingPckUpDtaLst,object :RescheduleCancelListener{
+                    override fun rescheduleClicked(position: Int) {
+                        (activity as HomeScreen).displayCnfPckUpFragment()
+                    }
+
+                    override fun cancelClicked(position: Int) {
+                        (activity as HomeScreen).shout("Cancelled order..")
+                    }
+
+                })
         } else {
             awtngPckUpAdapter!!.setNewAwaitingPckUpsList(awaitingPckUpDtaLst)
         }

@@ -13,10 +13,21 @@ import versatile.project.lauryl.R
 import versatile.project.lauryl.model.AwaitingPickUpModel
 import versatile.project.lauryl.screens.HomeScreen
 
-class AwaitingPckUpsAdapter(var activity: FragmentActivity?, var context: Context, var awtngPckUpList:ArrayList<AwaitingPickUpModel>?): RecyclerView.Adapter<AwaitingPckUpsAdapter.MyViewHolder>() {
+interface RescheduleCancelListener {
+    fun rescheduleClicked(position: Int)
+    fun cancelClicked(position: Int)
+}
+
+class AwaitingPckUpsAdapter(
+    var activity: FragmentActivity?,
+    var context: Context,
+    var awtngPckUpList: ArrayList<AwaitingPickUpModel>?,
+    var rescheduleCancelListener: RescheduleCancelListener
+) : RecyclerView.Adapter<AwaitingPckUpsAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        var itemView: View = LayoutInflater.from(context).inflate(R.layout.awaiting_pckup_lst_item,parent,false)
+        var itemView: View =
+            LayoutInflater.from(context).inflate(R.layout.awaiting_pckup_lst_item, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -30,8 +41,11 @@ class AwaitingPckUpsAdapter(var activity: FragmentActivity?, var context: Contex
 //
 //            (activity as HomeScreen).displayOrderHstryFragment()
 //        }
+        requiredViewHolder.cancelBtn.setOnClickListener {
+            rescheduleCancelListener.cancelClicked(position)
+        }
         requiredViewHolder.reschedule_pickup_btn.setOnClickListener {
-            (activity as HomeScreen).displayCnfPckUpFragment()
+            rescheduleCancelListener.rescheduleClicked(position)
         }
 
     }
@@ -41,18 +55,19 @@ class AwaitingPckUpsAdapter(var activity: FragmentActivity?, var context: Contex
     }
 
     fun clearSAwaitingPckUpsList() {
-        this.awtngPckUpList!!.clear()
+        this.awtngPckUpList?.clear()
     }
 
-    class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var mainLyot: LinearLayout = itemView.mainLyot
         var orderIdTxt = itemView.orderIdTxt
-        var ordrDteTme : TextView? = itemView.ordrDteTme
+        var ordrDteTme: TextView? = itemView.ordrDteTme
         var pckUpAdrsTxt = itemView.pckUpAdrsTxt
-        var reschedule_pickup_btn =itemView.reschedule_pickup_btn
+        var reschedule_pickup_btn = itemView.reschedule_pickup_btn
+        var cancelBtn: TextView = itemView.cancel_order_btn
 
-        fun bindDta(awtngPckUp: AwaitingPickUpModel){
+        fun bindDta(awtngPckUp: AwaitingPickUpModel) {
             orderIdTxt.text = "Order Id. ${awtngPckUp.orderIdVal}"
             ordrDteTme!!.text = "${awtngPckUp.date}"
             pckUpAdrsTxt.text = awtngPckUp.pickUpAddress
