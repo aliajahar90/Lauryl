@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
@@ -180,7 +181,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         val myOrdersFragment = MyOrdersFragment()
         loadMyFragment(myOrdersFragment)
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
-        selectMyOrdersDashboard()
+        //selectMyOrdersDashboard()
     }
 
     fun selectMyOrdersDashboard() {
@@ -188,11 +189,15 @@ class HomeScreen : BaseActivity(), LocationListener {
         homeNameMdlVwTxt.visibility = View.VISIBLE
         homeNameTxt.visibility = View.GONE
         filterTxt.visibility = View.GONE
-        bckBtn.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
     }
 
     private fun displayHomeFragment() {
+        val fm: FragmentManager = supportFragmentManager
+        for (i in 0 until fm.backStackEntryCount) {
+            fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
         val homeFragment = HomeFragment()
         homeNavigationController.addHomeFragment(homeFragment)
     }

@@ -28,6 +28,7 @@ public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdap
     Context context;
     private int selectedPosition = -1;
     private String date;
+    boolean isSelected=false;
 
     public CnfPickupTimeAdapter(Context context, List<String> stringList, OnTimeClickListener onDateClickListener,String date) {
         this.context = context;
@@ -67,19 +68,32 @@ public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdap
             listItemCnfSchedulePickupBinding.txtTime.setText(data);
             if (isCurrentTimeOrAfter(data)) {
                 if (selectedPosition == position) {
+                    isSelected=true;
                     listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.verify_otp_bckgrnd);
                     listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.white));
+                    onDateClickListener.onTimeClicked(isSelected? data : null);
 
                 } else {
+                    isSelected=false;
                     listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.white_bckgrnd_with_radius);
                     listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.orange));
                 }
             } else {
                 if(isFuture(date)) {
-                    listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.white_bckgrnd_with_radius);
-                    listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.orange));
+                    if (selectedPosition == position) {
+                        isSelected=true;
+                        listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.verify_otp_bckgrnd);
+                        listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.white));
+                        onDateClickListener.onTimeClicked(isSelected? data : null);
+
+                    } else {
+                        isSelected=false;
+                        listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.white_bckgrnd_with_radius);
+                        listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.orange));
+                    }
                 }
                 else {
+                    isSelected=false;
                     listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.grey_bckgrnd_with_radius);
                     listItemCnfSchedulePickupBinding.txtTime.setTextColor(Color.WHITE);
                 }
@@ -87,7 +101,7 @@ public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdap
             listItemCnfSchedulePickupBinding.linTime.setOnClickListener(view -> {
                 selectedPosition = position;
                 notifyDataSetChanged();
-                onDateClickListener.onTimeClicked(selectedPosition >= 0 ? data : null);
+
             });
 
         }

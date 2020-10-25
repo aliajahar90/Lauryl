@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.gson.Gson;
 
 import versatile.project.lauryl.R;
+import versatile.project.lauryl.application.MyApplication;
 import versatile.project.lauryl.base.BaseBinding;
 import versatile.project.lauryl.base.HomeNavigationController;
 import versatile.project.lauryl.databinding.FragmentPaymentErrorBinding;
@@ -30,14 +31,8 @@ public class PaymentErrorFragment extends BaseBinding<PaymentErrorViewModel, Fra
     private PaymentErrorViewModel paymentErrorViewModel;
     public static PaymentErrorFragment newInstance() {
         PaymentErrorFragment paymentSuccessFragment = new PaymentErrorFragment();
-        try {
-            paymentSuccessFragment.paymentBaseShareData = new Gson().fromJson((String) paymentSuccessFragment.getArguments().get(AllConstants.Payment.PaymentData), PaymentBaseShareData.class);
-        } catch (Exception e) {
-            Log.d("Error", "Null Pointer");
-        }
         return paymentSuccessFragment;
     }
-
     private PaymentErrorFragment() {
     }
     @Override
@@ -49,16 +44,33 @@ public class PaymentErrorFragment extends BaseBinding<PaymentErrorViewModel, Fra
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         paymentErrorBinding= DataBindingUtil.inflate(inflater, R.layout.fragment_payment_error,container,false);
+        try {
+            paymentBaseShareData = new Gson().fromJson((String)getArguments().get(AllConstants.Payment.PaymentData), PaymentBaseShareData.class);
+        } catch (Exception e) {
+            Log.d("Error", "Null Pointer");
+        }
         return paymentErrorBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (paymentBaseShareData!=null && paymentBaseShareData.getPaymentError()!=null){
+            String des=paymentBaseShareData.getPaymentError().getDescription();
+            Log.v("paymentErrorDesc",des);
+            PaymentBaseShareData.RazorPayError error=new Gson().fromJson(des, PaymentBaseShareData.RazorPayError.class);
+            paymentErrorBinding.txtTransactionId.setText(error.getError().getCode());
+            paymentErrorBinding.txtReason.setText(error.getError().getDescription());
+    }
         onClicks();
     }
     void onClicks(){
         paymentErrorBinding.btnRetry.setOnClickListener(view -> {
+            MyApplication myApplication=(MyApplication) getActivity().getApplicationContext();
+            myApplication.setActiveSessionOrderNumber(paymentBaseShareData.getPaymentError().getSerializedOrderInformation());
+            myApplication.setCreateOrderSerializedService(paymentBaseShareData.getPaymentError().getSerializedServiceInformation());
+            myApplication.setCreateOrderSerializdedAddressData(paymentBaseShareData.getPaymentError().getSerializedAddressInformation());
+            myApplication.setCreateOrderSerializdedProfile(paymentBaseShareData.getPaymentError().getSerializedProfileInformation());
             HomeNavigationController.getInstance(getActivity()).enableBackButton();
             getActivity().getSupportFragmentManager().popBackStackImmediate();
 

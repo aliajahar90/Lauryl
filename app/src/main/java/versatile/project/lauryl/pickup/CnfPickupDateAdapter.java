@@ -24,7 +24,7 @@ public class CnfPickupDateAdapter  extends RecyclerView.Adapter<CnfPickupDateAda
 
     List<String> stringList;
     OnDateClickListener onDateClickListener;
-    private int selectedPosition = -1;
+    private int selectedPosition = 0;
 
     public CnfPickupDateAdapter(List<String> stringList,OnDateClickListener onDateClickListener) {
         this.stringList = stringList;
@@ -62,11 +62,12 @@ public class CnfPickupDateAdapter  extends RecyclerView.Adapter<CnfPickupDateAda
                 listItemCnfSchedulePickupBinding.textDay.setTextColor(listItemCnfSchedulePickupBinding.getRoot().getResources().getColor(R.color.white));
                 listItemCnfSchedulePickupBinding.txtMonth.setTextColor(listItemCnfSchedulePickupBinding.getRoot().getResources().getColor(R.color.white));
                 listItemCnfSchedulePickupBinding.txtDate.setTextColor(listItemCnfSchedulePickupBinding.getRoot().getResources().getColor(R.color.white));
+                onDateClickListener.onDateClicked(data);
             } else {
-                listItemCnfSchedulePickupBinding.linDate.setBackgroundColor(listItemCnfSchedulePickupBinding.getRoot().getResources().getColor(R.color.white));
-                listItemCnfSchedulePickupBinding.textDay.setTextColor(listItemCnfSchedulePickupBinding.getRoot().getResources().getColor(R.color.orange));
-                listItemCnfSchedulePickupBinding.txtMonth.setTextColor(listItemCnfSchedulePickupBinding.getRoot().getResources().getColor(R.color.orange));
-                listItemCnfSchedulePickupBinding.txtDate.setTextColor(listItemCnfSchedulePickupBinding.getRoot().getResources().getColor(R.color.orange));
+                listItemCnfSchedulePickupBinding.linDate.setBackground(listItemCnfSchedulePickupBinding.getRoot().getResources().getDrawable(R.drawable.border_box));
+                listItemCnfSchedulePickupBinding.textDay.setTextColor(listItemCnfSchedulePickupBinding.getRoot().getResources().getColor(R.color.light_grey));
+                listItemCnfSchedulePickupBinding.txtMonth.setTextColor(listItemCnfSchedulePickupBinding.getRoot().getResources().getColor(R.color.light_grey));
+                listItemCnfSchedulePickupBinding.txtDate.setTextColor(listItemCnfSchedulePickupBinding.getRoot().getResources().getColor(R.color.light_grey));
             }
             listItemCnfSchedulePickupBinding.textDay.setText(getReadableDay(data));
             listItemCnfSchedulePickupBinding.txtMonth.setText(getReadableMonth(data));
@@ -74,12 +75,12 @@ public class CnfPickupDateAdapter  extends RecyclerView.Adapter<CnfPickupDateAda
             listItemCnfSchedulePickupBinding.linDate.setOnClickListener(view -> {
                 selectedPosition=position;
                 notifyDataSetChanged();
-                onDateClickListener.onDateClicked(data);
             });
 
         }
 
     }
+
 
     interface OnDateClickListener{
         void onDateClicked(String date);
