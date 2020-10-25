@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.recyclerview_lyout.*
 import kotlinx.android.synthetic.main.schedule_pick_up_fragment.*
@@ -26,7 +27,6 @@ import versatile.project.lauryl.view.model.SchedulePickUpFragmentViewModel
 class SchedulePickUpFragment : Fragment(), SchedulePickUpAdapterJava.OnItemClickListener {
 
     lateinit var schedulePickUpViewModel: SchedulePickUpFragmentViewModel
-    private val topServicesDataItems: MutableList<TopServicesDataItem> = ArrayList()
     private var selectedItems = SparseBooleanArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +53,7 @@ class SchedulePickUpFragment : Fragment(), SchedulePickUpAdapterJava.OnItemClick
                         )
                         recyclerVw.layoutManager =
                             LinearLayoutManager(activity!!.applicationContext)
-                        recyclerVw.adapter = schedulePickUpAdapter
+                            recyclerVw.adapter = schedulePickUpAdapter
                     } else {
                         progressLyot.visibility = View.GONE
                         Globals.showToastMsg(
@@ -88,9 +88,19 @@ class SchedulePickUpFragment : Fragment(), SchedulePickUpAdapterJava.OnItemClick
         (activity as HomeScreen).selectShedulePckUpDashBoard()
         schdlePckUpBtn.setOnClickListener {
             if (selectedItems.size() > 0) {
+                val selectedServices=ArrayList<TopServicesDataItem>()
+                for(item in (recyclerVw.adapter as SchedulePickUpAdapterJava).topServicesDataItems){
+                    if(selectedItems.get((recyclerVw.adapter as SchedulePickUpAdapterJava).topServicesDataItems.indexOf(item))){
+                        selectedServices.add(item)
+                    }
+                }
+                val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
+                if (myApplication != null) {
+                    myApplication.createOrderSerializedService=Gson().toJson(selectedServices)
+                }
                 (activity as HomeScreen).displayMapLocationFragment(Constants.ADD_LOCATION_ACTION)
             } else {
-                Globals.showToastMsg(activity!!.applicationContext, "Please select a service")
+                Globals.showToastMsg(activity!!.applicationContext, getString(R.string.select_service_msg))
             }
         }
         getTopServices()
@@ -126,4 +136,5 @@ class SchedulePickUpFragment : Fragment(), SchedulePickUpAdapterJava.OnItemClick
         super.onDetach()
         (activity as HomeScreen).myApplication.selectedServiceArray.clear()
     }
+
 }

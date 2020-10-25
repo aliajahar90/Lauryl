@@ -67,7 +67,11 @@ public class ProfileFragment extends BaseBinding<ProfileViewModel, FragmentProfi
         profileBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
         return profileBinding.getRoot();
     }
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((HomeScreen)getActivity()).selectProfile();
+    }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

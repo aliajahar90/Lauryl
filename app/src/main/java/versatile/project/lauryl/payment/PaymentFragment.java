@@ -30,13 +30,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.razorpay.Razorpay;
 
+import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.logging.Logger;
 
@@ -48,6 +52,7 @@ import versatile.project.lauryl.base.DeferredFragmentTransaction;
 import versatile.project.lauryl.base.HomeNavigationController;
 import versatile.project.lauryl.databinding.PaymentFragmentBinding;
 import versatile.project.lauryl.home.HomeFragment;
+import versatile.project.lauryl.model.TopServicesDataItem;
 import versatile.project.lauryl.model.address.AddressModel;
 import versatile.project.lauryl.orders.create.model.CreateOrderData;
 import versatile.project.lauryl.payment.adapter.NetBankAdapter;
@@ -76,6 +81,8 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     private NetBanking activeBankForCheckout = null;
     public static final String TAG = PaymentFragment.class.getName();
     private String paymentMethod;
+    private boolean isUserCanRetry=false;
+    private  Gson mGson;
 
 
     public static PaymentFragment newInstance(int viewType) {
@@ -104,7 +111,14 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         createWebView();
         paymentFragmentBinding.setViewmodel(paymentViewModel);
         paymentViewModel.setRazorpay(razorpay);
+        mGson=new Gson();
         return paymentFragmentBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((HomeScreen)getActivity()).selectPayment();
     }
 
     private void displayView(int type) {
@@ -150,32 +164,23 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         });
         paymentViewModel.getPaymentSuccess().observe(this, paymentSuccess -> {
             hideLoading();
-            CreateOrderData.Details details=new CreateOrderData.Details();
-            GetProfileResponse getProfileResponse=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(),GetProfileResponse.class);
-            AddressModel addressModel=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(),AddressModel.class);
-            details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
-            details.setOrderStage(AllConstants.Orders.OrderStage.Awaiting_Pickup);
-            details.setEmailId(getProfileResponse.getProfileData().getEmail());
-            details.setPickupCity(addressModel.getCity());
-            details.setPickupState(addressModel.getState());
-            details.setPickupCountry(addressModel.getCountry());
-            details.setPickupAddress2(addressModel.getAddress1());
-            details.setShippingPostCode(addressModel.getPinCode());
-            details.setTransactionId(paymentSuccess.getPaymentTransactionId());
-            paymentViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(),details);
-            HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment();
+            createMyOrder(paymentSuccess);
         });
         paymentViewModel.getPaymentError().observe(this, paymentError -> {
             hideLoading();
             if (paymentError.getCode() == -1) {
                 Log.d("Payment", "checksum error");
             } else {
-                Log.d("Payment", "payment Erro");
+                Log.d("Payment", "payment Error");
             }
-            HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment();
+            capturePaymentErrorRequiredData(paymentError);
+            HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment(mGson.toJson(paymentBaseShareData));
         });
-        paymentViewModel.getCreateOrderSuccessEvent().observe(this,it->{
-            //HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment();
+        paymentViewModel.getCreateOrderSuccessEvent().observe(this, it -> {
+            HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment(new Gson().toJson(paymentBaseShareData));
+        });
+        paymentViewModel.getCreateOrderFailedEvent().observe(this, it -> {
+            //need to handle if payment success but create order fails
         });
     }
 
@@ -229,14 +234,14 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             netBankingList = netBankings;
         });
         paymentViewModel.onSwitchPaymentViewWebCheckout().observe(this, aBoolean -> {
-            if(aBoolean){
+            if (aBoolean) {
                 hideLoading();
                 paymentFragmentBinding.wvCheckout.setVisibility(View.VISIBLE);
                 paymentFragmentBinding.rlOptionPage.setVisibility(View.GONE);
             }
         });
         paymentViewModel.onSwitchPaymentViewDefault().observe(this, aBoolean -> {
-            if(aBoolean){
+            if (aBoolean) {
                 hideLoading();
                 paymentFragmentBinding.rlOptionPage.setVisibility(View.VISIBLE);
                 paymentFragmentBinding.wvCheckout.setVisibility(View.GONE);
@@ -255,9 +260,10 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             displayView(PaymentFragment.PaymentTypeNetBanking);
         });
         paymentFragmentBinding.rlPaymentButton.setOnClickListener(view -> {
-            if(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()){
+
+            if (((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()) {
                 showCreateOrderDialog();
-                }else {
+            } else {
                 switch (activePaymentType) {
                     case PaymentTypeUpi:
                         processUpiService();
@@ -475,12 +481,11 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         paymentViewModel.onVpaValidationSuccess().observe(this, aBoolean -> {
             if (aBoolean) {
                 try {
-                    paymentMethod="upi";
+                    GetProfileResponse getProfileResponse=new Gson().fromJson(((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getCreateOrderSerializdedProfile(),GetProfileResponse.class);
+                    paymentMethod = "upi";
                     JSONObject payload = new JSONObject("{currency: 'INR'}");
-                    payload.put("amount", "100");
-                    payload.put("contact", "9999999999");
-                    payload.put("email", "customer@name.com");
-                    payload.put("order_id", "order_FkB8IeJE6PpkDe");
+                    payload.put("amount", 1*100);
+                    payload.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?!(getProfileResponse.getProfileData().getEmail().isEmpty())?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");                    payload.put("contact", ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getMobileNumber());
                     payload.put("method", "upi");
                     payload.put("vpa", paymentFragmentBinding.paymentUPI.inputUPI.getText().toString());
                     paymentViewModel.processPayment(payload);
@@ -511,11 +516,11 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         paymentViewModel.getCardPaymentValidationSuccess().observe(this, aBoolean -> {
             if (aBoolean) {
                 try {
-                    paymentMethod="card";
+                    GetProfileResponse getProfileResponse=new Gson().fromJson(((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getCreateOrderSerializdedProfile(),GetProfileResponse.class);
+                    paymentMethod = "card";
                     JSONObject data = new JSONObject("{currency: 'INR'}");
                     data.put("amount", 1 * 100);
-                    data.put("email", "gaurav.kumar@example.com");
-                    data.put("contact", "9123456789");
+                    data.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?!(getProfileResponse.getProfileData().getEmail().isEmpty())?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");                    data.put("contact", ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getMobileNumber());
                     data.put("method", "card");
                     data.put("card[name]", paymentFragmentBinding.paymentCard.inputName.getText().toString());
                     data.put("card[number]", paymentFragmentBinding.paymentCard.inputCardNumber.getText().toString());
@@ -536,14 +541,15 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     }
 
     private void processNetBankPaymentService() {
+        GetProfileResponse getProfileResponse=new Gson().fromJson(((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getCreateOrderSerializdedProfile(),GetProfileResponse.class);
         if (activeBankForCheckout != null) {
-            paymentMethod="netbanking";
+            paymentMethod = "netbanking";
             showLoading();
             try {
                 JSONObject data = new JSONObject("{currency: 'INR'}");
                 data.put("amount", 1 * 100);
-                data.put("email", "gaurav.kumar@example.com");
-                data.put("contact", "9123456789");
+                data.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?!(getProfileResponse.getProfileData().getEmail().isEmpty())?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");
+                data.put("contact", ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getMobileNumber());
                 data.put("method", "netbanking");
                 data.put("bank", activeBankForCheckout.getBankCode());
                 paymentViewModel.processPayment(data);
@@ -561,7 +567,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
 
     private void hideLoading() {
         if (getActivity() instanceof BaseActivity)
-        ((BaseActivity) getActivity()).hideLoading();
+            ((BaseActivity) getActivity()).hideLoading();
     }
 
     @Override
@@ -583,7 +589,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             PaymentDefferedFragmentTransaction defferedFragmentTransaction = new PaymentDefferedFragmentTransaction() {
                 @Override
                 public void commit() {
-                    HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment();
+                    HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment(mGson.toJson(paymentBaseShareData));
                 }
             };
             PaymentBaseShareData.PaymentError paymentError = new PaymentBaseShareData.PaymentError();
@@ -591,37 +597,119 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             paymentError.setDescription("User left the payment");
             paymentError.setPaymentData(null);
             defferedFragmentTransaction.setPaymentError(paymentError);
-            Queue<DeferredFragmentTransaction> paymentDefferedFragmentTransactionQueue=new ArrayDeque<>();
+            Queue<DeferredFragmentTransaction> paymentDefferedFragmentTransactionQueue = new ArrayDeque<>();
             paymentDefferedFragmentTransactionQueue.add(defferedFragmentTransaction);
-           HomeNavigationController.getInstance(getActivity()).setDeferredFragmentTransactions(paymentDefferedFragmentTransactionQueue);
+            HomeNavigationController.getInstance(getActivity()).setDeferredFragmentTransactions(paymentDefferedFragmentTransactionQueue);
         }
-        Log.d("Payment","OnDestroyView");
+        ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).setActiveSessionOrderNumber("");
+        ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).setCreateOrderSerializdedAddressData("");
+        ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).setCreateOrderSerializdedProfile("");
+        ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).setCreateOrderSerializedService("");
+        Log.d("Payment", "OnDestroyView");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        Log.d("Payment","OnDestroy");
+        Log.d("Payment", "OnDestroy");
         super.onDestroy();
     }
 
     @Override
     public void onDetach() {
-        Log.d("Payment","OnDestroyDetach");
+        Log.d("Payment", "OnDestroyDetach");
         super.onDetach();
     }
-    void showCreateOrderDialog(){
-           new AlertDialog.Builder(getActivity())
-                   .setTitle(getString(R.string.lauryl))
-                   .setMessage(R.string.create_order_message)
-                   .setPositiveButton("Yes", (dialog, which) -> {
-                       FragmentManager fm = getActivity().getSupportFragmentManager();
-                       fm.popBackStack(HomeFragment.class.getName(),FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                       HomeNavigationController.getInstance(getActivity()).addHomeFragment(new HomeFragment());
 
-                   })
-                   .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss())
-                   .show();
+    void showCreateOrderDialog() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.lauryl))
+                .setMessage(R.string.create_order_message)
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    }
+                    HomeNavigationController.getInstance(getActivity()).addHomeFragment(new HomeFragment());
+
+                })
+                .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss())
+                .show();
     }
 
+    String getCurrentDateTime() {
+        DateTime dateTime = DateTime.now();
+        return String.valueOf(dateTime.getMillis());
+    }
+
+    void createMyOrder(PaymentBaseShareData.PaymentSuccess paymentSuccess){
+        CreateOrderData.Details details = new CreateOrderData.Details();
+        MyApplication myApplication=(MyApplication) getActivity().getApplicationContext();
+        JsonObject jsonObject = mGson.fromJson(myApplication.getActiveSessionOrderNumber(), JsonObject.class);
+        String currentDateTimeInMilis = jsonObject.get("orderNumber").getAsString();
+        GetProfileResponse getProfileResponse = mGson.fromJson(myApplication.getCreateOrderSerializdedProfile(), GetProfileResponse.class);
+        AddressModel addressModel = mGson.fromJson(myApplication.getCreateOrderSerializdedAddressData(), AddressModel.class);
+        List<TopServicesDataItem> topServicesDataItemList = mGson.fromJson(myApplication.getCreateOrderSerializedService(),  new TypeToken<List<TopServicesDataItem>>(){}.getType());
+        List<String> localServiceList = new ArrayList<>();
+        for (TopServicesDataItem item : topServicesDataItemList) {
+            localServiceList.add(item.getVSku());
+        }
+        CreateOrderData createOrderData=new CreateOrderData();
+        //keeping static as of now
+        details.setOrderNumber(currentDateTimeInMilis);
+        details.setOrderTotal("100");
+        details.setVAccountId("1");
+        details.setMarketPlaceName(AllConstants.Orders.MARKET_PLACE_NAME);
+        details.setOrderDateTime(currentDateTimeInMilis);
+        details.setPaymentDateTime(getCurrentDateTime());
+        details.setPaymentReceived(true);
+        details.setShippingAddress1(addressModel.getAddresType());
+        details.setShippingAddress2(addressModel.getStreetName() + " " + addressModel.getPinCode());
+        details.setShippingAddress3(addressModel.getLandmark());
+        details.setShippingCity(addressModel.getCity());
+        details.setShippingState(addressModel.getState());
+        details.setShippingCountry(addressModel.getCountry());
+        details.setPickupAddress1(addressModel.getAddresType());
+        details.setPickupAddress2(addressModel.getStreetName() + " " + addressModel.getPinCode());
+        details.setPickupAddress3(addressModel.getLandmark());
+        details.setPickupCountryCode("+91");
+        details.setPickupCity(addressModel.getCity());
+        details.setPickupState(addressModel.getState());
+        details.setPickupCountry(addressModel.getCountry());
+        details.setShippingPostCode(addressModel.getPinCode());
+        details.setTransactionId(paymentSuccess.getPaymentTransactionId());
+        details.setServiceList(localServiceList);
+        details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
+        details.setOrderStage(AllConstants.Orders.OrderStage.Awaiting_Pickup);
+        details.setEmailId(getProfileResponse.getProfileData().getEmail());
+        createOrderData.setDetails(details);
+        capturePaymentSuccessRequiredData(paymentSuccess,createOrderData);
+        paymentViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), createOrderData);
+
+    }
+    void capturePaymentSuccessRequiredData(PaymentBaseShareData.PaymentSuccess paymentSuccess,CreateOrderData createOrderData){
+        PaymentBaseShareData.PaymentSuccess thisPaymentSuccess=new PaymentBaseShareData.PaymentSuccess();
+        thisPaymentSuccess.setPaymentData(paymentSuccess.getPaymentData());
+        thisPaymentSuccess.setPaymentTransactionId(paymentSuccess.getPaymentTransactionId());
+        thisPaymentSuccess.setCreateOrderData(createOrderData);
+        thisPaymentSuccess.setPaymenMethod(paymentMethod);
+        paymentBaseShareData.setPaymentSuccess(thisPaymentSuccess);
+
+    }
+    void capturePaymentErrorRequiredData(PaymentBaseShareData.PaymentError paymentError){
+         MyApplication myApplication=(MyApplication) getActivity().getApplicationContext();
+         String orderNumberJson = myApplication.getActiveSessionOrderNumber();
+         String getProfileResponseJson = myApplication.getCreateOrderSerializdedProfile();
+         String addressModelJson =myApplication.getCreateOrderSerializdedAddressData();
+         String topServicesDataItemListJson =myApplication.getCreateOrderSerializedService();
+         PaymentBaseShareData.PaymentError thisPaymentError=new PaymentBaseShareData.PaymentError();
+         thisPaymentError.setSerializedOrderInformation(orderNumberJson);
+         thisPaymentError.setSerializedProfileInformation(getProfileResponseJson);
+         thisPaymentError.setSerializedAddressInformation(addressModelJson);
+         thisPaymentError.setSerializedServiceInformation(topServicesDataItemListJson);
+         thisPaymentError.setPaymentData(paymentError.getPaymentData());
+         thisPaymentError.setDescription(paymentError.getDescription());
+         thisPaymentError.setCode(paymentError.getCode());
+         paymentBaseShareData.setPaymentError(thisPaymentError);
+    }
 }

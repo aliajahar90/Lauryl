@@ -2,6 +2,7 @@ package versatile.project.lauryl.base;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +19,7 @@ import versatile.project.lauryl.payment.PaymentFragment;
 import versatile.project.lauryl.payment.PaymentSuccessFragment;
 import versatile.project.lauryl.profile.ProfileFragment;
 import versatile.project.lauryl.screens.HomeScreen;
+import versatile.project.lauryl.utils.AllConstants;
 
 
 public class HomeNavigationController implements FragmentManager.OnBackStackChangedListener {
@@ -40,16 +42,24 @@ public class HomeNavigationController implements FragmentManager.OnBackStackChan
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public void addPaymentSuccessFragment(){
+    public void addPaymentSuccessFragment(String bundleJsonData) {
         FragmentTransaction fragmentTransaction= ourInstance.mFragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragContainer, PaymentSuccessFragment.newInstance(),PaymentSuccessFragment.TAG);
+        Bundle bundle=new Bundle();
+        bundle.putString(AllConstants.Payment.PaymentData,bundleJsonData);
+        PaymentSuccessFragment paymentSuccessFragment= PaymentSuccessFragment.newInstance();
+        paymentSuccessFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragContainer, paymentSuccessFragment,PaymentSuccessFragment.TAG);
         disableBackButton();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public void addPaymentErrorFragment(){
+    public void addPaymentErrorFragment(String bundleJsonData){
         FragmentTransaction fragmentTransaction= ourInstance.mFragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragContainer, PaymentErrorFragment.newInstance(),PaymentErrorFragment.TAG);
+        Bundle bundle=new Bundle();
+        bundle.putString(AllConstants.Payment.PaymentData,bundleJsonData);
+        PaymentErrorFragment paymentErrorFragment= PaymentErrorFragment.newInstance();
+        paymentErrorFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragContainer, paymentErrorFragment,PaymentErrorFragment.TAG);
         disableBackButton();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
