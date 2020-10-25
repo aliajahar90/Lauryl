@@ -6,13 +6,13 @@ import versatile.project.lauryl.base.DeferredFragmentTransaction;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
 
 public abstract class PaymentDefferedFragmentTransaction extends DeferredFragmentTransaction {
-    private PaymentBaseShareData.PaymentError paymentError;
+    private PaymentBaseShareData paymentError;
 
-    public PaymentBaseShareData.PaymentError getPaymentError() {
+    public PaymentBaseShareData getPaymentError() {
         return paymentError;
     }
 
-    public void setPaymentError(PaymentBaseShareData.PaymentError paymentError) {
+    public void setPaymentError(PaymentBaseShareData paymentError) {
         this.paymentError = paymentError;
     }
 }

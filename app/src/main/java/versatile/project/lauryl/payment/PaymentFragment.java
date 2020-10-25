@@ -589,14 +589,24 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             PaymentDefferedFragmentTransaction defferedFragmentTransaction = new PaymentDefferedFragmentTransaction() {
                 @Override
                 public void commit() {
+                    paymentBaseShareData=getPaymentError();
                     HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment(mGson.toJson(paymentBaseShareData));
                 }
             };
             PaymentBaseShareData.PaymentError paymentError = new PaymentBaseShareData.PaymentError();
             paymentError.setCode(-1);
-            paymentError.setDescription("User left the payment");
+            paymentError.setDescription("{\n" +
+                    "  \n" +
+                    "  \"error\": {\n" +
+                    "      \"code\": \"User Left\",\n" +
+                    "     \"description\": \"User left the payment\"\n" +
+                    "    \n" +
+                    "  }\n" +
+                    "}");
             paymentError.setPaymentData(null);
-            defferedFragmentTransaction.setPaymentError(paymentError);
+            paymentBaseShareData.setPaymentError(paymentError);
+            capturePaymentErrorRequiredData(paymentError);
+            defferedFragmentTransaction.setPaymentError(paymentBaseShareData);
             Queue<DeferredFragmentTransaction> paymentDefferedFragmentTransactionQueue = new ArrayDeque<>();
             paymentDefferedFragmentTransactionQueue.add(defferedFragmentTransaction);
             HomeNavigationController.getInstance(getActivity()).setDeferredFragmentTransactions(paymentDefferedFragmentTransactionQueue);
