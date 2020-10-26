@@ -191,6 +191,10 @@ class HomeScreen : BaseActivity(), LocationListener {
         filterTxt.visibility = View.GONE
         bckBtn.visibility = View.VISIBLE
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
     }
 
     private fun displayHomeFragment() {
@@ -209,6 +213,10 @@ class HomeScreen : BaseActivity(), LocationListener {
         bckBtn.visibility = View.GONE
         filterTxt.visibility = View.GONE
         botmNavVw.menu.findItem(R.id.homeId).isChecked = true
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
     }
 
     private fun loadMyFragment(fragment: Fragment) {
@@ -223,7 +231,10 @@ class HomeScreen : BaseActivity(), LocationListener {
     fun displayCnfPckUpFragment() {
         selectCnfPckUp()
         val fragment = CnfSchedulePckUpFragment.newInstance()
-        loadMyFragment(fragment)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragContainer, fragment)
+        transaction.addToBackStack(fragment::class.java.name)
+        transaction.commit()
     }
 
     fun selectCnfPckUp() {
@@ -250,6 +261,10 @@ class HomeScreen : BaseActivity(), LocationListener {
         homeNameTxt.visibility = View.GONE
         bckBtn.visibility = View.VISIBLE
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
     }
 
     override fun onBackPressed() {
@@ -274,6 +289,11 @@ class HomeScreen : BaseActivity(), LocationListener {
         //   imgLoc.setImageResource(R.drawable.ic_name)
         botmNavVw.menu.findItem(R.id.profileId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
+
     }
 
     fun selectPayment() {

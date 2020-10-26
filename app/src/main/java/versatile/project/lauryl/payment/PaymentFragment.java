@@ -261,7 +261,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         });
         paymentFragmentBinding.rlPaymentButton.setOnClickListener(view -> {
 
-            if (((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()) {
+            if (((MyApplication) getActivity().getApplicationContext()).getActiveSessionOrderNumber().isEmpty() ||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()) {
                 showCreateOrderDialog();
             } else {
                 switch (activePaymentType) {
@@ -485,7 +485,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                     paymentMethod = "upi";
                     JSONObject payload = new JSONObject("{currency: 'INR'}");
                     payload.put("amount", 1*100);
-                    payload.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?!(getProfileResponse.getProfileData().getEmail().isEmpty())?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");                    payload.put("contact", ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getMobileNumber());
+                    payload.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?getProfileResponse.getProfileData().getEmail()!=null?getProfileResponse.getProfileData().getEmail().isEmpty()?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");
                     payload.put("method", "upi");
                     payload.put("vpa", paymentFragmentBinding.paymentUPI.inputUPI.getText().toString());
                     paymentViewModel.processPayment(payload);
@@ -520,7 +520,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                     paymentMethod = "card";
                     JSONObject data = new JSONObject("{currency: 'INR'}");
                     data.put("amount", 1 * 100);
-                    data.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?!(getProfileResponse.getProfileData().getEmail().isEmpty())?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");                    data.put("contact", ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getMobileNumber());
+                    data.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?getProfileResponse.getProfileData().getEmail()!=null?getProfileResponse.getProfileData().getEmail().isEmpty()?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");
                     data.put("method", "card");
                     data.put("card[name]", paymentFragmentBinding.paymentCard.inputName.getText().toString());
                     data.put("card[number]", paymentFragmentBinding.paymentCard.inputCardNumber.getText().toString());
@@ -548,7 +548,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             try {
                 JSONObject data = new JSONObject("{currency: 'INR'}");
                 data.put("amount", 1 * 100);
-                data.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?!(getProfileResponse.getProfileData().getEmail().isEmpty())?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");
+                data.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?getProfileResponse.getProfileData().getEmail()!=null?getProfileResponse.getProfileData().getEmail().isEmpty()?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");
                 data.put("contact", ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getMobileNumber());
                 data.put("method", "netbanking");
                 data.put("bank", activeBankForCheckout.getBankCode());
@@ -590,7 +590,9 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                 @Override
                 public void commit() {
                     paymentBaseShareData=getPaymentError();
-                    HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment(mGson.toJson(paymentBaseShareData));
+                    if( getActivity()!=null && (getActivity().getSupportFragmentManager())!=null) {
+                        HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment(mGson.toJson(paymentBaseShareData));
+                    }
                 }
             };
             PaymentBaseShareData.PaymentError paymentError = new PaymentBaseShareData.PaymentError();
@@ -611,11 +613,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             paymentDefferedFragmentTransactionQueue.add(defferedFragmentTransaction);
             HomeNavigationController.getInstance(getActivity()).setDeferredFragmentTransactions(paymentDefferedFragmentTransactionQueue);
         }
-        ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).setActiveSessionOrderNumber("");
-        ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).setCreateOrderSerializdedAddressData("");
-        ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).setCreateOrderSerializdedProfile("");
-        ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).setCreateOrderSerializedService("");
-        Log.d("Payment", "OnDestroyView");
+          Log.d("Payment", "OnDestroyView");
         super.onDestroyView();
     }
 
@@ -673,20 +671,28 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         details.setOrderDateTime(currentDateTimeInMilis);
         details.setPaymentDateTime(getCurrentDateTime());
         details.setPaymentReceived(true);
-        details.setShippingAddress1(addressModel.getAddresType());
-        details.setShippingAddress2(addressModel.getStreetName() + " " + addressModel.getPinCode());
-        details.setShippingAddress3(addressModel.getLandmark());
-        details.setShippingCity(addressModel.getCity());
-        details.setShippingState(addressModel.getState());
-        details.setShippingCountry(addressModel.getCountry());
-        details.setPickupAddress1(addressModel.getAddresType());
-        details.setPickupAddress2(addressModel.getStreetName() + " " + addressModel.getPinCode());
-        details.setPickupAddress3(addressModel.getLandmark());
+        details.setShippingAddress1(addressModel!=null?addressModel.getAddresType():"");
+        String shippingAddress2="";
+        if(addressModel!=null){
+            shippingAddress2=addressModel.getStreetName()+" "+addressModel.getPinCode();
+        }
+        details.setShippingAddress2(shippingAddress2);
+        details.setShippingAddress3(addressModel!=null?addressModel.getLandmark():"");
+        details.setShippingCity(addressModel!=null?addressModel.getCity():"");
+        details.setShippingState(addressModel!=null?addressModel.getState():"");
+        details.setShippingCountry(addressModel!=null?addressModel.getCountry():"");
+        details.setPickupAddress1(addressModel!=null?addressModel.getAddresType():"");
+        String pickupAddress2="";
+        if(addressModel!=null){
+            pickupAddress2=addressModel.getStreetName()+" "+addressModel.getPinCode();
+        }
+        details.setPickupAddress2(pickupAddress2);
+        details.setPickupAddress3(addressModel!=null?addressModel.getLandmark():"");
         details.setPickupCountryCode("+91");
-        details.setPickupCity(addressModel.getCity());
-        details.setPickupState(addressModel.getState());
-        details.setPickupCountry(addressModel.getCountry());
-        details.setShippingPostCode(addressModel.getPinCode());
+        details.setPickupCity(addressModel!=null?addressModel.getCity():"");
+        details.setPickupState(addressModel!=null?addressModel.getState():"");
+        details.setPickupCountry(addressModel!=null?addressModel.getCountry():"");
+        details.setShippingPostCode(addressModel!=null?addressModel.getPinCode():"");
         details.setTransactionId(paymentSuccess.getPaymentTransactionId());
         details.setServiceList(localServiceList);
         details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());

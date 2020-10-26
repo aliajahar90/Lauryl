@@ -93,18 +93,6 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         cnfSchdulePckupFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.cnf_schdule_pckup_fragment, container, false);
-        return cnfSchdulePckupFragmentBinding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ((HomeScreen) getActivity()).selectCnfPckUp();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         resetState();
         loadDateTimeFromApi();
         if (adapter == null) {
@@ -170,6 +158,25 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
                     })
                     .show();
         });
+
+        return cnfSchdulePckupFragmentBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((HomeScreen) getActivity()).selectCnfPckUp();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
     }
 
@@ -288,20 +295,29 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         details.setOrderDateTime(currentDateTimeInMilis);
         details.setPaymentDateTime(getCurrentDateTime());
         details.setPaymentReceived(false);
-        details.setShippingAddress1(addressModel.getAddresType());
-        details.setShippingAddress2(addressModel.getStreetName()+" "+addressModel.getPinCode());
-        details.setShippingAddress3(addressModel.getLandmark());
-        details.setShippingCity(addressModel.getCity());
-        details.setShippingState(addressModel.getState());
-        details.setShippingCountry(addressModel.getCountry());
-        details.setPickupAddress1(addressModel.getAddresType());
-        details.setPickupAddress2(addressModel.getStreetName()+" "+addressModel.getPinCode());
-        details.setPickupAddress3(addressModel.getLandmark());
+        details.setShippingAddress1(addressModel!=null?addressModel.getAddresType():"");
+
+        String shippingAddress2="";
+        if(addressModel!=null){
+            shippingAddress2=addressModel.getStreetName()+" "+addressModel.getPinCode();
+        }
+        details.setShippingAddress2(shippingAddress2);
+        details.setShippingAddress3(addressModel!=null?addressModel.getLandmark():"");
+        details.setShippingCity(addressModel!=null?addressModel.getCity():"");
+        details.setShippingState(addressModel!=null?addressModel.getState():"");
+        details.setShippingCountry(addressModel!=null?addressModel.getCountry():"");
+        details.setPickupAddress1(addressModel!=null?addressModel.getAddresType():"");
+        String pickupAddress2="";
+        if(addressModel!=null){
+            pickupAddress2=addressModel.getStreetName()+" "+addressModel.getPinCode();
+        }
+        details.setPickupAddress2(pickupAddress2);
+        details.setPickupAddress3(addressModel!=null?addressModel.getLandmark():"");
         details.setPickupCountryCode("+91");
-        details.setPickupCity(addressModel.getCity());
-        details.setPickupState(addressModel.getState());
-        details.setPickupCountry(addressModel.getCountry());
-        details.setShippingPostCode(addressModel.getPinCode());
+        details.setPickupCity(addressModel!=null?addressModel.getCity():"");
+        details.setPickupState(addressModel!=null?addressModel.getState():"");
+        details.setPickupCountry(addressModel!=null?addressModel.getCountry():"");
+        details.setShippingPostCode(addressModel!=null?addressModel.getPinCode():"");
         details.setTransactionId("");
         details.setServiceList(localServiceList);
         details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
