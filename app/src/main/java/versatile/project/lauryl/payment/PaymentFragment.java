@@ -260,9 +260,9 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             displayView(PaymentFragment.PaymentTypeNetBanking);
         });
         paymentFragmentBinding.rlPaymentButton.setOnClickListener(view -> {
-            if (((MyApplication) getActivity().getApplicationContext()).getActiveSessionOrderNumber().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()) {
-                showCreateOrderDialog();
-            } else {
+//            if (((MyApplication) getActivity().getApplicationContext()).getActiveSessionOrderNumber().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()) {
+//                showCreateOrderDialog();
+//            } else {
                 switch (activePaymentType) {
                     case PaymentTypeUpi:
                         processUpiService();
@@ -274,7 +274,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                         processNetBankPaymentService();
                         break;
                 }
-            }
+           // }
         });
         paymentFragmentBinding.paymentCard.inputCardNumber.addTextChangedListener(new CardFormattingTextWatcher(paymentFragmentBinding.paymentCard.inputCardNumber, new CardFormattingTextWatcher.CardType() {
             @Override
@@ -530,10 +530,12 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                     data.put("contact", ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getMobileNumber());
                     data.put("method", "card");
                     data.put("card[name]", paymentFragmentBinding.paymentCard.inputName.getText().toString());
-                    data.put("card[number]", paymentFragmentBinding.paymentCard.inputCardNumber.getText().toString());
-                    data.put("card[expiry_month]", paymentFragmentBinding.paymentCard.inputMonth.getText().toString());
-                    data.put("card[expiry_year]", paymentFragmentBinding.paymentCard.inputYear.getText().toString());
-                    data.put("card[cvv]", paymentFragmentBinding.paymentCard.inputCvv.getText().toString());
+                    String cardNumber=paymentFragmentBinding.paymentCard.inputCardNumber.getText().toString().trim();
+                    cardNumber=cardNumber.replaceAll("\\s+","");
+                    data.put("card[number]", cardNumber);
+                    data.put("card[expiry_month]", paymentFragmentBinding.paymentCard.inputMonth.getText().toString().trim());
+                    data.put("card[expiry_year]", paymentFragmentBinding.paymentCard.inputYear.getText().toString().trim());
+                    data.put("card[cvv]", paymentFragmentBinding.paymentCard.inputCvv.getText().toString().trim());
                     paymentViewModel.processPayment(data);
                 } catch (JSONException e) {
                     e.printStackTrace();

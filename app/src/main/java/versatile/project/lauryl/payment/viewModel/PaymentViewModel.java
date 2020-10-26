@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 import versatile.project.lauryl.base.BaseViewModel;
+import versatile.project.lauryl.base.SingleLiveEvent;
 import versatile.project.lauryl.orders.create.CreateOrderViewModel;
 import versatile.project.lauryl.payment.data.NetBanking;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
@@ -23,8 +24,8 @@ import versatile.project.lauryl.utils.AllConstants;
 public class PaymentViewModel extends CreateOrderViewModel {
     private Razorpay razorpay;
     PaymentRepository paymentRepository;
-    MutableLiveData<String> cardPaymentValidationError=new MutableLiveData<>();
-    MutableLiveData<Boolean> cardPaymentValidationSuccess=new MutableLiveData<>();
+    SingleLiveEvent<String> cardPaymentValidationError=new SingleLiveEvent<>();
+    SingleLiveEvent<Boolean> cardPaymentValidationSuccess=new SingleLiveEvent<>();
 
     public PaymentViewModel(Razorpay razorpay) {
         this.razorpay = razorpay;
@@ -106,39 +107,38 @@ public class PaymentViewModel extends CreateOrderViewModel {
         }
     }
 
-    public void validateCard(String cardNumber, String name ,String month, String year, String cvv) {
-        if (basicInputValidation(cardNumber, 16)) {
-            if(basicInputValidation(cardNumber, name.length())) {
+    public void validateCard(String cardNumber, String name, String month, String year, String cvv) {
+        if (basicInputValidation(cardNumber, cardNumber.length())) {
+            if (basicInputValidation(name, name.length())) {
                 if (basicInputValidation(month, 2)) {
                     if (basicInputValidation(year, 2)) {
                         if (basicInputValidation(cvv, 3)) {
                             cardPaymentValidationSuccess.setValue(true);
                         } else {
-                            cardPaymentValidationError.setValue("Not a valid cvv");
+                            cardPaymentValidationError.setValue("Enter a valid cvv");
                         }
                     } else {
-                        cardPaymentValidationError.setValue("Not a valid year");
+                        cardPaymentValidationError.setValue("Enter last two digit of year");
                     }
                 } else {
-                    cardPaymentValidationError.setValue("Not a valid month");
+                    cardPaymentValidationError.setValue("Enter a valid month");
                 }
-            }
-            else {
-                cardPaymentValidationError.setValue("Enter valid name");
+            } else {
+                cardPaymentValidationError.setValue("Enter a valid name");
             }
         } else {
-            cardPaymentValidationError.setValue("Enter valid cardNumber");
+            cardPaymentValidationError.setValue("Enter a valid cardNumber");
         }
     }
     public void processPayment(JSONObject payload) {
       paymentRepository.processPayment(payload);
     }
 
-    public MutableLiveData<String> getCardPaymentValidationError() {
+    public SingleLiveEvent<String> getCardPaymentValidationError() {
         return cardPaymentValidationError;
     }
 
-    public MutableLiveData<Boolean> getCardPaymentValidationSuccess() {
+    public SingleLiveEvent<Boolean> getCardPaymentValidationSuccess() {
         return cardPaymentValidationSuccess;
     }
 }
