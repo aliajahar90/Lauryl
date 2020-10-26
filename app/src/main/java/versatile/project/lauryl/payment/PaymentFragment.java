@@ -260,8 +260,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             displayView(PaymentFragment.PaymentTypeNetBanking);
         });
         paymentFragmentBinding.rlPaymentButton.setOnClickListener(view -> {
-
-            if (((MyApplication) getActivity().getApplicationContext()).getActiveSessionOrderNumber().isEmpty() ||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()) {
+            if (((MyApplication) getActivity().getApplicationContext()).getActiveSessionOrderNumber().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()) {
                 showCreateOrderDialog();
             } else {
                 switch (activePaymentType) {
@@ -281,12 +280,8 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             @Override
             public void setCardType(String s) {
                 String cardType = "";
-                if (paymentFragmentBinding.paymentCard.txtCardType.toString().length() == 0) {
-                    {
-                        cardType = razorpay.getCardNetwork(s);
-                    }
-                    paymentFragmentBinding.paymentCard.txtCardType.setText(cardType);
-                }
+                cardType = razorpay.getCardNetwork(s);
+                paymentFragmentBinding.paymentCard.txtCardType.setText(cardType);
             }
 
             @Override
@@ -485,7 +480,13 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                     paymentMethod = "upi";
                     JSONObject payload = new JSONObject("{currency: 'INR'}");
                     payload.put("amount", 1*100);
-                    payload.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?getProfileResponse.getProfileData().getEmail()!=null?getProfileResponse.getProfileData().getEmail().isEmpty()?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");
+                    if (getProfileResponse != null && getProfileResponse.getProfileData() != null && getProfileResponse.getProfileData().getEmail() != null && !(getProfileResponse.getProfileData().getEmail().isEmpty())) {
+                        payload.put("email", getProfileResponse.getProfileData().getEmail());
+
+                    } else {
+                        payload.put("email", "abc@gmail.com");
+                    }
+                    payload.put("contact", ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getMobileNumber());
                     payload.put("method", "upi");
                     payload.put("vpa", paymentFragmentBinding.paymentUPI.inputUPI.getText().toString());
                     paymentViewModel.processPayment(payload);
@@ -520,7 +521,13 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                     paymentMethod = "card";
                     JSONObject data = new JSONObject("{currency: 'INR'}");
                     data.put("amount", 1 * 100);
-                    data.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?getProfileResponse.getProfileData().getEmail()!=null?getProfileResponse.getProfileData().getEmail().isEmpty()?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");
+                    if (getProfileResponse != null && getProfileResponse.getProfileData() != null && getProfileResponse.getProfileData().getEmail() != null && !(getProfileResponse.getProfileData().getEmail().isEmpty())) {
+                        data.put("email", getProfileResponse.getProfileData().getEmail());
+
+                    } else {
+                        data.put("email", "abc@gmail.com");
+                    }
+                    data.put("contact", ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getMobileNumber());
                     data.put("method", "card");
                     data.put("card[name]", paymentFragmentBinding.paymentCard.inputName.getText().toString());
                     data.put("card[number]", paymentFragmentBinding.paymentCard.inputCardNumber.getText().toString());
@@ -548,7 +555,11 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             try {
                 JSONObject data = new JSONObject("{currency: 'INR'}");
                 data.put("amount", 1 * 100);
-                data.put("email", getProfileResponse!=null?getProfileResponse.getProfileData()!=null?getProfileResponse.getProfileData().getEmail()!=null?getProfileResponse.getProfileData().getEmail().isEmpty()?getProfileResponse.getProfileData().getEmail():"abc@gmail.com":"abc@gmail.com":"abc@gmail.com":"abc@gmail.com");
+                if (getProfileResponse != null && getProfileResponse.getProfileData() != null && getProfileResponse.getProfileData().getEmail() != null && !(getProfileResponse.getProfileData().getEmail().isEmpty())) {
+                    data.put("email", getProfileResponse.getProfileData().getEmail());
+                } else {
+                    data.put("email", "abc@gmail.com");
+                }
                 data.put("contact", ((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getMobileNumber());
                 data.put("method", "netbanking");
                 data.put("bank", activeBankForCheckout.getBankCode());
@@ -589,8 +600,8 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             PaymentDefferedFragmentTransaction defferedFragmentTransaction = new PaymentDefferedFragmentTransaction() {
                 @Override
                 public void commit() {
-                    paymentBaseShareData=getPaymentError();
                     if( getActivity()!=null && (getActivity().getSupportFragmentManager())!=null) {
+                        paymentBaseShareData=getPaymentError();
                         HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment(mGson.toJson(paymentBaseShareData));
                     }
                 }
