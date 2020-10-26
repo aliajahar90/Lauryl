@@ -260,9 +260,9 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             displayView(PaymentFragment.PaymentTypeNetBanking);
         });
         paymentFragmentBinding.rlPaymentButton.setOnClickListener(view -> {
-//            if (((MyApplication) getActivity().getApplicationContext()).getActiveSessionOrderNumber().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()) {
-//                showCreateOrderDialog();
-//            } else {
+            if (((MyApplication) getActivity().getApplicationContext()).getActiveSessionOrderNumber().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()) {
+                showCreateOrderDialog();
+            } else {
                 switch (activePaymentType) {
                     case PaymentTypeUpi:
                         processUpiService();
@@ -274,7 +274,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                         processNetBankPaymentService();
                         break;
                 }
-           // }
+          }
         });
         paymentFragmentBinding.paymentCard.inputCardNumber.addTextChangedListener(new CardFormattingTextWatcher(paymentFragmentBinding.paymentCard.inputCardNumber, new CardFormattingTextWatcher.CardType() {
             @Override
