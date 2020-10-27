@@ -94,7 +94,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
            // if (action == Constants.CHANGE_LOCATION_ACTION) {
               //  (activity as HomeScreen).onBackPressed()
          //   } else {
-                (activity as HomeScreen).displayChangeAddressFragment(addressModel,action=Constants.CHANGE_LOCATION_ACTION)
+                (activity as HomeScreen).displayChangeAddressFragment(addressModel,action=action)
           //  }
             // if (isServiceable)
 //            else{
