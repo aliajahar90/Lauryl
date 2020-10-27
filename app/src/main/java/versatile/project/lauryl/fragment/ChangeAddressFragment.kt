@@ -162,6 +162,8 @@ class ChangeAddressFragment : Fragment() {
             if (it.status) {
                 emptyFields()
                 //continue to order use mAddress
+                val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
+                myApplication.createOrderSerializdedAddressData=Gson().toJson(mAddress)
                 (activity as HomeScreen).displayCnfPckUpFragment()
                 if (isEditing) {
                     shout("Address Updated")
