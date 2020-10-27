@@ -91,11 +91,11 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         confirm_location_btn.setOnClickListener {
-            if (action == Constants.CHANGE_LOCATION_ACTION) {
-                (activity as HomeScreen).onBackPressed()
-            } else {
-                (activity as HomeScreen).displayChangeAddressFragment(addressModel)
-            }
+           // if (action == Constants.CHANGE_LOCATION_ACTION) {
+              //  (activity as HomeScreen).onBackPressed()
+         //   } else {
+                (activity as HomeScreen).displayChangeAddressFragment(addressModel,action=Constants.CHANGE_LOCATION_ACTION)
+          //  }
             // if (isServiceable)
 //            else{
 //                (activity as HomeScreen).scream("Our services are not available in this province !!")
@@ -195,8 +195,8 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
     fun fetchAddress(latitude: Double?, longitude: Double?) {
         Timber.e("latitude $latitude longitude $longitude")
-        addressModel.latitude = latitude as String
-        addressModel.longitude = longitude as String
+        addressModel.latitude = latitude.toString()
+        addressModel.longitude = longitude.toString()
         try {
             val addresses: List<Address>
             val geoCoder = Geocoder(context!!, Locale.ENGLISH)

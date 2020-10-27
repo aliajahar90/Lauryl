@@ -48,7 +48,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         homeNavigationController = HomeNavigationController.getInstance(this)
         displayHomeFragment()
         bckBtn.setOnClickListener {
-
             if (supportFragmentManager.backStackEntryCount > 1) {
                 supportFragmentManager.popBackStack()
             } else {
@@ -59,7 +58,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         changeLocation.setOnClickListener {
             displayMapLocationFragment(Constants.CHANGE_LOCATION_ACTION)
         }
-
+        fetchLocation()
     }
 
     private val mOnNavigationItemSelectedListener =
@@ -148,8 +147,9 @@ class HomeScreen : BaseActivity(), LocationListener {
         bckBtn.visibility = View.VISIBLE
     }
 
-    fun displayChangeAddressFragment(addressModel: AddressModel) {
+    fun displayChangeAddressFragment(addressModel: AddressModel, action: String) {
         val bundle = Bundle()
+        bundle.putString(Constants.ACTION, action)
         bundle.putSerializable("address", addressModel)
         val fragment = ChangeAddressFragment()
         fragment.arguments = bundle
@@ -175,7 +175,7 @@ class HomeScreen : BaseActivity(), LocationListener {
 
 
     fun displayMyOrdersFragment(initPosition: Int) {
-        myApplication.selectedOrderTab=initPosition
+        myApplication.selectedOrderTab = initPosition
         val myOrdersFragment = MyOrdersFragment()
         loadMyFragment(myOrdersFragment)
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
@@ -274,6 +274,7 @@ class HomeScreen : BaseActivity(), LocationListener {
     }
 
     fun setLocation(address: String) {
+        Timber.e("Seeting home location to $address")
         homelocTxt.text = address
     }
 
@@ -407,9 +408,10 @@ class HomeScreen : BaseActivity(), LocationListener {
     override fun onProviderDisabled(p0: String?) {
     }
 
-    fun updateUserName(profileResponse: GetProfileResponse){
-        (application as MyApplication).createOrderSerializdedProfile =Gson().toJson(profileResponse)
-        homeNameTxt.text="Hello, " + profileResponse.profileData.firstName
+    fun updateUserName(profileResponse: GetProfileResponse) {
+        (application as MyApplication).createOrderSerializdedProfile =
+            Gson().toJson(profileResponse)
+        homeNameTxt.text = "Hello, " + profileResponse.profileData.firstName
     }
 
     override fun onResume() {

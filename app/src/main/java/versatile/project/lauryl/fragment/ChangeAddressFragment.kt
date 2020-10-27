@@ -22,6 +22,7 @@ import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.model.city.CityModel
 import versatile.project.lauryl.screens.HomeScreen
+import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
 import versatile.project.lauryl.view.model.ChangeAddressViewModel
 
@@ -37,7 +38,9 @@ class ChangeAddressFragment : Fragment() {
     var addressType: String = "Home"
     var addreList = ArrayList<AddressModel>()
     var mAddress = AddressModel()
-    var pinCodes = ArrayList<String>()
+    //var pinCodes = ArrayList<String>()
+    var supportedCities = ArrayList<String>()
+    lateinit var action: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +51,7 @@ class ChangeAddressFragment : Fragment() {
             access = myApplication.userAccessToken, number = myApplication.mobileNumber
         )
         changeAddressViewModel.getCities(myApplication.userAccessToken)
+        action = arguments?.getString(Constants.ACTION) as String
 
     }
 
@@ -69,7 +73,7 @@ class ChangeAddressFragment : Fragment() {
                 if (landMark != null && landMark.isNotEmpty()) {
                     if (pin_code != null && pin_code.isNotEmpty()) {
                         if (pin_code != null && pin_code.length == 6) {
-                            if (validateServiceAvailability(pin_code)) {
+                            if (validateServiceAvailability(city = city.city)) {
 
                                 Timber.e("validation success")
                                 val inputJson = JsonObject()
@@ -83,7 +87,12 @@ class ChangeAddressFragment : Fragment() {
                                 addressObj.addProperty("state", state.state)
                                 addressObj.addProperty("country", state.country)
                                 addressObj.addProperty("pinCode", pin_code)
-
+                                addressModel.latitude?.let {
+                                    addressObj.addProperty("latitude", it)
+                                }
+                                addressModel.longitude?.let {
+                                    addressObj.addProperty("longitude", it)
+                                }
                                 mAddress.landmark = landMark
                                 mAddress.streetName = streetName
                                 mAddress.city = city.city
@@ -91,6 +100,8 @@ class ChangeAddressFragment : Fragment() {
                                 mAddress.pinCode = pin_code
                                 mAddress.country = state.country
                                 mAddress.addresType = addressType
+                                mAddress.latitude = addressModel.latitude
+                                mAddress.longitude = addressModel.longitude
 
                                 if (isEditing) {
                                     //updating address
@@ -111,8 +122,9 @@ class ChangeAddressFragment : Fragment() {
                             } else {
                                 Globals.showPopoUpDialog(
                                     context!!,
-                                    getString(R.string.validation), "Our services are not available in this province !!\n" +
-                                            "Please enter different pincode.."
+                                    getString(R.string.validation),
+                                    "Our services are not available in this province !!\n" +
+                                            "Please select a different City.."
                                 )
                             }
 
@@ -162,14 +174,28 @@ class ChangeAddressFragment : Fragment() {
             if (it.status) {
                 emptyFields()
                 //continue to order use mAddress
-                val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
-                myApplication.createOrderSerializdedAddressData=Gson().toJson(mAddress)
-                (activity as HomeScreen).displayCnfPckUpFragment()
-                if (isEditing) {
-                    shout("Address Updated")
-                    activity?.onBackPressed()
+                shout("Address saved..")
+                if (action == Constants.CHANGE_LOCATION_ACTION) {
+                    mAddress.city?.let { it1 ->
+                       // (activity as HomeScreen).setLocation(it1)
+                        (activity as HomeScreen).onBackPressed()
+                        (activity as HomeScreen).onBackPressed()
+                    }
+
+                } else {
+                    val myApplication: MyApplication =
+                        (activity!!.applicationContext as MyApplication)
+                    myApplication.createOrderSerializdedAddressData = Gson().toJson(mAddress)
+                    (activity as HomeScreen).displayCnfPckUpFragment()
+                    if (isEditing) {
+                        shout("Address Updated")
+                        activity?.onBackPressed()
+                    }
+                    changeAddressViewModel.getAddress(
+                        access = myApplication.userAccessToken,
+                        number = myApplication.mobileNumber
+                    )
                 }
-                changeAddressViewModel.getAddress(access = myApplication.userAccessToken, number = myApplication.mobileNumber)
             } else {
                 Globals.showPopoUpDialog(
                     context!!,
@@ -181,8 +207,7 @@ class ChangeAddressFragment : Fragment() {
         changeAddressViewModel.getCitiesToObserve().observe(this, Observer { list ->
             cityList = list
             for (city in list) {
-                for (pin in city.pinCode)
-                    pinCodes.add(pin)
+               supportedCities.add(city.city.toLowerCase())
             }
             val adapter: ArrayAdapter<String> = ArrayAdapter(
                 this.context!!,
@@ -286,7 +311,7 @@ class ChangeAddressFragment : Fragment() {
                 validateFields()
             else {
                 val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
-                myApplication.createOrderSerializdedAddressData=Gson().toJson(mAddress)
+                myApplication.createOrderSerializdedAddressData = Gson().toJson(mAddress)
                 (activity as HomeScreen).displayCnfPckUpFragment()
                 //address selected so continue to order user mAddress as address
             }
@@ -294,6 +319,10 @@ class ChangeAddressFragment : Fragment() {
         if (addressModel.id != null) {
             isEditing = true
             continue_location_btn.text = "Update address"
+            address_spinner.visibility = View.GONE
+        }
+        if (action == Constants.CHANGE_LOCATION_ACTION) {
+            continue_location_btn.text = "Confirm address"
             address_spinner.visibility = View.GONE
         }
 
@@ -309,7 +338,7 @@ class ChangeAddressFragment : Fragment() {
                 address_type_radio.check(R.id.other)
 
             }
-            else->{
+            else -> {
                 address_type_radio.check(R.id.home)
             }
         }
@@ -338,8 +367,12 @@ class ChangeAddressFragment : Fragment() {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun validateServiceAvailability(pinCode: String): Boolean {
-        return pinCodes.contains(pinCode)
+//    private fun validateServiceAvailability(pinCode: String): Boolean {
+//        return pinCodes.contains(pinCode)
+//
+//    }
+    private fun validateServiceAvailability(city: String): Boolean {
+        return supportedCities.contains(city.toLowerCase())
 
     }
 
