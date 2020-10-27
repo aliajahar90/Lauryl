@@ -17,7 +17,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.map_location_fragment.*
 import timber.log.Timber
@@ -27,7 +26,6 @@ import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.screens.HomeScreen
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.view.model.MapLocationViewModel
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -41,8 +39,10 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     private var addressModel: AddressModel = AddressModel()
     lateinit var myApplication: MyApplication
     lateinit var mapLocationViewModel: MapLocationViewModel
-    var pinCodes = ArrayList<String>()
-   lateinit var action :String
+
+    // var pinCodes = ArrayList<String>()
+    var supportedCities = ArrayList<String>()
+    lateinit var action: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,10 +58,20 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     private fun observeDataSources() {
         mapLocationViewModel.getCitiesToObserve().observe(this, androidx.lifecycle.Observer {
             for (city in it) {
-                for (pin in city.pinCode)
-                    pinCodes.add(pin)
+                supportedCities.add(city.city.toLowerCase())
+            }
+            addressModel.city?.let { city ->
+                validateServiceAvailability(city)
             }
         })
+        /** uncomment for pincode validation **/
+
+//        mapLocationViewModel.getCitiesToObserve().observe(this, androidx.lifecycle.Observer {
+//            for (city in it) {
+//                for (pin in city.pinCode)
+//                    pinCodes.add(pin)
+//            }
+//        })
         (activity as HomeScreen).hideLoading()
     }
 
@@ -81,13 +91,12 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         confirm_location_btn.setOnClickListener {
-            if (action==Constants.CHANGE_LOCATION_ACTION)
-            {
-                (activity as HomeScreen).onBackPressed()
-            }else{
-                (activity as HomeScreen).displayChangeAddressFragment(addressModel)
-            }
-           // if (isServiceable)
+           // if (action == Constants.CHANGE_LOCATION_ACTION) {
+              //  (activity as HomeScreen).onBackPressed()
+         //   } else {
+                (activity as HomeScreen).displayChangeAddressFragment(addressModel,action=Constants.CHANGE_LOCATION_ACTION)
+          //  }
+            // if (isServiceable)
 //            else{
 //                (activity as HomeScreen).scream("Our services are not available in this province !!")
 //
@@ -120,21 +129,32 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
             )
         }
 
-        googleMap?.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
-            override fun onMarkerDragStart(marker: Marker) {
+        googleMap?.setOnMapClickListener {
+            val markerOptions = MarkerOptions()
+            markerOptions.position(it)
+            //clearing the map to restrict multiple markers
+            googleMap?.clear()
+            googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it, 15f))
+            googleMap?.addMarker(markerOptions)
+            fetchAddress(it.latitude, it.longitude)
+        }
 
-            }
-
-            override fun onMarkerDragEnd(marker: Marker) {
-                googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.position, 15f))
-                fetchAddress(marker.position.latitude, marker.position.longitude)
-            }
-
-            override fun onMarkerDrag(arg0: Marker?) {
-                //  val message = arg0!!.position.latitude.toString() + "" + arg0.position.longitude.toString()
-                // Log.d(TAG + "_DRAG", message)
-            }
-        })
+        /** uncomment for draggable marker**/
+//        googleMap?.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
+//            override fun onMarkerDragStart(marker: Marker) {
+//
+//            }
+//
+//            override fun onMarkerDragEnd(marker: Marker) {
+//                googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.position, 15f))
+//                fetchAddress(marker.position.latitude, marker.position.longitude)
+//            }
+//
+//            override fun onMarkerDrag(arg0: Marker?) {
+//                //  val message = arg0!!.position.latitude.toString() + "" + arg0.position.longitude.toString()
+//                // Log.d(TAG + "_DRAG", message)
+//            }
+//        })
     }
 
     override fun onRequestPermissionsResult(
@@ -150,8 +170,20 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     }
 
     var isServiceable = false
-    private fun validateServiceAvailability(pinCode: String) {
-        if (pinCodes.contains(pinCode)) {
+
+    /** uncomment for pincode validation **/
+    //    private fun validateServiceAvailability(pinCode: String) {
+//        if (pinCodes.contains(pinCode)) {
+//            isServiceable = true
+//            availabiltyMessage.visibility = View.GONE
+//        } else {
+//            isServiceable = false
+//            availabiltyMessage.visibility = View.VISIBLE
+//            availabiltyMessage.text = "Our services are not available in this province !!"
+//        }
+//    }
+    private fun validateServiceAvailability(city: String) {
+        if (supportedCities.contains(city.toLowerCase())) {
             isServiceable = true
             availabiltyMessage.visibility = View.GONE
         } else {
@@ -163,7 +195,8 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
     fun fetchAddress(latitude: Double?, longitude: Double?) {
         Timber.e("latitude $latitude longitude $longitude")
-
+        addressModel.latitude = latitude.toString()
+        addressModel.longitude = longitude.toString()
         try {
             val addresses: List<Address>
             val geoCoder = Geocoder(context!!, Locale.ENGLISH)
@@ -174,9 +207,12 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
             ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             val address: String = addresses[0]
                 .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-            addresses[0].locality.let {
+            addresses[0].locality?.let {
                 addressModel.city = it
                 Timber.e("city ${addressModel.city}")
+                (activity as HomeScreen).setLocation(it)
+                Timber.e("city ${addressModel.city}")
+                validateServiceAvailability(city = it)
             }
             addresses[0].adminArea.let {
                 addressModel.state = it
@@ -190,7 +226,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
             addresses[0].postalCode.let {
                 addressModel.pinCode = it
                 Timber.e("pinCode ${addressModel.pinCode}")
-                validateServiceAvailability(pinCode = it)
+                // validateServiceAvailability(pinCode = it)
             }
             addresses[0].featureName.let {
                 addressModel.landmark = it

@@ -21,6 +21,7 @@ class Constants {
         var CURRENT_AUTH_TOKEN = ""
         val CHANGE_LOCATION_ACTION = "CHANGE_LOCATION_ACTION"
         val ADD_LOCATION_ACTION = "ADD_LOCATION_ACTION"
+        val EDIT_ADDRESS_ACTION = "EDIT_ADDRESS_ACTION"
         val ACTION = "ACTION"
     }
 

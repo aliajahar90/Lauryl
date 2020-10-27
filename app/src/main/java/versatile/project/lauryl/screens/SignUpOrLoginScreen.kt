@@ -1,10 +1,15 @@
 package versatile.project.lauryl.screens
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import versatile.project.lauryl.R
 import versatile.project.lauryl.application.MyApplication
-import versatile.project.lauryl.interfaces.OnRegistrationCallback
+import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.model.ErrorResponse
 import versatile.project.lauryl.model.LoginResponse
 import versatile.project.lauryl.model.VersatileLoginResponse
@@ -25,15 +30,15 @@ import versatile.project.lauryl.utils.EnumOTPSource
 import versatile.project.lauryl.utils.Globals
 import versatile.project.lauryl.view.model.SignUpOrLoginViewModel
 
-class SignUpOrLoginScreen : AppCompatActivity() {
 
-    lateinit var signUpOrLoginViewModel:SignUpOrLoginViewModel
+class SignUpOrLoginScreen : BaseActivity() {
+
+    lateinit var signUpOrLoginViewModel: SignUpOrLoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up_or_login_screen)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
         signUpOrLoginViewModel = ViewModelProvider(this).get(SignUpOrLoginViewModel::class.java)
 
         loginTxtSelectedLyot.setOnClickListener {
@@ -70,15 +75,15 @@ class SignUpOrLoginScreen : AppCompatActivity() {
             selectedRegister()
         }
 
-        loginOrRegisterBtn.setOnClickListener{
+        loginOrRegisterBtn.setOnClickListener {
 
-            if(firstNamEdt.visibility == View.GONE){
+            if (firstNamEdt.visibility == View.GONE) {
 
                 // Login selected
                 val mblNumEdtVal = mblNumEdt.text.toString()
                 val pswrdEdtVal = pswrdEdt.text.toString()
 
-                if(mblNumEdtVal == null || mblNumEdtVal.isEmpty()){
+                if (mblNumEdtVal == null || mblNumEdtVal.isEmpty()) {
                     //Globals.showPopoUpDialog(this,getString(R.string.mbl_valid_num_txt))
                     Globals.showPopoUpDialog(
                         this@SignUpOrLoginScreen, getString(R.string.validation), getString(
@@ -88,7 +93,7 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                if(pswrdEdtVal == null || pswrdEdtVal.isEmpty()){
+                if (pswrdEdtVal == null || pswrdEdtVal.isEmpty()) {
                     //Globals.showToastMsg(this,getString(R.string.mbl_valid_pswrd_txt))
                     Globals.showPopoUpDialog(
                         this@SignUpOrLoginScreen, getString(R.string.validation), getString(
@@ -112,7 +117,7 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                         response: Response<LoginResponse>
                     ) {
 
-                        if(response?.body() != null) {
+                        if (response?.body() != null) {
                             response.body()
 
                             Globals.saveStringToPreferences(
@@ -148,10 +153,20 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                                         if (response != null) {
 
                                             if (response.isSuccessful) {
-                                                Globals.saveStringToPreferences(applicationContext, Constants.MOBILE_NUMBER, mblNumEdtVal)
-                                                Globals.saveStringToPreferences(applicationContext, Constants.AUTH_TOKEN, response.body()!!.accessToken)
-                                                (application as MyApplication).accessToken = response.body()!!.accessToken
-                                                (application as MyApplication).mobileNumber =mblNumEdtVal
+                                                Globals.saveStringToPreferences(
+                                                    applicationContext,
+                                                    Constants.MOBILE_NUMBER,
+                                                    mblNumEdtVal
+                                                )
+                                                Globals.saveStringToPreferences(
+                                                    applicationContext,
+                                                    Constants.AUTH_TOKEN,
+                                                    response.body()!!.accessToken
+                                                )
+                                                (application as MyApplication).accessToken =
+                                                    response.body()!!.accessToken
+                                                (application as MyApplication).mobileNumber =
+                                                    mblNumEdtVal
                                                 startActivity(
                                                     Intent(
                                                         this@SignUpOrLoginScreen,
@@ -250,7 +265,7 @@ class SignUpOrLoginScreen : AppCompatActivity() {
 
                 })
 
-             }else{
+            } else {
 
                 // Registration
                 val firstNamTxt = firstNamEdt.text.toString()
@@ -259,20 +274,20 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                 val pswrdTxt = pswrdEdt.text.toString()
                 val cnfPswrdTxt = cnfPswrdEdt.text.toString()
 
-                if(firstNamTxt != null && firstNamTxt.isNotEmpty()){
-                    if(!firstNamTxt.contains("0123456789!@#$%^&*()_+")){
-                        if(lastNameTxt != null && lastNameTxt.isNotEmpty()){
-                            if(!lastNameTxt.contains("0123456789!@#$%^&*()_+")){
-                                if(mblNumberTxt != null && mblNumberTxt.isNotEmpty()){
-                                    if(mblNumberTxt.length == 10){
-                                        if(pswrdTxt != null && pswrdTxt.isNotEmpty()){
-                                            if(cnfPswrdTxt != null && cnfPswrdTxt.isNotEmpty()){
-                                                if(pswrdTxt.contentEquals(cnfPswrdTxt)){
+                if (firstNamTxt != null && firstNamTxt.isNotEmpty()) {
+                    if (!firstNamTxt.contains("0123456789!@#$%^&*()_+")) {
+                        if (lastNameTxt != null && lastNameTxt.isNotEmpty()) {
+                            if (!lastNameTxt.contains("0123456789!@#$%^&*()_+")) {
+                                if (mblNumberTxt != null && mblNumberTxt.isNotEmpty()) {
+                                    if (mblNumberTxt.length == 10) {
+                                        if (pswrdTxt != null && pswrdTxt.isNotEmpty()) {
+                                            if (cnfPswrdTxt != null && cnfPswrdTxt.isNotEmpty()) {
+                                                if (pswrdTxt.contentEquals(cnfPswrdTxt)) {
                                                     loginOrRegisterBtn.isEnabled = false
                                                     signUpOrLoginViewModel.checkUserExistance(
                                                         mblNumberTxt
                                                     )
-                                                }else{
+                                                } else {
                                                     Globals.showPopoUpDialog(
                                                         this,
                                                         getString(R.string.validation),
@@ -281,28 +296,28 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                                                         )
                                                     )
                                                 }
-                                            }else{
+                                            } else {
                                                 Globals.showPopoUpDialog(
                                                     this, getString(R.string.validation), getString(
                                                         R.string.cnf_pswrd_valid_txt
                                                     )
                                                 )
                                             }
-                                        }else{
+                                        } else {
                                             Globals.showPopoUpDialog(
                                                 this, getString(R.string.validation), getString(
                                                     R.string.pswrd_valid_txt
                                                 )
                                             )
                                         }
-                                    }else{
+                                    } else {
                                         Globals.showPopoUpDialog(
                                             this, getString(R.string.validation), getString(
                                                 R.string.mbl_digit_valid_txt
                                             )
                                         )
                                     }
-                                }else{
+                                } else {
                                     Globals.showPopoUpDialog(
                                         this,
                                         getString(R.string.validation),
@@ -310,7 +325,7 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                                     )
                                 }
 
-                            }else{
+                            } else {
                                 Globals.showPopoUpDialog(
                                     this,
                                     getString(R.string.validation),
@@ -318,7 +333,7 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                                 )
                             }
 
-                        }else{
+                        } else {
                             Globals.showPopoUpDialog(
                                 this,
                                 getString(R.string.validation),
@@ -326,14 +341,14 @@ class SignUpOrLoginScreen : AppCompatActivity() {
                             )
                         }
 
-                    }else{
+                    } else {
                         Globals.showPopoUpDialog(
                             this,
                             getString(R.string.validation),
                             getString(R.string.fn_alpha_valid_txt)
                         )
                     }
-                }else{
+                } else {
                     Globals.showPopoUpDialog(
                         this,
                         getString(R.string.validation),
@@ -455,22 +470,22 @@ class SignUpOrLoginScreen : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
+        getCurrentVersion()
         val isPreferenceExisted = Globals.checkBoolFromPreferences(
             applicationContext,
             Constants.IS_PREFS_EXISTED
         )
-        if(isPreferenceExisted){
+        if (isPreferenceExisted) {
             val savedLoginSts = Globals.getBoolFromPreferences(
                 applicationContext,
                 Constants.IS_LOGIN
             )
-            if(savedLoginSts){
+            if (savedLoginSts) {
                 populateLogin()
-            }else{
+            } else {
                 populateRegister()
             }
-        }else{
+        } else {
             selectedTabHdngTxt.text = getString(R.string.plz_login_txt)
             loginTxtUnSelectedLyot.visibility = View.GONE
             registerTxtSelectedLyot.visibility = View.GONE
@@ -501,7 +516,7 @@ class SignUpOrLoginScreen : AppCompatActivity() {
         Globals.saveBoolToPreferences(applicationContext, Constants.IS_LOGIN, false)
     }
 
-    private fun populateRegister(){
+    private fun populateRegister() {
         forgotPswrdTxt.visibility = View.GONE
         firstNamEdtLyout.visibility = View.VISIBLE
         firstNamEdt.visibility = View.VISIBLE
@@ -552,7 +567,7 @@ class SignUpOrLoginScreen : AppCompatActivity() {
         Globals.saveBoolToPreferences(applicationContext, Constants.IS_LOGIN, true)
     }
 
-    private fun populateLogin(){
+    private fun populateLogin() {
         firstNamEdtLyout.visibility = View.GONE
         firstNamEdt.visibility = View.GONE
         lastNameEdtLyout.visibility = View.GONE
@@ -614,6 +629,48 @@ class SignUpOrLoginScreen : AppCompatActivity() {
         super.onDestroy()
         Log.d("sign_up_", "on_destroy_fired")
         Globals.clearLaurylPrefs(applicationContext)
+    }
+
+    var apiVersion = 0
+    var currentVersion = 1
+    private fun getCurrentVersion() {
+        val pm = this.packageManager
+        var pInfo: PackageInfo? = null
+        try {
+            pInfo = pm.getPackageInfo(this.packageName, 0)
+        } catch (e1: PackageManager.NameNotFoundException) {
+            e1.printStackTrace()
+        }
+        pInfo?.versionCode?.let {
+            currentVersion = it
+            if (currentVersion < apiVersion) {
+                showUpdateDialog()
+            }
+        }
+    }
+
+    private fun showUpdateDialog() {
+        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("A New Update is Available")
+        builder.setPositiveButton(
+            "Update"
+        ) { dialog, _ ->
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=versatile.project.lauryl")
+                )
+            )
+            // dialog.dismiss()
+        }
+        builder.setNegativeButton(
+            "Exit"
+        ) { _, _ ->
+            shout("You selected to exit app")
+            finishAffinity()
+        }
+        builder.setCancelable(false)
+        builder.show()
     }
 
 }
