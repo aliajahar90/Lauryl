@@ -39,7 +39,9 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     private var addressModel: AddressModel = AddressModel()
     lateinit var myApplication: MyApplication
     lateinit var mapLocationViewModel: MapLocationViewModel
-    var pinCodes = ArrayList<String>()
+
+    // var pinCodes = ArrayList<String>()
+    var supportedCities = ArrayList<String>()
     lateinit var action: String
 
 
@@ -56,10 +58,20 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     private fun observeDataSources() {
         mapLocationViewModel.getCitiesToObserve().observe(this, androidx.lifecycle.Observer {
             for (city in it) {
-                for (pin in city.pinCode)
-                    pinCodes.add(pin)
+                supportedCities.add(city.city.toLowerCase())
+            }
+            addressModel.city?.let { city ->
+                validateServiceAvailability(city)
             }
         })
+        /** uncomment for pincode validation **/
+
+//        mapLocationViewModel.getCitiesToObserve().observe(this, androidx.lifecycle.Observer {
+//            for (city in it) {
+//                for (pin in city.pinCode)
+//                    pinCodes.add(pin)
+//            }
+//        })
         (activity as HomeScreen).hideLoading()
     }
 
@@ -158,8 +170,20 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     }
 
     var isServiceable = false
-    private fun validateServiceAvailability(pinCode: String) {
-        if (pinCodes.contains(pinCode)) {
+
+    /** uncomment for pincode validation **/
+    //    private fun validateServiceAvailability(pinCode: String) {
+//        if (pinCodes.contains(pinCode)) {
+//            isServiceable = true
+//            availabiltyMessage.visibility = View.GONE
+//        } else {
+//            isServiceable = false
+//            availabiltyMessage.visibility = View.VISIBLE
+//            availabiltyMessage.text = "Our services are not available in this province !!"
+//        }
+//    }
+    private fun validateServiceAvailability(city: String) {
+        if (supportedCities.contains(city.toLowerCase())) {
             isServiceable = true
             availabiltyMessage.visibility = View.GONE
         } else {
@@ -171,7 +195,8 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
     fun fetchAddress(latitude: Double?, longitude: Double?) {
         Timber.e("latitude $latitude longitude $longitude")
-
+        addressModel.latitude = latitude as String
+        addressModel.longitude = longitude as String
         try {
             val addresses: List<Address>
             val geoCoder = Geocoder(context!!, Locale.ENGLISH)
@@ -182,9 +207,12 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
             ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             val address: String = addresses[0]
                 .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-            addresses[0].locality.let {
+            addresses[0].locality?.let {
                 addressModel.city = it
                 Timber.e("city ${addressModel.city}")
+                (activity as HomeScreen).setLocation(it)
+                Timber.e("city ${addressModel.city}")
+                validateServiceAvailability(city = it)
             }
             addresses[0].adminArea.let {
                 addressModel.state = it
@@ -198,7 +226,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
             addresses[0].postalCode.let {
                 addressModel.pinCode = it
                 Timber.e("pinCode ${addressModel.pinCode}")
-                validateServiceAvailability(pinCode = it)
+                // validateServiceAvailability(pinCode = it)
             }
             addresses[0].featureName.let {
                 addressModel.landmark = it

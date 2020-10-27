@@ -414,6 +414,6 @@ class HomeScreen : BaseActivity(), LocationListener {
 
     override fun onResume() {
         super.onResume()
-        fetchLocation()
+        //fetchLocation()
     }
 }

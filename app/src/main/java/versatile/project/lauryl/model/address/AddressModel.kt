@@ -85,6 +85,14 @@ class AddressModel : Serializable {
     @Expose
     var phoneNumber: Long? = null
 
+    @SerializedName("latitude")
+    @Expose
+    var latitude: String? = null
+
+    @SerializedName("longitude")
+    @Expose
+    var longitude: String? = null
+
 
     override fun toString(): String {
         return "$streetName, $landmark, $city, $state, $pinCode"
