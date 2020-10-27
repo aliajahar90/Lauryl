@@ -55,8 +55,7 @@ class ForgotPasswordScreen : BaseActivity() {
         forgotPswrdViewModel.getOtpResponseToObserve().observe(this, Observer {
             hideLoading()
             it?.let {
-                if (it.data != null && it.data == "true") {
-
+                if (it.data != null && it.data.matches(".*\\d.*".toRegex()) ){
                     Log.d("otp_", it.data)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         Globals.showNotifInOreoAll(this, "Otp Sent to mobile")

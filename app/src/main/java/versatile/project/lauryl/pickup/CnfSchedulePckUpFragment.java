@@ -1,5 +1,6 @@
 package versatile.project.lauryl.pickup;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -22,7 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -39,6 +43,8 @@ import versatile.project.lauryl.base.BaseActivity;
 import versatile.project.lauryl.base.BaseBinding;
 import versatile.project.lauryl.base.HomeNavigationController;
 import versatile.project.lauryl.databinding.CnfSchdulePckupFragmentBinding;
+import versatile.project.lauryl.home.HomeFragment;
+import versatile.project.lauryl.model.TopServicesDataItem;
 import versatile.project.lauryl.model.address.AddressModel;
 import versatile.project.lauryl.orders.create.model.CreateOrderData;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
@@ -87,18 +93,6 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         cnfSchdulePckupFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.cnf_schdule_pckup_fragment, container, false);
-        return cnfSchdulePckupFragmentBinding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ((HomeScreen) getActivity()).selectCnfPckUp();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         resetState();
         loadDateTimeFromApi();
         if (adapter == null) {
@@ -144,30 +138,46 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
 
         cnfSchdulePckupFragmentBinding.schdlePckUpBtn.setOnClickListener(view -> {
             if (selectedTime != null) {
-                CreateOrderData.Details details=new CreateOrderData.Details();
-                GetProfileResponse getProfileResponse=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(),GetProfileResponse.class);
-                AddressModel addressModel=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(),AddressModel.class);
-                details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
-                details.setOrderStage("On Hold");
-                details.setEmailId(getProfileResponse.getProfileData().getEmail());
-                details.setPickupCity(addressModel.getCity());
-                details.setPickupState(addressModel.getState());
-                details.setPickupCountry(addressModel.getCountry());
-                details.setPickupAddress2(addressModel.getAddress1());
-                details.setShippingPostCode(addressModel.getPinCode());
-                details.setTransactionId("");
-                cnfSchedulePickupViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(),details);
-
+                createOrderOnHoldOrder();
             } else {
                 Globals.Companion.showToastMsg(getActivity(), "Please select pickup time");
             }
         });
-        cnfSchedulePickupViewModel.getCreateOrderSuccessEvent().observe(this, it->{
+        cnfSchedulePickupViewModel.getCreateOrderSuccessEvent().observe(this, it -> {
             if (getActivity() instanceof HomeScreen) {
                 ((HomeScreen) getActivity()).selectPayment();
                 HomeNavigationController.getInstance(getActivity()).addPaymentFragment();
             }
         });
+        cnfSchedulePickupViewModel.getCreateOrderFailedEvent().observe(this, it->{
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.lauryl))
+                    .setMessage(R.string.order_not_created)
+                    .setPositiveButton("Ok", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+        });
+
+        return cnfSchdulePckupFragmentBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((HomeScreen) getActivity()).selectCnfPckUp();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
     }
 
     private void setUpTimeView() {
@@ -222,14 +232,16 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         for (String s : uniqueTimeSet) {
             uniqueTimes.add(s);
         }
-        cnfPickupTimeAdapter = new CnfPickupTimeAdapter(getActivity(), uniqueTimes, this,date);
+        cnfPickupTimeAdapter = new CnfPickupTimeAdapter(getActivity(), uniqueTimes, this, date);
         cnfSchdulePckupFragmentBinding.gridPickUpTimer.setAdapter(cnfPickupTimeAdapter);
     }
 
 
     @Override
     public void onTimeClicked(String time) {
-        selectedTime = time;
+        if(time!=null) {
+            selectedTime = time;
+        }
     }
 
     boolean isTodayOrFuture(String stringDate) {
@@ -257,5 +269,65 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         if (scrollListener != null) {
             scrollListener.resetState();
         }
+    }
+
+    void createOrderOnHoldOrder() {
+        CreateOrderData.Details details = new CreateOrderData.Details();
+        String currentDateTimeInMilis=getCurrentDateTime();
+        JsonObject jsonObject=new JsonObject();
+        jsonObject.addProperty("orderNumber",currentDateTimeInMilis);
+        ((MyApplication) getActivity().getApplicationContext()).setActiveSessionOrderNumber(new Gson().toJson(jsonObject));
+        GetProfileResponse getProfileResponse = new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(), GetProfileResponse.class);
+        AddressModel addressModel = new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(), AddressModel.class);
+        List<TopServicesDataItem> topServicesDataItemList=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService(), new TypeToken<List<TopServicesDataItem>>(){}.getType());
+        List<String> localServiceList=new ArrayList<>();
+        if(topServicesDataItemList!=null) {
+            for (TopServicesDataItem item : topServicesDataItemList) {
+                localServiceList.add(item.getVSku());
+            }
+        }
+        CreateOrderData createOrderData=new CreateOrderData();
+        //keeping static as of now
+        details.setOrderNumber(currentDateTimeInMilis);
+        details.setOrderTotal("100");
+        details.setVAccountId("1");
+        details.setMarketPlaceName(AllConstants.Orders.MARKET_PLACE_NAME);
+        details.setOrderDateTime(currentDateTimeInMilis);
+        details.setPaymentDateTime(getCurrentDateTime());
+        details.setPaymentReceived(false);
+        details.setShippingAddress1(addressModel!=null?addressModel.getAddresType():"");
+
+        String shippingAddress2="";
+        if(addressModel!=null){
+            shippingAddress2=addressModel.getStreetName()+" "+addressModel.getPinCode();
+        }
+        details.setShippingAddress2(shippingAddress2);
+        details.setShippingAddress3(addressModel!=null?addressModel.getLandmark():"");
+        details.setShippingCity(addressModel!=null?addressModel.getCity():"");
+        details.setShippingState(addressModel!=null?addressModel.getState():"");
+        details.setShippingCountry(addressModel!=null?addressModel.getCountry():"");
+        details.setPickupAddress1(addressModel!=null?addressModel.getAddresType():"");
+        String pickupAddress2="";
+        if(addressModel!=null){
+            pickupAddress2=addressModel.getStreetName()+" "+addressModel.getPinCode();
+        }
+        details.setPickupAddress2(pickupAddress2);
+        details.setPickupAddress3(addressModel!=null?addressModel.getLandmark():"");
+        details.setPickupCountryCode("+91");
+        details.setPickupCity(addressModel!=null?addressModel.getCity():"");
+        details.setPickupState(addressModel!=null?addressModel.getState():"");
+        details.setPickupCountry(addressModel!=null?addressModel.getCountry():"");
+        details.setShippingPostCode(addressModel!=null?addressModel.getPinCode():"");
+        details.setTransactionId("");
+        details.setServiceList(localServiceList);
+        details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
+        details.setOrderStage("On Hold");
+        details.setEmailId(getProfileResponse.getProfileData().getEmail());
+        createOrderData.setDetails(details);
+        cnfSchedulePickupViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), createOrderData);
+    }
+    String getCurrentDateTime(){
+        DateTime dateTime=DateTime.now();
+        return String.valueOf(dateTime.getMillis());
     }
 }

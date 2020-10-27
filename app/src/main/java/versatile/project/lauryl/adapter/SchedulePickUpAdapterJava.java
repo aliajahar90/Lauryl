@@ -109,4 +109,8 @@ public class SchedulePickUpAdapterJava extends RecyclerView.Adapter<SchedulePick
     public interface OnItemClickListener {
         void onItemClicked(SparseBooleanArray sparseBooleanArray);
     }
+
+    public List<TopServicesDataItem> getTopServicesDataItems() {
+        return topServicesDataItems;
+    }
 }

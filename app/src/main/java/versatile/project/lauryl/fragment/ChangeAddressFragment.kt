@@ -162,6 +162,8 @@ class ChangeAddressFragment : Fragment() {
             if (it.status) {
                 emptyFields()
                 //continue to order use mAddress
+                val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
+                myApplication.createOrderSerializdedAddressData=Gson().toJson(mAddress)
                 (activity as HomeScreen).displayCnfPckUpFragment()
                 if (isEditing) {
                     shout("Address Updated")
@@ -303,9 +305,12 @@ class ChangeAddressFragment : Fragment() {
             "Work" -> {
                 address_type_radio.check(R.id.work)
             }
-            else -> {
+            "Other" -> {
                 address_type_radio.check(R.id.other)
 
+            }
+            else->{
+                address_type_radio.check(R.id.home)
             }
         }
         addressModel.pinCode.let {

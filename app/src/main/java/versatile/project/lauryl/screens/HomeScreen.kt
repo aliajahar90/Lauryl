@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
@@ -97,12 +98,10 @@ class HomeScreen : BaseActivity(), LocationListener {
         }
 
     private fun displayProfileFragment() {
-        selectProfile()
         homeNavigationController.addProfileFragment();
     }
 
     private fun displayPaymentFragment() {
-        selectPayment()
         homeNavigationController.addPaymentFragment()
     }
 
@@ -180,7 +179,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         val myOrdersFragment = MyOrdersFragment()
         loadMyFragment(myOrdersFragment)
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
-        selectMyOrdersDashboard()
+        //selectMyOrdersDashboard()
     }
 
     fun selectMyOrdersDashboard() {
@@ -188,11 +187,19 @@ class HomeScreen : BaseActivity(), LocationListener {
         homeNameMdlVwTxt.visibility = View.VISIBLE
         homeNameTxt.visibility = View.GONE
         filterTxt.visibility = View.GONE
-        bckBtn.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
     }
 
     private fun displayHomeFragment() {
+        val fm: FragmentManager = supportFragmentManager
+        for (i in 0 until fm.backStackEntryCount) {
+            fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
         val homeFragment = HomeFragment()
         homeNavigationController.addHomeFragment(homeFragment)
     }
@@ -204,6 +211,10 @@ class HomeScreen : BaseActivity(), LocationListener {
         bckBtn.visibility = View.GONE
         filterTxt.visibility = View.GONE
         botmNavVw.menu.findItem(R.id.homeId).isChecked = true
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
     }
 
     private fun loadMyFragment(fragment: Fragment) {
@@ -218,7 +229,10 @@ class HomeScreen : BaseActivity(), LocationListener {
     fun displayCnfPckUpFragment() {
         selectCnfPckUp()
         val fragment = CnfSchedulePckUpFragment.newInstance()
-        loadMyFragment(fragment)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragContainer, fragment)
+        transaction.addToBackStack(fragment::class.java.name)
+        transaction.commit()
     }
 
     fun selectCnfPckUp() {
@@ -245,6 +259,10 @@ class HomeScreen : BaseActivity(), LocationListener {
         homeNameTxt.visibility = View.GONE
         bckBtn.visibility = View.VISIBLE
         botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
     }
 
     override fun onBackPressed() {
@@ -269,6 +287,11 @@ class HomeScreen : BaseActivity(), LocationListener {
         //   imgLoc.setImageResource(R.drawable.ic_name)
         botmNavVw.menu.findItem(R.id.profileId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
+
     }
 
     fun selectPayment() {

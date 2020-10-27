@@ -17,7 +17,7 @@ open class MyApplication : MultiDexApplication() {
     var createOrderSerializedService=""
     var createOrderSerializdedAddressData=""
     var createOrderSerializdedProfile=""
-
+    var activeSessionOrderNumber=""
     var selectedServiceArray: SparseBooleanArray = SparseBooleanArray()
     override fun onCreate() {
         super.onCreate()
