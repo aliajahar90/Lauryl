@@ -17,7 +17,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.map_location_fragment.*
 import timber.log.Timber
@@ -27,7 +26,6 @@ import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.screens.HomeScreen
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.view.model.MapLocationViewModel
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -42,7 +40,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     lateinit var myApplication: MyApplication
     lateinit var mapLocationViewModel: MapLocationViewModel
     var pinCodes = ArrayList<String>()
-   lateinit var action :String
+    lateinit var action: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,13 +79,12 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         confirm_location_btn.setOnClickListener {
-            if (action==Constants.CHANGE_LOCATION_ACTION)
-            {
+            if (action == Constants.CHANGE_LOCATION_ACTION) {
                 (activity as HomeScreen).onBackPressed()
-            }else{
+            } else {
                 (activity as HomeScreen).displayChangeAddressFragment(addressModel)
             }
-           // if (isServiceable)
+            // if (isServiceable)
 //            else{
 //                (activity as HomeScreen).scream("Our services are not available in this province !!")
 //
@@ -120,21 +117,32 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
             )
         }
 
-        googleMap?.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
-            override fun onMarkerDragStart(marker: Marker) {
+        googleMap?.setOnMapClickListener {
+            val markerOptions = MarkerOptions()
+            markerOptions.position(it)
+            //clearing the map to restrict multiple markers
+            googleMap?.clear()
+            googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it, 15f))
+            googleMap?.addMarker(markerOptions)
+            fetchAddress(it.latitude, it.longitude)
+        }
 
-            }
-
-            override fun onMarkerDragEnd(marker: Marker) {
-                googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.position, 15f))
-                fetchAddress(marker.position.latitude, marker.position.longitude)
-            }
-
-            override fun onMarkerDrag(arg0: Marker?) {
-                //  val message = arg0!!.position.latitude.toString() + "" + arg0.position.longitude.toString()
-                // Log.d(TAG + "_DRAG", message)
-            }
-        })
+        /** uncomment for draggable marker**/
+//        googleMap?.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
+//            override fun onMarkerDragStart(marker: Marker) {
+//
+//            }
+//
+//            override fun onMarkerDragEnd(marker: Marker) {
+//                googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.position, 15f))
+//                fetchAddress(marker.position.latitude, marker.position.longitude)
+//            }
+//
+//            override fun onMarkerDrag(arg0: Marker?) {
+//                //  val message = arg0!!.position.latitude.toString() + "" + arg0.position.longitude.toString()
+//                // Log.d(TAG + "_DRAG", message)
+//            }
+//        })
     }
 
     override fun onRequestPermissionsResult(

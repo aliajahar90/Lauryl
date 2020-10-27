@@ -470,7 +470,7 @@ class SignUpOrLoginScreen : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-getCurrentVersion()
+        getCurrentVersion()
         val isPreferenceExisted = Globals.checkBoolFromPreferences(
             applicationContext,
             Constants.IS_PREFS_EXISTED
@@ -631,7 +631,7 @@ getCurrentVersion()
         Globals.clearLaurylPrefs(applicationContext)
     }
 
-    var apiVersion = 5
+    var apiVersion = 0
     var currentVersion = 1
     private fun getCurrentVersion() {
         val pm = this.packageManager
@@ -661,11 +661,12 @@ getCurrentVersion()
                     Uri.parse("market://details?id=versatile.project.lauryl")
                 )
             )
-           // dialog.dismiss()
+            // dialog.dismiss()
         }
         builder.setNegativeButton(
             "Exit"
-        ) { _, _ -> shout("You selected to exit app")
+        ) { _, _ ->
+            shout("You selected to exit app")
             finishAffinity()
         }
         builder.setCancelable(false)
