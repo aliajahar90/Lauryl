@@ -647,11 +647,16 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                 .setTitle(getString(R.string.lauryl))
                 .setMessage(R.string.create_order_message)
                 .setPositiveButton("Yes", (dialog, which) -> {
+//                    FragmentManager fm = getActivity().getSupportFragmentManager();
+//                    for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+//                        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    }
+//                    HomeNavigationController.getInstance(getActivity()).addHomeFragment(new HomeFragment());
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-                        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    for(int i = 1; i < fm.getBackStackEntryCount(); ++i) {
+                        fm.popBackStack();
                     }
-                    HomeNavigationController.getInstance(getActivity()).addHomeFragment(new HomeFragment());
+                    ((HomeScreen) getActivity()).displaySPFragment();
 
                 })
                 .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss())
