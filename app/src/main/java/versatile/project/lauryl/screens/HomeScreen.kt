@@ -193,6 +193,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializdedAddressData = ""
         (application as MyApplication).createOrderSerializdedProfile = ""
         (application as MyApplication).createOrderSerializedService = ""
+        (application as MyApplication).activeSessionPickupSlots = ""
     }
 
     private fun displayHomeFragment() {
@@ -215,6 +216,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializdedAddressData = ""
         (application as MyApplication).createOrderSerializdedProfile = ""
         (application as MyApplication).createOrderSerializedService = ""
+        (application as MyApplication).activeSessionPickupSlots = ""
     }
 
     private fun loadMyFragment(fragment: Fragment) {
@@ -263,6 +265,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializdedAddressData = ""
         (application as MyApplication).createOrderSerializdedProfile = ""
         (application as MyApplication).createOrderSerializedService = ""
+        (application as MyApplication).activeSessionPickupSlots = ""
     }
 
     override fun onBackPressed() {
@@ -292,6 +295,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializdedAddressData = ""
         (application as MyApplication).createOrderSerializdedProfile = ""
         (application as MyApplication).createOrderSerializedService = ""
+        (application as MyApplication).activeSessionPickupSlots = ""
 
     }
 

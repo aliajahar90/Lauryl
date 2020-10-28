@@ -164,6 +164,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         });
         paymentViewModel.getPaymentSuccess().observe(this, paymentSuccess -> {
             hideLoading();
+            showLoading();
             createMyOrder(paymentSuccess);
         });
         paymentViewModel.getPaymentError().observe(this, paymentError -> {
@@ -177,9 +178,18 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             HomeNavigationController.getInstance(getActivity()).addPaymentErrorFragment(mGson.toJson(paymentBaseShareData));
         });
         paymentViewModel.getCreateOrderSuccessEvent().observe(this, it -> {
+            hideLoading();
             HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment(new Gson().toJson(paymentBaseShareData));
         });
         paymentViewModel.getCreateOrderFailedEvent().observe(this, it -> {
+            hideLoading();
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.lauryl))
+                    .setMessage(R.string.order_creation_error_after_payment)
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
             //need to handle if payment success but create order fails
         });
     }
@@ -676,6 +686,14 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         GetProfileResponse getProfileResponse = mGson.fromJson(myApplication.getCreateOrderSerializdedProfile(), GetProfileResponse.class);
         AddressModel addressModel = mGson.fromJson(myApplication.getCreateOrderSerializdedAddressData(), AddressModel.class);
         List<TopServicesDataItem> topServicesDataItemList = mGson.fromJson(myApplication.getCreateOrderSerializedService(),  new TypeToken<List<TopServicesDataItem>>(){}.getType());
+        JsonObject pickupSlotJson = mGson.fromJson(myApplication.getActiveSessionPickupSlots(), JsonObject.class);
+        String selectedDate="";
+        String selectedTime="";
+        if(pickupSlotJson!=null){
+            selectedDate=pickupSlotJson.get(AllConstants.Orders.pickupDate).getAsString();
+            selectedTime=pickupSlotJson.get(AllConstants.Orders.pickupTime).getAsString();
+        }
+
         List<String> localServiceList = new ArrayList<>();
         for (TopServicesDataItem item : topServicesDataItemList) {
             localServiceList.add(item.getVSku());
@@ -684,7 +702,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         //keeping static as of now
         details.setOrderNumber(currentDateTimeInMilis);
         details.setOrderTotal("100");
-        details.setVAccountId("1");
+        details.setVAccountId(AllConstants.Orders.vAccountId);
         details.setMarketPlaceName(AllConstants.Orders.MARKET_PLACE_NAME);
         details.setOrderDateTime(currentDateTimeInMilis);
         details.setPaymentDateTime(getCurrentDateTime());
@@ -716,6 +734,11 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
         details.setOrderStage(AllConstants.Orders.OrderStage.Awaiting_Pickup);
         details.setEmailId(getProfileResponse.getProfileData().getEmail());
+        details.setPickupDate(selectedDate);
+        details.setPickupSlot(selectedTime);
+        details.setLatitude(addressModel!=null?addressModel.getLatitude():"");
+        details.setLongitude(addressModel!=null?addressModel.getLongitude():"");
+        details.setRazorPayOrderId(paymentSuccess.getRazorOrderId());
         createOrderData.setDetails(details);
         capturePaymentSuccessRequiredData(paymentSuccess,createOrderData);
         paymentViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), createOrderData);

@@ -275,6 +275,7 @@ public class PaymentRepository extends CreateOrderRepository {
                                         PaymentBaseShareData.PaymentSuccess paymentSuccess = new PaymentBaseShareData.PaymentSuccess();
                                         paymentSuccess.setPaymentTransactionId(razorpayPaymentId);
                                         paymentSuccess.setPaymentData(paymentData);
+                                        paymentSuccess.setRazorOrderId(result instanceof Order ? ((Order) result).get("id") : "");
                                         paymentSuccessSingleLiveEvent.setValue(paymentSuccess);
                                       //  verifyPostPaymentSignature(result instanceof Order ? ((Order) result).get("id"):"",paymentData,"V1bFCk7Jurwyjm74cCO8KHHP",razorpayPaymentId);
                                     }

@@ -40,7 +40,10 @@ public class AllConstants {
         public static final String initTabSelection = "initTabSelection";
         public static final String ORDER_ITEM_ERROR_EMPTY = "No Order item found";
         public static final String ORDER_ITEM_ERROR_API = "Error fetching order item";
-        public static final String MARKET_PLACE_NAME = "Lauryl";
+        public static final String MARKET_PLACE_NAME = "Lauryl-Android";
+        public static String vAccountId="3";
+        public static String pickupDate="pickupDate";
+        public static String pickupTime="pickupTime";
 
         public class OrderStage{
             public static final String Awaiting_Pickup = "Awaiting Pickup";
