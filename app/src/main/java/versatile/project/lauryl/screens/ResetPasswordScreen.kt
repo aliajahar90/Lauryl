@@ -30,6 +30,10 @@ class ResetPasswordScreen : AppCompatActivity() {
 
         resetPswrdViewModel = ViewModelProvider(this).get(ResetPasswordViewModel::class.java)
 
+        bckBtn.setOnClickListener{
+            finish()
+        }
+
         sendBtn.setOnClickListener {
 
             val newPswrdTxt = newPswrdEdt.text.toString()

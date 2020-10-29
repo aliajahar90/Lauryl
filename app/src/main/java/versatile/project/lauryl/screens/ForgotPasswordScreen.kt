@@ -10,6 +10,9 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_forgot_password_screen.*
+import kotlinx.android.synthetic.main.activity_forgot_password_screen.bckBtn
+import kotlinx.android.synthetic.main.activity_forgot_password_screen.sendBtn
+import kotlinx.android.synthetic.main.activity_reset_password_screen.*
 import versatile.project.lauryl.R
 import versatile.project.lauryl.base.BaseActivity
 import versatile.project.lauryl.utils.Constants
@@ -27,6 +30,9 @@ class ForgotPasswordScreen : BaseActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         forgotPswrdViewModel = ViewModelProvider(this).get(ForgotPasswordViewModel::class.java)
+        bckBtn.setOnClickListener{
+            finish()
+        }
         sendBtn.setOnClickListener {
 
             val mblNumberTxt = mblNumberEdt.text.toString()
