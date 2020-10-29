@@ -73,6 +73,8 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     CnfPickupTimeAdapter cnfPickupTimeAdapter = null;
     EndlessRecyclerViewScrollListener scrollListener;
     String selectedTime = null;
+    String selectedDate = null;
+    private Gson mGson;
 
     public static CnfSchedulePckUpFragment newInstance() {
         CnfSchedulePckUpFragment cnfSchedulePckUpFragment = new CnfSchedulePckUpFragment();
@@ -93,6 +95,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         cnfSchdulePckupFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.cnf_schdule_pckup_fragment, container, false);
+        mGson=new Gson();
         resetState();
         loadDateTimeFromApi();
         if (adapter == null) {
@@ -226,6 +229,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
 
     @Override
     public void onDateClicked(String date) {
+        selectedDate=date;
         List<String> uniqueTimes = new ArrayList<>();
         List<String> timeSlotList = cnfSchedulePickupViewModel.getSlotForSelectedDate(date);
         Set<String> uniqueTimeSet = new LinkedHashSet<>(timeSlotList);
@@ -261,6 +265,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
 
     void resetState() {
         selectedTime = null;
+        selectedDate=null;
         adapter = null;
         CURRENT_PAGE = 1;
         isLastPage = false;
@@ -272,14 +277,19 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     }
 
     void createOrderOnHoldOrder() {
+        MyApplication myApplication=(MyApplication) getActivity().getApplicationContext();
         CreateOrderData.Details details = new CreateOrderData.Details();
         String currentDateTimeInMilis=getCurrentDateTime();
         JsonObject jsonObject=new JsonObject();
         jsonObject.addProperty("orderNumber",currentDateTimeInMilis);
-        ((MyApplication) getActivity().getApplicationContext()).setActiveSessionOrderNumber(new Gson().toJson(jsonObject));
-        GetProfileResponse getProfileResponse = new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(), GetProfileResponse.class);
-        AddressModel addressModel = new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile(), AddressModel.class);
-        List<TopServicesDataItem> topServicesDataItemList=new Gson().fromJson(((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService(), new TypeToken<List<TopServicesDataItem>>(){}.getType());
+        myApplication.setActiveSessionOrderNumber(mGson.toJson(jsonObject));
+        GetProfileResponse getProfileResponse = mGson.fromJson(myApplication.getCreateOrderSerializdedProfile(), GetProfileResponse.class);
+        AddressModel addressModel = mGson.fromJson(myApplication.getCreateOrderSerializdedAddressData(), AddressModel.class);
+        List<TopServicesDataItem> topServicesDataItemList=mGson.fromJson(myApplication.getCreateOrderSerializedService(), new TypeToken<List<TopServicesDataItem>>(){}.getType());
+        JsonObject pickupTimingJson=new JsonObject();
+        pickupTimingJson.addProperty(AllConstants.Orders.pickupDate,selectedDate);
+        pickupTimingJson.addProperty(AllConstants.Orders.pickupTime,selectedTime);
+        myApplication.setActiveSessionPickupSlots(mGson.toJson(pickupTimingJson));
         List<String> localServiceList=new ArrayList<>();
         if(topServicesDataItemList!=null) {
             for (TopServicesDataItem item : topServicesDataItemList) {
@@ -290,7 +300,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         //keeping static as of now
         details.setOrderNumber(currentDateTimeInMilis);
         details.setOrderTotal("100");
-        details.setVAccountId("1");
+        details.setVAccountId(AllConstants.Orders.vAccountId);
         details.setMarketPlaceName(AllConstants.Orders.MARKET_PLACE_NAME);
         details.setOrderDateTime(currentDateTimeInMilis);
         details.setPaymentDateTime(getCurrentDateTime());
@@ -323,6 +333,10 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
         details.setOrderStage("On Hold");
         details.setEmailId(getProfileResponse.getProfileData().getEmail());
+        details.setPickupDate(selectedDate);
+        details.setPickupSlot(selectedTime);
+        details.setLatitude(addressModel!=null?addressModel.getLatitude():"");
+        details.setLongitude(addressModel!=null?addressModel.getLongitude():"");
         createOrderData.setDetails(details);
         cnfSchedulePickupViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), createOrderData);
     }

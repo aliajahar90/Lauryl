@@ -124,6 +124,61 @@ public class CreateOrderData implements Serializable {
         @SerializedName("serviceList")
         @Expose
         private List<String> serviceList = null;
+        @SerializedName("razorPayOrderId")
+        @Expose
+        private String razorPayOrderId;
+        @SerializedName("latitude")
+        @Expose
+        private String latitude;
+        @SerializedName("longitude")
+        @Expose
+        private String longitude;
+        @SerializedName("pickupDate")
+        @Expose
+        private String pickupDate;
+        @SerializedName("pickupSlot")
+        @Expose
+        private String pickupSlot;
+
+        public String getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(String latitude) {
+            this.latitude = latitude;
+        }
+
+        public String getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(String longitude) {
+            this.longitude = longitude;
+        }
+
+        public String getPickupDate() {
+            return pickupDate;
+        }
+
+        public void setPickupDate(String pickupDate) {
+            this.pickupDate = pickupDate;
+        }
+
+        public String getPickupSlot() {
+            return pickupSlot;
+        }
+
+        public void setPickupSlot(String pickupSlot) {
+            this.pickupSlot = pickupSlot;
+        }
+
+        public String getRazorPayOrderId() {
+            return razorPayOrderId;
+        }
+
+        public void setRazorPayOrderId(String razorPayOrderId) {
+            this.razorPayOrderId = razorPayOrderId;
+        }
 
         public String getOrderNumber() {
             return orderNumber;
