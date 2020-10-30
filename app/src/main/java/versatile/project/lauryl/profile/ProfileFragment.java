@@ -99,8 +99,8 @@ public class ProfileFragment extends BaseBinding<ProfileViewModel, FragmentProfi
                     .setTitle(getString(R.string.lauryl))
                     .setMessage(R.string.logout_message)
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getUSER_AUTH_TOKEN(), "");
-                        Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getAUTH_TOKEN(), "");
+                        Globals.Companion.saveStringToPreferences(getActivity(), Constants.USER_AUTH_TOKEN, "");
+                        Globals.Companion.saveStringToPreferences(getActivity(), Constants.AUTH_TOKEN, "");
                         Globals.Companion.saveStringToPreferences(getActivity(), Constants.Companion.getMOBILE_NUMBER(), "");
                         MyApplication myApplication = (MyApplication) getActivity().getApplicationContext();
                         myApplication.setAccessToken("");

@@ -98,7 +98,7 @@ class SchedulePickUpFragment : Fragment(), SchedulePickUpAdapterJava.OnItemClick
                 if (myApplication != null) {
                     myApplication.createOrderSerializedService=Gson().toJson(selectedServices)
                 }
-                (activity as HomeScreen).displayMapLocationFragment(Constants.ADD_LOCATION_ACTION)
+                (activity as HomeScreen).displayMapLocationFragment(Constants.SELECT_ADDRESS_ACTION,Constants.CNF)
             } else {
                 Globals.showToastMsg(activity!!.applicationContext, getString(R.string.select_service_msg))
             }
@@ -122,7 +122,7 @@ class SchedulePickUpFragment : Fragment(), SchedulePickUpAdapterJava.OnItemClick
         inputJson.addProperty("sort", "DESC")
         inputJson.addProperty("sortBy", "createdAt")
         //inputJson.addProperty("search","[]")
-        val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
+        val myApplication: MyApplication = (activity?.applicationContext as MyApplication)
         if (myApplication != null) {
             schedulePickUpViewModel.getTopServices(myApplication.accessToken, inputJson)
         }

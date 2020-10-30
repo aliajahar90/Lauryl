@@ -33,11 +33,14 @@ class ManageAddressFragment : Fragment(), EditDeleteListener {
         manageAddressViewModel = ViewModelProvider(this)[ManageAddressViewModel::class.java]
         myApplication = (activity?.applicationContext as MyApplication)
         observeDataSources()
+    }
+
+    override fun onResume() {
+        super.onResume()
         manageAddressViewModel.getAddress(
             access = myApplication.userAccessToken, number = myApplication.mobileNumber
         )
     }
-
     private fun observeDataSources() {
         manageAddressViewModel.getAddressesToObserve().observe(this, Observer {
             addressList = it
@@ -59,11 +62,21 @@ class ManageAddressFragment : Fragment(), EditDeleteListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        add_address_button.setOnClickListener {
+            (activity as HomeScreen).displayMapLocationFragment(
+                action = Constants.ADD_LOCATION_ACTION,
+                origin = Constants.MANAGE_ADDRESS
+            )
+        }
     }
 
     override fun editClicked(position: Int) {
         val activity = activity as HomeScreen
-        activity.displayChangeAddressFragment(addressList[position],action = Constants.EDIT_ADDRESS_ACTION)
+        activity.displayChangeAddressFragment(
+            addressList[position],
+            action = Constants.EDIT_ADDRESS_ACTION,
+            origin = Constants.MANAGE_ADDRESS
+        )
 
     }
 
@@ -72,7 +85,10 @@ class ManageAddressFragment : Fragment(), EditDeleteListener {
         manageAddressViewModel.deleteObserver.observe(this, Observer {
             if (it.status) {
                 shout("Address deleted")
-                manageAddressViewModel.getAddress(access = myApplication.userAccessToken, number = myApplication.mobileNumber)
+                manageAddressViewModel.getAddress(
+                    access = myApplication.userAccessToken,
+                    number = myApplication.mobileNumber
+                )
             }
         })
     }

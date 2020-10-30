@@ -14,16 +14,28 @@ class Constants {
         val API_BASIC_AUTH_USER_NAME_VERSATILE = "versatilecommerce"
         val API_BASIC_AUTH_PASSWORD_VERSATILE = "versatilecommerce"
         val LAURYL_PREFERENCES = "LaurylPrefs"
-        val IS_LOGIN = "IsLogin"
-        val IS_PREFS_EXISTED = "IsPrefsExisted"
-        val AUTH_TOKEN = "Auth_Token"
-        val USER_AUTH_TOKEN = "User_Auth_Token"
+        const val IS_LOGIN = "IsLogin"
+        const val IS_PREFS_EXISTED = "IsPrefsExisted"
+        const val AUTH_TOKEN = "Auth_Token"
+        const val USER_AUTH_TOKEN = "User_Auth_Token"
         var CURRENT_AUTH_TOKEN = ""
-        val CHANGE_LOCATION_ACTION = "CHANGE_LOCATION_ACTION"
-        val ADD_LOCATION_ACTION = "ADD_LOCATION_ACTION"
-        val EDIT_ADDRESS_ACTION = "EDIT_ADDRESS_ACTION"
-        val ACTION = "ACTION"
-    }
+
+        const val CHANGE_LOCATION_ACTION = "CHANGE_LOCATION_ACTION"
+        const val ADD_LOCATION_ACTION = "ADD_LOCATION_ACTION"
+        const val EDIT_ADDRESS_ACTION = "EDIT_ADDRESS_ACTION"
+        const val SELECT_ADDRESS_ACTION = "SELECT_ADDRESS_ACTION"
+
+        const val ACTION = "ACTION"
+        const val ORIGIN = "ORIGIN"
+
+
+        const val PAYMENT_FRAG = "PAYMENT_FRAG"
+        const val SPF = "SPF"
+        const val CNF = "CNF"
+        const val MANAGE_ADDRESS = "MANAGE_ADDRESS"
+
+        const val NEGATIVE_ACTION = "NEGATIVE_ACTION"
+     }
 
 
 }

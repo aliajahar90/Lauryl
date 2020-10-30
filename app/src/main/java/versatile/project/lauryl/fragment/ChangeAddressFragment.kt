@@ -1,5 +1,7 @@
 package versatile.project.lauryl.fragment
 
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,12 +27,14 @@ import versatile.project.lauryl.screens.HomeScreen
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
 import versatile.project.lauryl.view.model.ChangeAddressViewModel
+import java.io.IOException
 
 
 class ChangeAddressFragment : Fragment() {
 
     lateinit var myApplication: MyApplication
     lateinit var changeAddressViewModel: ChangeAddressViewModel
+    lateinit var cityFromMap: String
     lateinit var city: CityModel
     lateinit var state: CityModel
     lateinit var cityList: List<CityModel>
@@ -38,9 +42,11 @@ class ChangeAddressFragment : Fragment() {
     var addressType: String = "Home"
     var addreList = ArrayList<AddressModel>()
     var mAddress = AddressModel()
+
     //var pinCodes = ArrayList<String>()
     var supportedCities = ArrayList<String>()
     lateinit var action: String
+    lateinit var origin: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +58,7 @@ class ChangeAddressFragment : Fragment() {
         )
         changeAddressViewModel.getCities(myApplication.userAccessToken)
         action = arguments?.getString(Constants.ACTION) as String
+        origin = arguments?.getString(Constants.ORIGIN) as String
 
     }
 
@@ -67,58 +74,24 @@ class ChangeAddressFragment : Fragment() {
         val flatNo = flat_no.text.toString()
         val streetName = street_name.text.toString()
         val landMark = landmark.text.toString()
-        val pin_code = pincode.text.toString()
-        if (flatNo != null && flatNo.isNotEmpty()) {
-            if (streetName != null && streetName.isNotEmpty()) {
-                if (landMark != null && landMark.isNotEmpty()) {
-                    if (pin_code != null && pin_code.isNotEmpty()) {
-                        if (pin_code != null && pin_code.length == 6) {
+        val pinCode = pincode.text.toString()
+        if (flatNo.isNotEmpty()) {
+            if (streetName.isNotEmpty()) {
+                if (landMark.isNotEmpty()) {
+                    if (pinCode.isNotEmpty()) {
+                        if (pinCode.length == 6) {
                             if (validateServiceAvailability(city = city.city)) {
-
                                 Timber.e("validation success")
-                                val inputJson = JsonObject()
-                                inputJson.addProperty("phoneNumber", number)
-                                val addressObj = JsonObject()
-                                addressObj.addProperty("addresType", addressType)
-                                addressObj.addProperty("address1", "${addressType}1")
-                                addressObj.addProperty("streetName", streetName)
-                                addressObj.addProperty("landmark", landMark)
-                                addressObj.addProperty("city", city.city)
-                                addressObj.addProperty("state", state.state)
-                                addressObj.addProperty("country", state.country)
-                                addressObj.addProperty("pinCode", pin_code)
-                                addressModel.latitude?.let {
-                                    addressObj.addProperty("latitude", it)
-                                }
-                                addressModel.longitude?.let {
-                                    addressObj.addProperty("longitude", it)
-                                }
                                 mAddress.landmark = landMark
                                 mAddress.streetName = streetName
                                 mAddress.city = city.city
                                 mAddress.state = state.state
-                                mAddress.pinCode = pin_code
+                                mAddress.pinCode = pinCode
                                 mAddress.country = state.country
                                 mAddress.addresType = addressType
-                                mAddress.latitude = addressModel.latitude
-                                mAddress.longitude = addressModel.longitude
-
-                                if (isEditing) {
-                                    //updating address
-                                    addressObj.addProperty("id", addressModel.id)
-                                } else {
-                                    if (isAddressTypeUsed(addressType) != "-") {
-                                        //overriding previos address
-                                        addressObj.addProperty("id", isAddressTypeUsed(addressType))
-                                    }
-                                }
-                                val addresList = JsonArray()
-                                addresList.add(addressObj)
-                                inputJson.add("addressList", addresList)
-                                changeAddressViewModel.saveAddress(
-                                    myApplication.userAccessToken,
-                                    inputJson
-                                )
+                                mAddress.latitude = addressModel?.latitude
+                                mAddress.longitude = addressModel?.longitude
+                                fetchLatLongFromAddress(mAddress)
                             } else {
                                 Globals.showPopoUpDialog(
                                     context!!,
@@ -174,27 +147,27 @@ class ChangeAddressFragment : Fragment() {
             if (it.status) {
                 emptyFields()
                 //continue to order use mAddress
-                shout("Address saved..")
-                if (action == Constants.CHANGE_LOCATION_ACTION) {
-                    mAddress.city?.let { it1 ->
-                       // (activity as HomeScreen).setLocation(it1)
-                        (activity as HomeScreen).onBackPressed()
-                        (activity as HomeScreen).onBackPressed()
-                    }
+                if (isEditing) {
+                    shout("Address Updated..")
+                    activity?.onBackPressed()
+                } else
+                    shout("Address saved..")
+                (activity as HomeScreen).setLocation(mAddress.city.toString())
 
-                } else {
-                    val myApplication: MyApplication =
-                        (activity!!.applicationContext as MyApplication)
-                    myApplication.createOrderSerializdedAddressData = Gson().toJson(mAddress)
-                    (activity as HomeScreen).displayCnfPckUpFragment()
-                    if (isEditing) {
-                        shout("Address Updated")
-                        activity?.onBackPressed()
+                when {
+                    origin == Constants.CNF -> {
+                        val myApplication: MyApplication =
+                            (activity!!.applicationContext as MyApplication)
+                        myApplication.createOrderSerializdedAddressData = Gson().toJson(mAddress)
+                        (activity as HomeScreen).displayCnfPckUpFragment()
                     }
-                    changeAddressViewModel.getAddress(
-                        access = myApplication.userAccessToken,
-                        number = myApplication.mobileNumber
-                    )
+                    origin == Constants.PAYMENT_FRAG -> {
+                        (activity as HomeScreen).displayPaymentFragment()
+                    }
+                    action == Constants.ADD_LOCATION_ACTION -> {
+                        (activity as HomeScreen).onBackPressed()
+                        (activity as HomeScreen).onBackPressed()
+                    }
                 }
             } else {
                 Globals.showPopoUpDialog(
@@ -207,7 +180,7 @@ class ChangeAddressFragment : Fragment() {
         changeAddressViewModel.getCitiesToObserve().observe(this, Observer { list ->
             cityList = list
             for (city in list) {
-               supportedCities.add(city.city.toLowerCase())
+                supportedCities.add(city.city.toLowerCase())
             }
             val adapter: ArrayAdapter<String> = ArrayAdapter(
                 this.context!!,
@@ -281,7 +254,7 @@ class ChangeAddressFragment : Fragment() {
                         mAddress = addreList[position]
                         emptyFields()
                         shouldValidte = false
-                        shout("Previous address selected so continue to order")
+                        shout("Previous address selected, continue to order")
                     }
                     mSpinnerInitialized = true
                 }
@@ -290,7 +263,7 @@ class ChangeAddressFragment : Fragment() {
 
     }
 
-    var addressModel: AddressModel = AddressModel()
+    var addressModel: AddressModel? = null
     private var mSpinnerInitialized = false
     private var shouldValidte = true
     private var isEditing = false
@@ -300,7 +273,11 @@ class ChangeAddressFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.change_address_fragment, container, false)
-        addressModel = arguments?.getSerializable("address") as AddressModel
+        addressModel = try {
+            arguments?.getSerializable("address") as AddressModel
+        } catch (e: TypeCastException) {
+            AddressModel()
+        }
         return rootView
     }
 
@@ -310,24 +287,29 @@ class ChangeAddressFragment : Fragment() {
             if (shouldValidte)
                 validateFields()
             else {
+                (activity as HomeScreen).setLocation(mAddress.city.toString())
                 val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
                 myApplication.createOrderSerializdedAddressData = Gson().toJson(mAddress)
-                (activity as HomeScreen).displayCnfPckUpFragment()
+                if (origin == Constants.PAYMENT_FRAG)
+                    (activity as HomeScreen).displayPaymentFragment()
+                else
+                    (activity as HomeScreen).displayCnfPckUpFragment()
                 //address selected so continue to order user mAddress as address
             }
         }
-        if (addressModel.id != null) {
+        if (addressModel?.id != null) {
             isEditing = true
             continue_location_btn.text = "Update address"
             address_spinner.visibility = View.GONE
+            addressType = addressModel?.addresType.toString()
+            Timber.e("AddressType $addressType")
         }
-        if (action == Constants.CHANGE_LOCATION_ACTION) {
+        if (action == Constants.EDIT_ADDRESS_ACTION || action == Constants.ADD_LOCATION_ACTION) {
             continue_location_btn.text = "Confirm address"
             address_spinner.visibility = View.GONE
         }
 
-        addressType = addressModel.addresType.toString()
-        when (addressModel.addresType.toString()) {
+        when (addressModel?.addresType.toString()) {
             "Home" -> {
                 address_type_radio.check(R.id.home)
             }
@@ -342,13 +324,13 @@ class ChangeAddressFragment : Fragment() {
                 address_type_radio.check(R.id.home)
             }
         }
-        addressModel.pinCode.let {
+        addressModel?.pinCode.let {
             pincode.setText(it)
         }
-        addressModel.streetName.let {
+        addressModel?.streetName.let {
             street_name.setText(it)
         }
-        addressModel.landmark.let {
+        addressModel?.landmark.let {
             landmark.setText(it)
         }
 
@@ -358,6 +340,8 @@ class ChangeAddressFragment : Fragment() {
             run {
                 addressType =
                     (radioGroup?.findViewById(radioGroup.checkedRadioButtonId) as RadioButton).text as String
+                Timber.e("AddressType $addressType")
+
             }
         }
     }
@@ -367,13 +351,113 @@ class ChangeAddressFragment : Fragment() {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-//    private fun validateServiceAvailability(pinCode: String): Boolean {
+    //    private fun validateServiceAvailability(pinCode: String): Boolean {
 //        return pinCodes.contains(pinCode)
 //
 //    }
     private fun validateServiceAvailability(city: String): Boolean {
         return supportedCities.contains(city.toLowerCase())
-
     }
 
+
+    private fun fetchLatLongFromAddress(mAddress: AddressModel) {
+        if (myApplication.changeButtonClicked) {
+            val coder = Geocoder(activity)
+            try {
+                val addresses: ArrayList<Address> =
+                    coder.getFromLocationName(
+                        "${mAddress.streetName}, ${mAddress.landmark}, ${mAddress.city}," +
+                                "${mAddress.state}, ${mAddress.country}, ${mAddress.pinCode}", 5
+                    ) as ArrayList<Address>
+                val add = addresses[0]
+                mAddress.latitude = add.latitude.toString()
+                mAddress.longitude = add.longitude.toString()
+                makeApiCall(mAddress)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        } else {
+            makeApiCall(mAddress)
+        }
+    }
+
+    private fun makeApiCall(mAddress: AddressModel) {
+        val inputJson = JsonObject()
+        inputJson.addProperty("phoneNumber", number)
+        val addressObj = JsonObject()
+        addressObj.addProperty("addresType", mAddress.addresType)
+        addressObj.addProperty("address1", "${addressType}1")
+        addressObj.addProperty("streetName", mAddress.streetName)
+        addressObj.addProperty("landmark", mAddress.landmark)
+        addressObj.addProperty("city", city.city)
+        addressObj.addProperty("state", state.state)
+        addressObj.addProperty("country", state.country)
+        addressObj.addProperty("pinCode", mAddress.pinCode)
+        mAddress.latitude?.let {
+            addressObj.addProperty("latitude", it)
+        }
+        mAddress.longitude?.let {
+            addressObj.addProperty("longitude", it)
+        }
+
+        if (isEditing) {
+//updating address
+            addressObj.addProperty("id", addressModel?.id)
+        } else {
+            if (isAddressTypeUsed(addressType) != "-") {
+//overriding previous address
+                addressObj.addProperty("id", isAddressTypeUsed(addressType))
+            }
+        }
+        val addresList = JsonArray()
+        addresList.add(addressObj)
+        inputJson.add("addressList", addresList)
+
+        Timber.e("AddressType $addressType")
+        changeAddressViewModel.saveAddress(myApplication.userAccessToken, jsonObject = inputJson)
+    }
 }
+
+
+/**
+
+val inputJson = JsonObject()
+inputJson.addProperty("phoneNumber", number)
+val addressObj = JsonObject()
+addressObj.addProperty("addresType", addressType)
+addressObj.addProperty("address1", "${addressType}1")
+addressObj.addProperty("streetName", streetName)
+addressObj.addProperty("landmark", landMark)
+addressObj.addProperty("city", city.city)
+addressObj.addProperty("state", state.state)
+addressObj.addProperty("country", state.country)
+addressObj.addProperty("pinCode", pin_code)
+addressModel?.latitude?.let {
+addressObj.addProperty("latitude", it)
+}
+addressModel?.longitude?.let {
+addressObj.addProperty("longitude", it)
+}
+mAddress.landmark = landMark
+mAddress.streetName = streetName
+mAddress.city = city.city
+mAddress.state = state.state
+mAddress.pinCode = pin_code
+mAddress.country = state.country
+mAddress.addresType = addressType
+mAddress.latitude = addressModel?.latitude
+mAddress.longitude = addressModel?.longitude
+
+if (isEditing) {
+//updating address
+addressObj.addProperty("id", addressModel?.id)
+} else {
+if (isAddressTypeUsed(addressType) != "-") {
+//overriding previos address
+addressObj.addProperty("id", isAddressTypeUsed(addressType))
+}
+}
+val addresList = JsonArray()
+addresList.add(addressObj)
+inputJson.add("addressList", addresList)
+fetchLatLongFromAddress(mAddress,inputJson)         * */

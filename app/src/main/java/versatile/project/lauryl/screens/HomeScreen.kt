@@ -24,11 +24,13 @@ import versatile.project.lauryl.fragment.*
 import versatile.project.lauryl.home.HomeFragment
 import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.orders.history.OrderHistoryFragment
+import versatile.project.lauryl.payment.PaymentFragment
 import versatile.project.lauryl.pickup.CnfSchedulePckUpFragment
 import versatile.project.lauryl.profile.data.GetProfileResponse
 import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
+import java.sql.Time
 import java.util.*
 
 class HomeScreen : BaseActivity(), LocationListener {
@@ -56,7 +58,28 @@ class HomeScreen : BaseActivity(), LocationListener {
 
         }
         changeLocation.setOnClickListener {
-            displayMapLocationFragment(Constants.CHANGE_LOCATION_ACTION)
+            //get current visible fragment
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragContainer)
+            if (currentFragment is SchedulePickUpFragment && myApplication.selectedServiceArray.size() == 0) {
+                showLocationRestrictionDialog()
+            } else if (currentFragment is SchedulePickUpFragment && myApplication.selectedServiceArray.size() != 0)
+                displayMapLocationFragment(
+                    action = Constants.SELECT_ADDRESS_ACTION,
+                    origin = Constants.SPF
+                )
+            else if (currentFragment is CnfSchedulePckUpFragment)
+                displayMapLocationFragment(
+                    action = Constants.SELECT_ADDRESS_ACTION,
+                    origin = Constants.CNF
+                )
+            else if (currentFragment is PaymentFragment)
+                displayMapLocationFragment(
+                    action = Constants.SELECT_ADDRESS_ACTION,
+                    origin = Constants.PAYMENT_FRAG
+                )
+            else
+                showLocationRestrictionDialog()
+
         }
         fetchLocation()
     }
@@ -96,18 +119,13 @@ class HomeScreen : BaseActivity(), LocationListener {
 
         }
 
-    private fun displayProfileFragment() {
-        homeNavigationController.addProfileFragment();
-    }
 
-    private fun displayPaymentFragment() {
-        homeNavigationController.addPaymentFragment()
-    }
-
-    fun displaySPFragment() {
-        val fragment = SchedulePickUpFragment()
-        loadMyFragment(fragment)
-        selectShedulePckUpDashBoard()
+    fun selectCnfPckUp() {
+        homeNameMdlVwTxt.text = getString(R.string.schedule_pckup_txt)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+        botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
     }
 
     fun selectShedulePckUpDashBoard() {
@@ -128,60 +146,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         // botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
     }
 
-    fun displayMapLocationFragment(action: String) {
-        val bundle = Bundle()
-        bundle.putString(Constants.ACTION, action)
-        val fragment = MapLocationFragment()
-        fragment.arguments = bundle
-        loadMyFragment(fragment)
-        selectMapLocationPickUpDashBoard()
-        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
-        //selectMyOrdersDashboard()
-    }
-
-    private fun selectChangeAddressDashBoard() {
-        homeNameMdlVwTxt.text = getString(R.string.change_address)
-        homeNameMdlVwTxt.visibility = View.VISIBLE
-        homeNameTxt.visibility = View.GONE
-        filterTxt.visibility = View.GONE
-        bckBtn.visibility = View.VISIBLE
-    }
-
-    fun displayChangeAddressFragment(addressModel: AddressModel, action: String) {
-        val bundle = Bundle()
-        bundle.putString(Constants.ACTION, action)
-        bundle.putSerializable("address", addressModel)
-        val fragment = ChangeAddressFragment()
-        fragment.arguments = bundle
-        loadMyFragment(fragment)
-        selectChangeAddressDashBoard()
-    }
-
-    private fun selectManageAddressDashBoard() {
-        homeNameMdlVwTxt.text = getString(R.string.manage_address)
-        homeNameMdlVwTxt.visibility = View.VISIBLE
-        homeNameTxt.visibility = View.GONE
-        filterTxt.visibility = View.GONE
-        bckBtn.visibility = View.VISIBLE
-    }
-
-    fun displayManageAddressFragment() {
-        val fragment = ManageAddressFragment()
-        loadMyFragment(fragment)
-        selectManageAddressDashBoard()
-        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
-        //selectMyOrdersDashboard()
-    }
-
-
-    fun displayMyOrdersFragment(initPosition: Int) {
-        myApplication.selectedOrderTab = initPosition
-        val myOrdersFragment = MyOrdersFragment()
-        loadMyFragment(myOrdersFragment)
-        botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
-        //selectMyOrdersDashboard()
-    }
-
     fun selectMyOrdersDashboard() {
         homeNameMdlVwTxt.text = getString(R.string.my_orders_txt)
         homeNameMdlVwTxt.visibility = View.VISIBLE
@@ -195,13 +159,20 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializedService = ""
     }
 
-    private fun displayHomeFragment() {
-        val fm: FragmentManager = supportFragmentManager
-        for (i in 0 until fm.backStackEntryCount) {
-            fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        }
-        val homeFragment = HomeFragment()
-        homeNavigationController.addHomeFragment(homeFragment)
+    private fun selectChangeAddressDashBoard() {
+        homeNameMdlVwTxt.text = getString(R.string.change_address)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+    }
+
+    private fun selectManageAddressDashBoard() {
+        homeNameMdlVwTxt.text = getString(R.string.manage_address)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
     }
 
     fun selectHomeDashboard() {
@@ -215,67 +186,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializdedAddressData = ""
         (application as MyApplication).createOrderSerializdedProfile = ""
         (application as MyApplication).createOrderSerializedService = ""
-    }
-
-    private fun loadMyFragment(fragment: Fragment) {
-        // load fragment
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragContainer, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-
-    fun displayCnfPckUpFragment() {
-        selectCnfPckUp()
-        val fragment = CnfSchedulePckUpFragment.newInstance()
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragContainer, fragment)
-        transaction.addToBackStack(fragment::class.java.name)
-        transaction.commit()
-    }
-
-    fun selectCnfPckUp() {
-        homeNameMdlVwTxt.text = getString(R.string.schedule_pckup_txt)
-        homeNameMdlVwTxt.visibility = View.VISIBLE
-        homeNameTxt.visibility = View.GONE
-        bckBtn.visibility = View.VISIBLE
-        botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
-    }
-
-    fun displayOrderHstryFragment(jsonString: String) {
-        val bundle = Bundle()
-        bundle.putString(AllConstants.Orders.orderData, jsonString)
-        val orderHistoryFragment = OrderHistoryFragment();
-        orderHistoryFragment.arguments = bundle
-        val fragment = orderHistoryFragment
-        loadMyFragment(fragment)
-        selectOrderHistory()
-    }
-
-    fun selectOrderHistory() {
-        homeNameMdlVwTxt.text = getString(R.string.order_histry_txt)
-        homeNameMdlVwTxt.visibility = View.VISIBLE
-        homeNameTxt.visibility = View.GONE
-        bckBtn.visibility = View.VISIBLE
-        botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
-        (application as MyApplication).activeSessionOrderNumber = ""
-        (application as MyApplication).createOrderSerializdedAddressData = ""
-        (application as MyApplication).createOrderSerializdedProfile = ""
-        (application as MyApplication).createOrderSerializedService = ""
-    }
-
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 1) {
-            supportFragmentManager.popBackStack()
-        } else {
-            finish()
-        }
-    }
-
-    fun setLocation(address: String) {
-        Timber.e("Seeting home location to $address")
-        homelocTxt.text = address
     }
 
     fun selectProfile() {
@@ -306,6 +216,135 @@ class HomeScreen : BaseActivity(), LocationListener {
         botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
         bckBtn.visibility = View.VISIBLE;
     }
+
+
+    fun displayMapLocationFragment(action: String, origin: String) {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragContainer)
+        if (currentFragment is MapLocationFragment) {
+            Timber.e("blah blah...")
+        } else {
+            val bundle = Bundle()
+            bundle.putString(Constants.ACTION, action)
+            bundle.putString(Constants.ORIGIN, origin)
+            val fragment = MapLocationFragment()
+            fragment.arguments = bundle
+            loadMyFragment(fragment)
+            selectMapLocationPickUpDashBoard()
+        }
+        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        //selectMyOrdersDashboard()
+    }
+
+    fun displayChangeAddressFragment(addressModel: AddressModel?, action: String, origin: String) {
+        val bundle = Bundle()
+        bundle.putString(Constants.ACTION, action)
+        bundle.putString(Constants.ORIGIN, origin)
+        bundle.putSerializable("address", addressModel)
+        val fragment = ChangeAddressFragment()
+        fragment.arguments = bundle
+        loadMyFragment(fragment)
+        selectChangeAddressDashBoard()
+    }
+
+    fun displayManageAddressFragment() {
+        val fragment = ManageAddressFragment()
+        loadMyFragment(fragment)
+        selectManageAddressDashBoard()
+        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        //selectMyOrdersDashboard()
+    }
+
+
+    fun displayMyOrdersFragment(initPosition: Int) {
+        myApplication.selectedOrderTab = initPosition
+        val myOrdersFragment = MyOrdersFragment()
+        loadMyFragment(myOrdersFragment)
+        botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        //selectMyOrdersDashboard()
+    }
+
+    private fun displayHomeFragment() {
+        val fm: FragmentManager = supportFragmentManager
+        for (i in 0 until fm.backStackEntryCount) {
+            fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+        val homeFragment = HomeFragment()
+        homeNavigationController.addHomeFragment(homeFragment)
+    }
+
+    private fun loadMyFragment(fragment: Fragment) {
+        // load fragment
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragContainer, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+
+    fun displayCnfPckUpFragment() {
+        selectCnfPckUp()
+        val fragment = CnfSchedulePckUpFragment.newInstance()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragContainer, fragment)
+        transaction.addToBackStack(fragment::class.java.name)
+        transaction.commit()
+    }
+
+
+    fun displayOrderHstryFragment(jsonString: String) {
+        val bundle = Bundle()
+        bundle.putString(AllConstants.Orders.orderData, jsonString)
+        val orderHistoryFragment = OrderHistoryFragment()
+        orderHistoryFragment.arguments = bundle
+        loadMyFragment(orderHistoryFragment)
+        selectOrderHistory()
+    }
+
+    fun selectOrderHistory() {
+        homeNameMdlVwTxt.text = getString(R.string.order_histry_txt)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+        botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
+    }
+
+    private fun displayProfileFragment() {
+        homeNavigationController.addProfileFragment();
+    }
+
+     fun displayPaymentFragment() {
+        homeNavigationController.addPaymentFragment()
+    }
+
+    fun displaySPFragment() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragContainer)
+        if (currentFragment is SchedulePickUpFragment) {
+            Timber.e("blah blah...")
+        } else {
+            val fragment = SchedulePickUpFragment()
+            loadMyFragment(fragment)
+            selectShedulePckUpDashBoard()
+        }
+
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 1) {
+            supportFragmentManager.popBackStack()
+        } else {
+            finish()
+        }
+    }
+
+    fun setLocation(address: String) {
+        Timber.e("Seeting home location to $address")
+        homelocTxt.text = address
+    }
+
 
     fun hideBackButton() {
         bckBtn.visibility = View.GONE;
@@ -418,4 +457,33 @@ class HomeScreen : BaseActivity(), LocationListener {
         super.onResume()
         //fetchLocation()
     }
+
+    private fun showLocationRestrictionDialog() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragContainer)
+        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Lauryl")
+        if (currentFragment is SchedulePickUpFragment)
+            builder.setMessage("Do you wish to schedule a service")
+        else
+            builder.setMessage("Do you wish to schedule a service")
+        builder.setPositiveButton(
+            "Yes"
+        ) { _, _ ->
+            if (currentFragment is SchedulePickUpFragment) {
+                Timber.e("Waiting to select service....")
+            } else
+                displaySPFragment()
+            // dialog.dismiss()
+        }
+        builder.setNegativeButton(
+            "No"
+        ) { _, _ ->
+            displayManageAddressFragment()
+        }
+        builder.setCancelable(true)
+        builder.show()
+    }
 }
+
+
+

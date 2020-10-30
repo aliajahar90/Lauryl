@@ -43,6 +43,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
     // var pinCodes = ArrayList<String>()
     var supportedCities = ArrayList<String>()
     lateinit var action: String
+    lateinit var origin: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +53,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
         mapLocationViewModel.getCities(myApplication.userAccessToken)
         (activity as HomeScreen).showLoading()
         action = arguments?.getString(Constants.ACTION) as String
+        origin = arguments?.getString(Constants.ORIGIN) as String
 
     }
 
@@ -90,11 +92,17 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        change_address_button.setOnClickListener {
+            myApplication.changeButtonClicked = true
+            (activity as HomeScreen).displayChangeAddressFragment(null, action =action,origin = origin)
+        }
         confirm_location_btn.setOnClickListener {
            // if (action == Constants.CHANGE_LOCATION_ACTION) {
               //  (activity as HomeScreen).onBackPressed()
          //   } else {
-                (activity as HomeScreen).displayChangeAddressFragment(addressModel,action=action)
+            myApplication.changeButtonClicked = false
+            (activity as HomeScreen).displayChangeAddressFragment(addressModel, action =action,origin = origin)
           //  }
             // if (isServiceable)
 //            else{
@@ -130,6 +138,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
         }
 
         googleMap?.setOnMapClickListener {
+            Timber.e("new marker landed...")
             val markerOptions = MarkerOptions()
             markerOptions.position(it)
             //clearing the map to restrict multiple markers
