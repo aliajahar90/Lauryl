@@ -283,6 +283,8 @@ class ChangeAddressFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as HomeScreen).selectChangeAddressDashBoard()
+
         continue_location_btn.setOnClickListener {
             if (shouldValidte)
                 validateFields()

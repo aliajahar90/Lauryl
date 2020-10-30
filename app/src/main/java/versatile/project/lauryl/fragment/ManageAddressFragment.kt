@@ -62,6 +62,7 @@ class ManageAddressFragment : Fragment(), EditDeleteListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as HomeScreen).selectManageAddressDashBoard()
         add_address_button.setOnClickListener {
             (activity as HomeScreen).displayMapLocationFragment(
                 action = Constants.ADD_LOCATION_ACTION,

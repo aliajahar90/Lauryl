@@ -92,6 +92,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as HomeScreen).selectMapLocationPickUpDashBoard()
 
         change_address_button.setOnClickListener {
             myApplication.changeButtonClicked = true

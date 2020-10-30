@@ -161,7 +161,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializedService = ""
     }
 
-    private fun selectChangeAddressDashBoard() {
+     fun selectChangeAddressDashBoard() {
         homeNameMdlVwTxt.text = getString(R.string.change_address)
         homeNameMdlVwTxt.visibility = View.VISIBLE
         homeNameTxt.visibility = View.GONE
@@ -169,7 +169,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         bckBtn.visibility = View.VISIBLE
     }
 
-    private fun selectManageAddressDashBoard() {
+     fun selectManageAddressDashBoard() {
         homeNameMdlVwTxt.text = getString(R.string.manage_address)
         homeNameMdlVwTxt.visibility = View.VISIBLE
         homeNameTxt.visibility = View.GONE
@@ -231,7 +231,6 @@ class HomeScreen : BaseActivity(), LocationListener {
             val fragment = MapLocationFragment()
             fragment.arguments = bundle
             loadMyFragment(fragment)
-            selectMapLocationPickUpDashBoard()
         }
         // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
         //selectMyOrdersDashboard()
@@ -245,7 +244,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         val fragment = ChangeAddressFragment()
         fragment.arguments = bundle
         loadMyFragment(fragment)
-        selectChangeAddressDashBoard()
     }
 
     fun displayManageAddressFragment() {
