@@ -72,7 +72,9 @@ class HomeScreen : BaseActivity(), LocationListener {
                     action = Constants.SELECT_ADDRESS_ACTION,
                     origin = Constants.CNF
                 )
-            else if (currentFragment is PaymentFragment)
+            else if (currentFragment is PaymentFragment && myApplication.selectedServiceArray.size() == 0)
+                showLocationRestrictionDialog()
+            else if (currentFragment is PaymentFragment && myApplication.selectedServiceArray.size() != 0)
                 displayMapLocationFragment(
                     action = Constants.SELECT_ADDRESS_ACTION,
                     origin = Constants.PAYMENT_FRAG
