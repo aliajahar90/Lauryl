@@ -1,7 +1,6 @@
-package versatile.project.lauryl.pickup;
+package versatile.project.lauryl.orders.reschedule;
 
 import android.app.AlertDialog;
-import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -32,23 +29,23 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import timber.log.Timber;
 import versatile.project.lauryl.R;
 import versatile.project.lauryl.application.MyApplication;
 import versatile.project.lauryl.base.BaseActivity;
 import versatile.project.lauryl.base.BaseBinding;
 import versatile.project.lauryl.base.HomeNavigationController;
 import versatile.project.lauryl.databinding.CnfSchdulePckupFragmentBinding;
-import versatile.project.lauryl.home.HomeFragment;
+import versatile.project.lauryl.model.MyOrdersDataItem;
 import versatile.project.lauryl.model.TopServicesDataItem;
 import versatile.project.lauryl.model.address.AddressModel;
 import versatile.project.lauryl.orders.create.model.CreateOrderData;
-import versatile.project.lauryl.payment.data.PaymentBaseShareData;
-import versatile.project.lauryl.pickup.data.CnfPickupResponse;
+import versatile.project.lauryl.pickup.CnfPickupDateAdapter;
+import versatile.project.lauryl.pickup.CnfPickupTimeAdapter;
 import versatile.project.lauryl.pickup.data.PickUpSharedData;
 import versatile.project.lauryl.pickup.viewmodel.CnfSchedulePickupViewModel;
 import versatile.project.lauryl.profile.data.GetProfileResponse;
@@ -57,7 +54,7 @@ import versatile.project.lauryl.utils.AllConstants;
 import versatile.project.lauryl.utils.EndlessRecyclerViewScrollListener;
 import versatile.project.lauryl.utils.Globals;
 
-public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewModel, CnfSchdulePckupFragmentBinding> implements CnfPickupDateAdapter.OnDateClickListener, CnfPickupTimeAdapter.OnTimeClickListener {
+public class ReSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewModel, CnfSchdulePckupFragmentBinding> implements CnfPickupDateAdapter.OnDateClickListener, CnfPickupTimeAdapter.OnTimeClickListener {
     private CnfSchdulePckupFragmentBinding cnfSchdulePckupFragmentBinding;
     private CnfSchedulePickupViewModel cnfSchedulePickupViewModel;
     private PickUpSharedData pickUpSharedData;
@@ -76,16 +73,6 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     String selectedDate = null;
     private Gson mGson;
 
-    public static CnfSchedulePckUpFragment newInstance() {
-        CnfSchedulePckUpFragment cnfSchedulePckUpFragment = new CnfSchedulePckUpFragment();
-        try {
-            cnfSchedulePckUpFragment.pickUpSharedData = new Gson().fromJson((String) cnfSchedulePckUpFragment.getArguments().get(AllConstants.PickUp.PickUpData), PickUpSharedData.class);
-        } catch (Exception e) {
-            Log.d("Error", "Null Pointer");
-        }
-        return cnfSchedulePckUpFragment;
-    }
-
     @Override
     protected void initializeViewModel() {
         cnfSchedulePickupViewModel = new ViewModelProvider(this).get(CnfSchedulePickupViewModel.class);
@@ -96,6 +83,12 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         cnfSchdulePckupFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.cnf_schdule_pckup_fragment, container, false);
         mGson=new Gson();
+        try {
+            pickUpSharedData =mGson.fromJson((String) getArguments().get(AllConstants.PickUp.PickUpData), PickUpSharedData.class);
+        }
+        catch (Exception e){
+            Timber.d(ReSchedulePckUpFragment.class.getName(),"data not loaded");
+        }
         resetState();
         loadDateTimeFromApi();
         if (adapter == null) {
@@ -141,21 +134,34 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
 
         cnfSchdulePckupFragmentBinding.schdlePckUpBtn.setOnClickListener(view -> {
             if (selectedTime != null) {
-                createOrderOnHoldOrder();
+                updateOrder();
             } else {
                 Globals.Companion.showToastMsg(getActivity(), "Please select pickup time");
             }
         });
         cnfSchedulePickupViewModel.getCreateOrderSuccessEvent().observe(this, it -> {
             if (getActivity() instanceof HomeScreen) {
-                ((HomeScreen) getActivity()).selectPayment();
-                HomeNavigationController.getInstance(getActivity()).addPaymentFragment();
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getString(R.string.lauryl))
+                        .setMessage(R.string.order_update_success)
+                        .setPositiveButton("Return", (dialog, which) -> {
+                            dialog.dismiss();
+                            FragmentManager fm = getActivity().getSupportFragmentManager();
+                            // fm.popBackStack();
+                            for(int i = 1; i < fm.getBackStackEntryCount(); ++i) {
+                                fm.popBackStack();
+                            }
+                            ((HomeScreen) getActivity()).showBackButton();
+                            ((HomeScreen) getActivity()).displayMyOrdersFragment(0);
+
+                        })
+                        .show();
             }
         });
         cnfSchedulePickupViewModel.getCreateOrderFailedEvent().observe(this, it->{
             new AlertDialog.Builder(getActivity())
                     .setTitle(getString(R.string.lauryl))
-                    .setMessage(R.string.order_not_created)
+                    .setMessage(R.string.order_update_error)
                     .setPositiveButton("Ok", (dialog, which) -> {
                         dialog.dismiss();
                     })
@@ -276,76 +282,44 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         }
     }
 
-    void createOrderOnHoldOrder() {
+    void updateOrder() {
+        MyOrdersDataItem myOrdersDataItem=pickUpSharedData.getMyOrdersDataItem();
         MyApplication myApplication=(MyApplication) getActivity().getApplicationContext();
         CreateOrderData.Details details = new CreateOrderData.Details();
-        String currentDateTimeInMilis=getCurrentDateTime();
-        JsonObject jsonObject=new JsonObject();
-        jsonObject.addProperty("orderNumber",currentDateTimeInMilis);
-        myApplication.setActiveSessionOrderNumber(mGson.toJson(jsonObject));
-        GetProfileResponse getProfileResponse = mGson.fromJson(myApplication.getCreateOrderSerializdedProfile(), GetProfileResponse.class);
-        AddressModel addressModel = mGson.fromJson(myApplication.getCreateOrderSerializdedAddressData(), AddressModel.class);
-        List<TopServicesDataItem> topServicesDataItemList=mGson.fromJson(myApplication.getCreateOrderSerializedService(), new TypeToken<List<TopServicesDataItem>>(){}.getType());
-        JsonObject pickupTimingJson=new JsonObject();
-        pickupTimingJson.addProperty(AllConstants.Orders.pickupDate,selectedDate);
-        pickupTimingJson.addProperty(AllConstants.Orders.pickupTime,selectedTime);
-        myApplication.setActiveSessionPickupSlots(mGson.toJson(pickupTimingJson));
-        List<String> localServiceList=new ArrayList<>();
-        if(topServicesDataItemList!=null) {
-            for (TopServicesDataItem item : topServicesDataItemList) {
-                localServiceList.add(item.getVSku());
-            }
-        }
         CreateOrderData createOrderData=new CreateOrderData();
         //keeping static as of now
-        details.setOrderNumber(currentDateTimeInMilis);
-        details.setOrderTotal("100");
-        details.setVAccountId(AllConstants.Orders.vAccountId);
-        details.setMarketPlaceName(AllConstants.Orders.MARKET_PLACE_NAME);
-        details.setOrderDateTime(currentDateTimeInMilis);
-        details.setPaymentDateTime(getCurrentDateTime());
-        details.setPaymentReceived(false);
-        details.setShippingAddress1(addressModel!=null?addressModel.getAddresType():"");
-
-        String shippingAddress2="";
-        if(addressModel!=null){
-            shippingAddress2=addressModel.getStreetName()+" "+addressModel.getPinCode();
-        }
-        details.setShippingAddress2(shippingAddress2);
-        details.setShippingAddress3(addressModel!=null?addressModel.getLandmark():"");
-        details.setShippingCity(addressModel!=null?addressModel.getCity():"");
-        details.setShippingState(addressModel!=null?addressModel.getState():"");
-        details.setShippingCountry(addressModel!=null?addressModel.getCountry():"");
-        details.setPickupAddress1(addressModel!=null?addressModel.getAddresType():"");
-        String pickupAddress2="";
-        if(addressModel!=null){
-            pickupAddress2=addressModel.getStreetName()+" "+addressModel.getPinCode();
-        }
-        details.setPickupAddress2(pickupAddress2);
-        details.setPickupAddress3(addressModel!=null?addressModel.getLandmark():"");
-        details.setPickupCountryCode("+91");
-        details.setPickupCity(addressModel!=null?addressModel.getCity():"");
-        details.setPickupState(addressModel!=null?addressModel.getState():"");
-        details.setPickupCountry(addressModel!=null?addressModel.getCountry():"");
-        details.setShippingPostCode(addressModel!=null?addressModel.getPinCode():"");
-        details.setTransactionId("");
-        details.setServiceList(localServiceList);
+        details.setOrderNumber(myOrdersDataItem.getOrderNumber());
+        details.setOrderTotal(myOrdersDataItem.getOrderTotal());
+        details.setVAccountId(myOrdersDataItem.getVAccountId());
+        details.setMarketPlaceName(myOrdersDataItem.getMarketPlaceName());
+        details.setOrderDateTime(""+myOrdersDataItem.getOrderDateTime());
+        details.setPaymentDateTime(""+myOrdersDataItem.getPaymentDateTime());
+        details.setPaymentReceived(myOrdersDataItem.getPaymentReceived());
+        details.setShippingAddress1(myOrdersDataItem.getShippingAddress1());
+        details.setShippingAddress2(myOrdersDataItem.getShippingAddress2());
+        details.setShippingAddress3(myOrdersDataItem.getShippingAddress3());
+        details.setShippingCity(myOrdersDataItem.getShippingCity());
+        details.setShippingState(myOrdersDataItem.getShippingState());
+        details.setShippingCountry(myOrdersDataItem.getShippingCountry());
+        details.setPickupAddress1(myOrdersDataItem.getInvoiceAddress1());
+        details.setPickupAddress2(myOrdersDataItem.getInvoiceAddress2());
+        details.setPickupAddress3(myOrdersDataItem.getInvoiceAddress3());
+        details.setPickupCountryCode(myOrdersDataItem.getShippingCountryCode());
+        details.setPickupCity(myOrdersDataItem.getInvoiceCity());
+        details.setPickupState(myOrdersDataItem.getInvoiceState());
+        details.setPickupCountry(myOrdersDataItem.getInvoiceCountry());
+        details.setShippingPostCode(myOrdersDataItem.getShippingPostCode());
+        //details.setTransactionId(myOrdersDataItem.getId());
+        details.setServiceList(myOrdersDataItem.getServiceList());
         details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
-        details.setOrderStage("On Hold");
-        if(getProfileResponse!=null && getProfileResponse.getProfileData()!=null) {
-            details.setEmailId(getProfileResponse.getProfileData().getEmail());
-        }else {
-            details.setEmailId("");
-        }
+        details.setOrderStage(myOrdersDataItem.getOrderStage());
+        details.setEmailId(myOrdersDataItem.getEmailId());
         details.setPickupDate(selectedDate);
         details.setPickupSlot(selectedTime);
-        details.setLatitude(addressModel!=null?addressModel.getLatitude():"");
-        details.setLongitude(addressModel!=null?addressModel.getLongitude():"");
+        //details.setLatitude(myOrdersDataItem?addressModel.getLatitude():"");
+        //details.setLongitude(addressModel!=null?addressModel.getLongitude():"");
         createOrderData.setDetails(details);
-        cnfSchedulePickupViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), createOrderData);
+        cnfSchedulePickupViewModel.createOrderOnServerWithoutPayment(myApplication.getAccessToken(), createOrderData);
     }
-    String getCurrentDateTime(){
-        DateTime dateTime=DateTime.now();
-        return String.valueOf(dateTime.getMillis());
-    }
+
 }
