@@ -263,6 +263,20 @@ class HomeScreen : BaseActivity(), LocationListener {
         //selectMyOrdersDashboard()
     }
 
+    fun selectMyOrdersDashboard() {
+        homeNameMdlVwTxt.text = getString(R.string.my_orders_txt)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+        botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
+        (application as MyApplication).activeSessionPickupSlots = ""
+    }
+
     private fun displayHomeFragment() {
         val fm: FragmentManager = supportFragmentManager
         for (i in 0 until fm.backStackEntryCount) {
@@ -270,6 +284,20 @@ class HomeScreen : BaseActivity(), LocationListener {
         }
         val homeFragment = HomeFragment()
         homeNavigationController.addHomeFragment(homeFragment)
+    }
+
+    fun selectHomeDashboard() {
+        homeNameTxt.text = getString(R.string.home_hdng_txt)
+        homeNameTxt.visibility = View.VISIBLE
+        homeNameMdlVwTxt.visibility = View.GONE
+        bckBtn.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        botmNavVw.menu.findItem(R.id.homeId).isChecked = true
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
+        (application as MyApplication).activeSessionPickupSlots = ""
     }
 
     private fun loadMyFragment(fragment: Fragment) {
@@ -310,6 +338,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializdedAddressData = ""
         (application as MyApplication).createOrderSerializdedProfile = ""
         (application as MyApplication).createOrderSerializedService = ""
+        (application as MyApplication).activeSessionPickupSlots = ""
     }
 
     private fun displayProfileFragment() {
@@ -345,6 +374,35 @@ class HomeScreen : BaseActivity(), LocationListener {
         homelocTxt.text = address
     }
 
+    fun selectProfile() {
+        homeNameMdlVwTxt.text = getString(R.string.my_profile)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        rlChange.visibility = View.VISIBLE
+        homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
+        //   imgLoc.setImageResource(R.drawable.ic_name)
+        botmNavVw.menu.findItem(R.id.profileId).isChecked = true
+        bckBtn.visibility = View.VISIBLE;
+        (application as MyApplication).activeSessionOrderNumber = ""
+        (application as MyApplication).createOrderSerializdedAddressData = ""
+        (application as MyApplication).createOrderSerializdedProfile = ""
+        (application as MyApplication).createOrderSerializedService = ""
+        (application as MyApplication).activeSessionPickupSlots = ""
+
+    }
+
+    fun selectPayment() {
+        homeNameMdlVwTxt.text = getString(R.string.payment_details)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        rlChange.visibility = View.VISIBLE
+        homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
+        imgLoc.setImageResource(R.drawable.location_white_icon)
+        botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
+        bckBtn.visibility = View.VISIBLE;
+    }
 
     fun hideBackButton() {
         bckBtn.visibility = View.GONE;

@@ -26,6 +26,7 @@ public class PaymentBaseShareData implements Serializable {
         String paymentTransactionId;
         PaymentData paymentData;
         CreateOrderData createOrderData;
+        String razorOrderId;
 
         public String getPaymenMethod() {
             return paymenMethod;
@@ -59,6 +60,14 @@ public class PaymentBaseShareData implements Serializable {
 
         public void setCreateOrderData(CreateOrderData createOrderData) {
             this.createOrderData = createOrderData;
+        }
+
+        public String getRazorOrderId() {
+            return razorOrderId;
+        }
+
+        public void setRazorOrderId(String razorOrderId) {
+            this.razorOrderId = razorOrderId;
         }
     }
     public static class PaymentError implements Serializable {

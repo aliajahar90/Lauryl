@@ -7,14 +7,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
+        <RelativeLayout
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/rlName"
@@ -195,5 +200,15 @@
                 android:layout_height="@dimen/dp_1"
                 android:background="@color/grey_color"></View>
         </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:paddingBottom="@dimen/dp_10"
+                android:textColor="@color/orange"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:text="Powered by VERSATILE COMMERCE "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
+        </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
