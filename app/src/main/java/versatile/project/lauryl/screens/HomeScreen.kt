@@ -148,18 +148,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         // botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
     }
 
-    fun selectMyOrdersDashboard() {
-        homeNameMdlVwTxt.text = getString(R.string.my_orders_txt)
-        homeNameMdlVwTxt.visibility = View.VISIBLE
-        homeNameTxt.visibility = View.GONE
-        filterTxt.visibility = View.GONE
-        bckBtn.visibility = View.VISIBLE
-        botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
-        (application as MyApplication).activeSessionOrderNumber = ""
-        (application as MyApplication).createOrderSerializdedAddressData = ""
-        (application as MyApplication).createOrderSerializdedProfile = ""
-        (application as MyApplication).createOrderSerializedService = ""
-    }
 
      fun selectChangeAddressDashBoard() {
         homeNameMdlVwTxt.text = getString(R.string.change_address)
@@ -177,47 +165,6 @@ class HomeScreen : BaseActivity(), LocationListener {
         bckBtn.visibility = View.VISIBLE
     }
 
-    fun selectHomeDashboard() {
-        homeNameTxt.text = getString(R.string.home_hdng_txt)
-        homeNameTxt.visibility = View.VISIBLE
-        homeNameMdlVwTxt.visibility = View.GONE
-        bckBtn.visibility = View.GONE
-        filterTxt.visibility = View.GONE
-        botmNavVw.menu.findItem(R.id.homeId).isChecked = true
-        (application as MyApplication).activeSessionOrderNumber = ""
-        (application as MyApplication).createOrderSerializdedAddressData = ""
-        (application as MyApplication).createOrderSerializdedProfile = ""
-        (application as MyApplication).createOrderSerializedService = ""
-    }
-
-    fun selectProfile() {
-        homeNameMdlVwTxt.text = getString(R.string.my_profile)
-        homeNameMdlVwTxt.visibility = View.VISIBLE
-        homeNameTxt.visibility = View.GONE
-        filterTxt.visibility = View.GONE
-        rlChange.visibility = View.VISIBLE
-        homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
-        //   imgLoc.setImageResource(R.drawable.ic_name)
-        botmNavVw.menu.findItem(R.id.profileId).isChecked = true
-        bckBtn.visibility = View.VISIBLE;
-        (application as MyApplication).activeSessionOrderNumber = ""
-        (application as MyApplication).createOrderSerializdedAddressData = ""
-        (application as MyApplication).createOrderSerializdedProfile = ""
-        (application as MyApplication).createOrderSerializedService = ""
-
-    }
-
-    fun selectPayment() {
-        homeNameMdlVwTxt.text = getString(R.string.payment_details)
-        homeNameMdlVwTxt.visibility = View.VISIBLE
-        homeNameTxt.visibility = View.GONE
-        filterTxt.visibility = View.GONE
-        rlChange.visibility = View.VISIBLE
-        homeLocHdngTxt.text = getString(R.string.loc_hdng_txt)
-        imgLoc.setImageResource(R.drawable.location_white_icon)
-        botmNavVw.menu.findItem(R.id.paymentId).isChecked = true
-        bckBtn.visibility = View.VISIBLE;
-    }
 
 
     fun displayMapLocationFragment(action: String, origin: String) {
