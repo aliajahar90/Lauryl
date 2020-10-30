@@ -20,6 +20,7 @@ open class MyApplication : MultiDexApplication() {
     var activeSessionOrderNumber=""
     var activeSessionPickupSlots=""
     var selectedServiceArray: SparseBooleanArray = SparseBooleanArray()
+    var changeButtonClicked = false
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {

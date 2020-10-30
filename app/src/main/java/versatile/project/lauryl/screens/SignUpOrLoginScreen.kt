@@ -470,7 +470,7 @@ class SignUpOrLoginScreen : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        getCurrentVersion()
+       // getCurrentVersion()
         val isPreferenceExisted = Globals.checkBoolFromPreferences(
             applicationContext,
             Constants.IS_PREFS_EXISTED
@@ -631,7 +631,7 @@ class SignUpOrLoginScreen : BaseActivity() {
         Globals.clearLaurylPrefs(applicationContext)
     }
 
-    var apiVersion = 0
+    var apiVersion = 1
     var currentVersion = 1
     private fun getCurrentVersion() {
         val pm = this.packageManager
@@ -643,7 +643,7 @@ class SignUpOrLoginScreen : BaseActivity() {
         }
         pInfo?.versionCode?.let {
             currentVersion = it
-            if (currentVersion < apiVersion) {
+            if (currentVersion != apiVersion) {
                 showUpdateDialog()
             }
         }
