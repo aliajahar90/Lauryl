@@ -79,6 +79,14 @@ class HomeScreen : BaseActivity(), LocationListener {
                     action = Constants.SELECT_ADDRESS_ACTION,
                     origin = Constants.PAYMENT_FRAG
                 )
+            else if (currentFragment is MapLocationFragment)
+            {
+                Timber.e("re selected map")
+            }
+            else if (currentFragment is ChangeAddressFragment)
+            {
+                onBackPressed()
+            }
             else
                 showLocationRestrictionDialog()
 
