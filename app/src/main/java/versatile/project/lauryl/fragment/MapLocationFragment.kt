@@ -19,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.map_location_fragment.*
+import org.apache.commons.lang3.StringUtils
 import timber.log.Timber
 import versatile.project.lauryl.R
 import versatile.project.lauryl.application.MyApplication
@@ -203,7 +204,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
         }
     }
 
-    fun fetchAddress(latitude: Double?, longitude: Double?) {
+    private fun fetchAddress(latitude: Double?, longitude: Double?) {
         Timber.e("latitude $latitude longitude $longitude")
         addressModel.latitude = latitude.toString()
         addressModel.longitude = longitude.toString()
@@ -216,7 +217,20 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
                 1
             ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             val address: String = addresses[0]
-                .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                .getAddressLine(0)
+            addressModel.address1 = (address.split(",").dropLast(3).toList()).joinToString(
+                prefix = " ",
+                separator = ",",
+                postfix = "",
+                truncated = "...",
+                transform = { it.capitalize()})
+            Timber.e( "Joined list ${(address.split(",").dropLast(3).toList()).joinToString(
+                prefix = " ",
+                separator = ",",
+                postfix = "",
+                truncated = "...",
+                transform = { it.capitalize()})}")
+            // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
             addresses[0].locality?.let {
                 addressModel.city = it
                 Timber.e("city ${addressModel.city}")

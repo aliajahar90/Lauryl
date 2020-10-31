@@ -333,7 +333,7 @@ class ChangeAddressFragment : Fragment() {
         addressModel?.pinCode.let {
             pincode.setText(it)
         }
-        addressModel?.streetName.let {
+        addressModel?.address1.let {
             street_name.setText(it)
         }
         addressModel?.landmark.let {
