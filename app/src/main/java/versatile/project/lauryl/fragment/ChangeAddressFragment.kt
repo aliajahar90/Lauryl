@@ -50,13 +50,10 @@ class ChangeAddressFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.e("hi")
         changeAddressViewModel = ViewModelProvider(this)[ChangeAddressViewModel::class.java]
         myApplication = (activity?.applicationContext as MyApplication)
         number = myApplication.mobileNumber
-        changeAddressViewModel.getAddress(
-            access = myApplication.userAccessToken, number = myApplication.mobileNumber
-        )
-        changeAddressViewModel.getCities(myApplication.userAccessToken)
         action = arguments?.getString(Constants.ACTION) as String
         origin = arguments?.getString(Constants.ORIGIN) as String
 
@@ -143,8 +140,12 @@ class ChangeAddressFragment : Fragment() {
     }
 
     private fun observeDataSources() {
+        Timber.e("hi")
+
         changeAddressViewModel.saveAddressLiveData.observe(this, Observer {
             if (it.status) {
+                Timber.e("hi")
+
                 emptyFields()
                 //continue to order use mAddress
                 if (isEditing) {
@@ -273,6 +274,8 @@ class ChangeAddressFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.change_address_fragment, container, false)
+        Timber.e("hi")
+
         addressModel = try {
             arguments?.getSerializable("address") as AddressModel
         } catch (e: TypeCastException) {
@@ -284,6 +287,7 @@ class ChangeAddressFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as HomeScreen).selectChangeAddressDashBoard()
+        Timber.e("hi")
 
         continue_location_btn.setOnClickListener {
             if (shouldValidte)
@@ -418,48 +422,20 @@ class ChangeAddressFragment : Fragment() {
         Timber.e("AddressType $addressType")
         changeAddressViewModel.saveAddress(myApplication.userAccessToken, jsonObject = inputJson)
     }
+
+    override fun onPause() {
+        super.onPause()
+        mSpinnerInitialized=false
+    }
+    override fun onResume() {
+        super.onResume()
+
+        changeAddressViewModel.getAddress(
+            access = myApplication.userAccessToken, number = myApplication.mobileNumber
+        )
+        changeAddressViewModel.getCities(myApplication.userAccessToken)
+    }
+
 }
 
 
-/**
-
-val inputJson = JsonObject()
-inputJson.addProperty("phoneNumber", number)
-val addressObj = JsonObject()
-addressObj.addProperty("addresType", addressType)
-addressObj.addProperty("address1", "${addressType}1")
-addressObj.addProperty("streetName", streetName)
-addressObj.addProperty("landmark", landMark)
-addressObj.addProperty("city", city.city)
-addressObj.addProperty("state", state.state)
-addressObj.addProperty("country", state.country)
-addressObj.addProperty("pinCode", pin_code)
-addressModel?.latitude?.let {
-addressObj.addProperty("latitude", it)
-}
-addressModel?.longitude?.let {
-addressObj.addProperty("longitude", it)
-}
-mAddress.landmark = landMark
-mAddress.streetName = streetName
-mAddress.city = city.city
-mAddress.state = state.state
-mAddress.pinCode = pin_code
-mAddress.country = state.country
-mAddress.addresType = addressType
-mAddress.latitude = addressModel?.latitude
-mAddress.longitude = addressModel?.longitude
-
-if (isEditing) {
-//updating address
-addressObj.addProperty("id", addressModel?.id)
-} else {
-if (isAddressTypeUsed(addressType) != "-") {
-//overriding previos address
-addressObj.addProperty("id", isAddressTypeUsed(addressType))
-}
-}
-val addresList = JsonArray()
-addresList.add(addressObj)
-inputJson.add("addressList", addresList)
-fetchLatLongFromAddress(mAddress,inputJson)         * */

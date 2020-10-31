@@ -34,7 +34,7 @@ open class LaurylRepository {
     var citiesLiveData: MutableLiveData<ArrayList<CityModel>> = MutableLiveData()
     var statesLiveData: MutableLiveData<ArrayList<String>> = MutableLiveData()
     var addressLiveData: MutableLiveData<ArrayList<AddressModel>> = MutableLiveData()
-    var saveAddressLiveData: MutableLiveData<BooleanResponse> = MutableLiveData()
+    var saveAddressLiveData: SingleLiveEvent<BooleanResponse> = SingleLiveEvent()
     var deleteAddressLiveData: MutableLiveData<BooleanResponse> = MutableLiveData()
     private val getProfileResponseLiveData =
         SingleLiveEvent<GetProfileResponse>()
