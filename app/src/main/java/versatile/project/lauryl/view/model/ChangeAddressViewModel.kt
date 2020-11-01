@@ -3,8 +3,10 @@ package versatile.project.lauryl.view.model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
+import io.reactivex.Single
 import timber.log.Timber
 import versatile.project.lauryl.application.MyApplication
+import versatile.project.lauryl.base.SingleLiveEvent
 import versatile.project.lauryl.data.source.LaurylRepository
 import versatile.project.lauryl.model.BooleanResponse
 import versatile.project.lauryl.model.address.AddressModel
@@ -18,7 +20,7 @@ class ChangeAddressViewModel : ViewModel() {
     private var citiesLiveData: LiveData<ArrayList<CityModel>>
     private var statesLiveData: LiveData<ArrayList<String>>
     private var addressLiveData: LiveData<ArrayList<AddressModel>>
-     var saveAddressLiveData: LiveData<BooleanResponse>
+     var saveAddressLiveData: SingleLiveEvent<BooleanResponse>
 
     init {
         citiesLiveData = laurylRepository.citiesLiveData
@@ -54,7 +56,6 @@ class ChangeAddressViewModel : ViewModel() {
 
     fun saveAddress(access: String, jsonObject: JsonObject) {
         Timber.e("saving address")
-
         laurylRepository.saveAddress(accessToken = access, address = jsonObject)
     }
 
