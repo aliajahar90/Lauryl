@@ -194,14 +194,14 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 //        }
 //    }
     private fun validateServiceAvailability(city: String) {
-        if (supportedCities.contains(city.toLowerCase())) {
-            isServiceable = true
-            availabiltyMessage.visibility = View.GONE
-        } else {
-            isServiceable = false
-            availabiltyMessage.visibility = View.VISIBLE
-            availabiltyMessage.text = "Our services are not available in this province !!"
-        }
+//        if (supportedCities.contains(city.toLowerCase())) {
+//            isServiceable = true
+//            availabiltyMessage.visibility = View.GONE
+//        } else {
+//            isServiceable = false
+//            availabiltyMessage.visibility = View.VISIBLE
+//            availabiltyMessage.text = "Our services are not available in this province !!"
+//        }
     }
 
     private fun fetchAddress(latitude: Double?, longitude: Double?) {

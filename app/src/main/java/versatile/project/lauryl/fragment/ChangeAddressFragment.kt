@@ -362,7 +362,8 @@ class ChangeAddressFragment : Fragment() {
 //
 //    }
     private fun validateServiceAvailability(city: String): Boolean {
-        return supportedCities.contains(city.toLowerCase())
+        return true
+       // return supportedCities.contains(city.toLowerCase())
     }
 
 
