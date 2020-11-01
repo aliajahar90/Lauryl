@@ -1,7 +1,6 @@
 package versatile.project.lauryl.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.my_orders_fragment.*
-import timber.log.Timber
 import versatile.project.lauryl.R
 import versatile.project.lauryl.adapter.AwaitingCompleteAdapter
 import versatile.project.lauryl.adapter.AwaitingDevliveryAdapter
@@ -25,8 +24,8 @@ import versatile.project.lauryl.model.AwaitingCompleteModel
 import versatile.project.lauryl.model.AwaitingDeliveryModel
 import versatile.project.lauryl.model.AwaitingPickUpModel
 import versatile.project.lauryl.model.MyOrdersDataItem
+import versatile.project.lauryl.pickup.data.PickUpSharedData
 import versatile.project.lauryl.screens.HomeScreen
-import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Globals
 import versatile.project.lauryl.view.model.MyOrdersViewModel
 import java.text.SimpleDateFormat
@@ -40,6 +39,7 @@ class MyOrdersFragment : Fragment() {
     private var awtngCmpltdAdapter: AwaitingCompleteAdapter? = null
     lateinit var myOrdersViewModel: MyOrdersViewModel
     private var seletectTab = 0
+    var mGson:Gson?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +52,7 @@ class MyOrdersFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mGson= Gson();
         seletectTab = (activity as HomeScreen).myApplication.selectedOrderTab
         return inflater.inflate(R.layout.my_orders_fragment, container, false)
     }
@@ -159,7 +160,8 @@ class MyOrdersFragment : Fragment() {
                             (dataItem.orderNumber),
                             dateTimeString,
                             "",
-                            "${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}"
+                            "${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}",
+                            dataItem
                         )
                     )
                 }
@@ -268,8 +270,11 @@ class MyOrdersFragment : Fragment() {
         if (awtngPckUpAdapter == null) {
             awtngPckUpAdapter =
                 AwaitingPckUpsAdapter(activity, activity!!.applicationContext, awaitingPckUpDtaLst,object :RescheduleCancelListener{
-                    override fun rescheduleClicked(position: Int) {
-                        (activity as HomeScreen).displayCnfPckUpFragment()
+                    override fun rescheduleClicked(position: Int,myOrdersDataItem: MyOrdersDataItem) {
+                        val pickUpSharedData = PickUpSharedData()
+                        pickUpSharedData.myOrdersDataItem=myOrdersDataItem;
+                        val orderData= this@MyOrdersFragment.mGson!!.toJson(pickUpSharedData)
+                        (activity as HomeScreen).displayReschedulePickUpFragment(orderData)
                     }
 
                     override fun cancelClicked(position: Int) {

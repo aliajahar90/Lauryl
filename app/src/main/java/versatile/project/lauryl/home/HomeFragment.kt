@@ -54,7 +54,7 @@ class HomeFragment : Fragment() {
             if (it != null) {
 
                 if (it.getData() != null) {
-                    if (it.getData().totalCount == 4) {
+                    if (it.getData().totalCount >= 4) {
                         linServiceOne.visibility = View.VISIBLE
                         linServiceTwo.visibility = View.VISIBLE
                         linServiceThree.visibility = View.VISIBLE

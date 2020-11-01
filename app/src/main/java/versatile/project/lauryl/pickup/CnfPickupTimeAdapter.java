@@ -108,7 +108,7 @@ public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdap
 
     }
 
-    interface OnTimeClickListener {
+    public interface OnTimeClickListener {
         void onTimeClicked(String time);
     }
 

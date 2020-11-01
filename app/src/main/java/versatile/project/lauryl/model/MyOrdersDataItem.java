@@ -4,6 +4,8 @@ package versatile.project.lauryl.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class MyOrdersDataItem {
 
     @SerializedName("vOrderNumber")
@@ -32,37 +34,37 @@ public class MyOrdersDataItem {
     private String orderStage;
     @SerializedName("mpShippingService")
     @Expose
-    private Object mpShippingService;
+    private String mpShippingService;
     @SerializedName("vShippingService")
     @Expose
-    private Object vShippingService;
+    private String vShippingService;
     @SerializedName("shippingName")
     @Expose
-    private Object shippingName;
+    private String shippingName;
     @SerializedName("shippingAddress1")
     @Expose
-    private Object shippingAddress1;
+    private String shippingAddress1;
     @SerializedName("shippingAddress2")
     @Expose
-    private Object shippingAddress2;
+    private String shippingAddress2;
     @SerializedName("shippingAddress3")
     @Expose
-    private Object shippingAddress3;
+    private String shippingAddress3;
     @SerializedName("shippingCity")
     @Expose
-    private Object shippingCity;
+    private String shippingCity;
     @SerializedName("shippingState")
     @Expose
-    private Object shippingState;
+    private String shippingState;
     @SerializedName("shippingCountry")
     @Expose
-    private Object shippingCountry;
+    private String shippingCountry;
     @SerializedName("shippingCountryCode")
     @Expose
-    private Object shippingCountryCode;
+    private String shippingCountryCode;
     @SerializedName("shippingPostCode")
     @Expose
-    private Object shippingPostCode;
+    private String shippingPostCode;
     @SerializedName("emailId")
     @Expose
     private String emailId;
@@ -71,49 +73,49 @@ public class MyOrdersDataItem {
     private String phoneNumber;
     @SerializedName("buyerName")
     @Expose
-    private Object buyerName;
+    private String buyerName;
     @SerializedName("invoicePhone")
     @Expose
-    private Object invoicePhone;
+    private String invoicePhone;
     @SerializedName("invoiceAddress1")
     @Expose
-    private Object invoiceAddress1;
+    private String invoiceAddress1;
     @SerializedName("invoiceAddress2")
     @Expose
-    private Object invoiceAddress2;
+    private String invoiceAddress2;
     @SerializedName("invoiceAddress3")
     @Expose
-    private Object invoiceAddress3;
+    private String invoiceAddress3;
     @SerializedName("invoiceCity")
     @Expose
-    private Object invoiceCity;
+    private String invoiceCity;
     @SerializedName("invoiceState")
     @Expose
-    private Object invoiceState;
+    private String invoiceState;
     @SerializedName("invoiceCountry")
     @Expose
-    private Object invoiceCountry;
+    private String invoiceCountry;
     @SerializedName("invoicePostCode")
     @Expose
-    private Object invoicePostCode;
+    private String invoicePostCode;
     @SerializedName("promiseDispatchDate")
     @Expose
-    private Object promiseDispatchDate;
+    private String promiseDispatchDate;
     @SerializedName("promiseDeliveryDate")
     @Expose
-    private Object promiseDeliveryDate;
+    private String promiseDeliveryDate;
     @SerializedName("vMergeOrderId")
     @Expose
-    private Object vMergeOrderId;
+    private String vMergeOrderId;
     @SerializedName("orderTotal")
     @Expose
-    private Object orderTotal;
+    private String orderTotal;
     @SerializedName("latestShipDate")
     @Expose
-    private Object latestShipDate;
+    private String latestShipDate;
     @SerializedName("earliestDeliveryDate")
     @Expose
-    private Object earliestDeliveryDate;
+    private String earliestDeliveryDate;
     @SerializedName("isBusinessOrder")
     @Expose
     private Boolean isBusinessOrder;
@@ -125,10 +127,10 @@ public class MyOrdersDataItem {
     private Boolean orderItemDownload;
     @SerializedName("lastUpdateDate")
     @Expose
-    private Object lastUpdateDate;
+    private String lastUpdateDate;
     @SerializedName("orderLevelDiscountAmount")
     @Expose
-    private Float orderLevelDiscountAmount;
+    private String orderLevelDiscountAmount;
     @SerializedName("processedToThirdParty")
     @Expose
     private Boolean processedToThirdParty;
@@ -137,13 +139,112 @@ public class MyOrdersDataItem {
     private String id;
     @SerializedName("executedRuleName")
     @Expose
-    private Object executedRuleName;
+    private String executedRuleName;
     @SerializedName("paymentReceived")
     @Expose
     private Boolean paymentReceived;
     @SerializedName("marketplaceCountryName")
     @Expose
-    private Object marketplaceCountryName;
+    private String marketplaceCountryName;
+    @SerializedName("magentoInvoice")
+    @Expose
+    private Boolean magentoInvoice;
+
+    public String getvOrderNumber() {
+        return vOrderNumber;
+    }
+
+    public void setvOrderNumber(String vOrderNumber) {
+        this.vOrderNumber = vOrderNumber;
+    }
+
+    public String getvAccountId() {
+        return vAccountId;
+    }
+
+    public void setvAccountId(String vAccountId) {
+        this.vAccountId = vAccountId;
+    }
+
+    public String getvShippingService() {
+        return vShippingService;
+    }
+
+    public void setvShippingService(String vShippingService) {
+        this.vShippingService = vShippingService;
+    }
+
+    public String getvMergeOrderId() {
+        return vMergeOrderId;
+    }
+
+    public void setvMergeOrderId(String vMergeOrderId) {
+        this.vMergeOrderId = vMergeOrderId;
+    }
+
+    public Boolean getMagentoInvoice() {
+        return magentoInvoice;
+    }
+
+    public void setMagentoInvoice(Boolean magentoInvoice) {
+        this.magentoInvoice = magentoInvoice;
+    }
+
+    public List<String> getServiceList() {
+        return serviceList;
+    }
+
+    public void setServiceList(List<String> serviceList) {
+        this.serviceList = serviceList;
+    }
+
+    public String getCreatedByUser() {
+        return createdByUser;
+    }
+
+    public void setCreatedByUser(String createdByUser) {
+        this.createdByUser = createdByUser;
+    }
+
+    public String getModifiedByUser() {
+        return modifiedByUser;
+    }
+
+    public void setModifiedByUser(String modifiedByUser) {
+        this.modifiedByUser = modifiedByUser;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public void setModifiedAt(String modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
+
+    @SerializedName("serviceList")
+    @Expose
+    private List<String> serviceList = null;
+    @SerializedName("createdByUser")
+    @Expose
+    private String createdByUser;
+    @SerializedName("modifiedByUser")
+    @Expose
+    private String modifiedByUser;
+    @SerializedName("createdAt")
+    @Expose
+    private String createdAt;
+    @SerializedName("modifiedAt")
+    @Expose
+    private String modifiedAt;
     @SerializedName("businessOrder")
     @Expose
     private Boolean businessOrder;
@@ -218,91 +319,91 @@ public class MyOrdersDataItem {
         this.orderStage = orderStage;
     }
 
-    public Object getMpShippingService() {
+    public String getMpShippingService() {
         return mpShippingService;
     }
 
-    public void setMpShippingService(Object mpShippingService) {
+    public void setMpShippingService(String mpShippingService) {
         this.mpShippingService = mpShippingService;
     }
 
-    public Object getVShippingService() {
+    public String getVShippingService() {
         return vShippingService;
     }
 
-    public void setVShippingService(Object vShippingService) {
+    public void setVShippingService(String vShippingService) {
         this.vShippingService = vShippingService;
     }
 
-    public Object getShippingName() {
+    public String getShippingName() {
         return shippingName;
     }
 
-    public void setShippingName(Object shippingName) {
+    public void setShippingName(String shippingName) {
         this.shippingName = shippingName;
     }
 
-    public Object getShippingAddress1() {
+    public String getShippingAddress1() {
         return shippingAddress1;
     }
 
-    public void setShippingAddress1(Object shippingAddress1) {
+    public void setShippingAddress1(String shippingAddress1) {
         this.shippingAddress1 = shippingAddress1;
     }
 
-    public Object getShippingAddress2() {
+    public String getShippingAddress2() {
         return shippingAddress2;
     }
 
-    public void setShippingAddress2(Object shippingAddress2) {
+    public void setShippingAddress2(String shippingAddress2) {
         this.shippingAddress2 = shippingAddress2;
     }
 
-    public Object getShippingAddress3() {
+    public String getShippingAddress3() {
         return shippingAddress3;
     }
 
-    public void setShippingAddress3(Object shippingAddress3) {
+    public void setShippingAddress3(String shippingAddress3) {
         this.shippingAddress3 = shippingAddress3;
     }
 
-    public Object getShippingCity() {
+    public String getShippingCity() {
         return shippingCity;
     }
 
-    public void setShippingCity(Object shippingCity) {
+    public void setShippingCity(String shippingCity) {
         this.shippingCity = shippingCity;
     }
 
-    public Object getShippingState() {
+    public String getShippingState() {
         return shippingState;
     }
 
-    public void setShippingState(Object shippingState) {
+    public void setShippingState(String shippingState) {
         this.shippingState = shippingState;
     }
 
-    public Object getShippingCountry() {
+    public String getShippingCountry() {
         return shippingCountry;
     }
 
-    public void setShippingCountry(Object shippingCountry) {
+    public void setShippingCountry(String shippingCountry) {
         this.shippingCountry = shippingCountry;
     }
 
-    public Object getShippingCountryCode() {
+    public String getShippingCountryCode() {
         return shippingCountryCode;
     }
 
-    public void setShippingCountryCode(Object shippingCountryCode) {
+    public void setShippingCountryCode(String shippingCountryCode) {
         this.shippingCountryCode = shippingCountryCode;
     }
 
-    public Object getShippingPostCode() {
+    public String getShippingPostCode() {
         return shippingPostCode;
     }
 
-    public void setShippingPostCode(Object shippingPostCode) {
+    public void setShippingPostCode(String shippingPostCode) {
         this.shippingPostCode = shippingPostCode;
     }
 
@@ -322,123 +423,123 @@ public class MyOrdersDataItem {
         this.phoneNumber = phoneNumber;
     }
 
-    public Object getBuyerName() {
+    public String getBuyerName() {
         return buyerName;
     }
 
-    public void setBuyerName(Object buyerName) {
+    public void setBuyerName(String buyerName) {
         this.buyerName = buyerName;
     }
 
-    public Object getInvoicePhone() {
+    public String getInvoicePhone() {
         return invoicePhone;
     }
 
-    public void setInvoicePhone(Object invoicePhone) {
+    public void setInvoicePhone(String invoicePhone) {
         this.invoicePhone = invoicePhone;
     }
 
-    public Object getInvoiceAddress1() {
+    public String getInvoiceAddress1() {
         return invoiceAddress1;
     }
 
-    public void setInvoiceAddress1(Object invoiceAddress1) {
+    public void setInvoiceAddress1(String invoiceAddress1) {
         this.invoiceAddress1 = invoiceAddress1;
     }
 
-    public Object getInvoiceAddress2() {
+    public String getInvoiceAddress2() {
         return invoiceAddress2;
     }
 
-    public void setInvoiceAddress2(Object invoiceAddress2) {
+    public void setInvoiceAddress2(String invoiceAddress2) {
         this.invoiceAddress2 = invoiceAddress2;
     }
 
-    public Object getInvoiceAddress3() {
+    public String getInvoiceAddress3() {
         return invoiceAddress3;
     }
 
-    public void setInvoiceAddress3(Object invoiceAddress3) {
+    public void setInvoiceAddress3(String invoiceAddress3) {
         this.invoiceAddress3 = invoiceAddress3;
     }
 
-    public Object getInvoiceCity() {
+    public String getInvoiceCity() {
         return invoiceCity;
     }
 
-    public void setInvoiceCity(Object invoiceCity) {
+    public void setInvoiceCity(String invoiceCity) {
         this.invoiceCity = invoiceCity;
     }
 
-    public Object getInvoiceState() {
+    public String getInvoiceState() {
         return invoiceState;
     }
 
-    public void setInvoiceState(Object invoiceState) {
+    public void setInvoiceState(String invoiceState) {
         this.invoiceState = invoiceState;
     }
 
-    public Object getInvoiceCountry() {
+    public String getInvoiceCountry() {
         return invoiceCountry;
     }
 
-    public void setInvoiceCountry(Object invoiceCountry) {
+    public void setInvoiceCountry(String invoiceCountry) {
         this.invoiceCountry = invoiceCountry;
     }
 
-    public Object getInvoicePostCode() {
+    public String getInvoicePostCode() {
         return invoicePostCode;
     }
 
-    public void setInvoicePostCode(Object invoicePostCode) {
+    public void setInvoicePostCode(String invoicePostCode) {
         this.invoicePostCode = invoicePostCode;
     }
 
-    public Object getPromiseDispatchDate() {
+    public String getPromiseDispatchDate() {
         return promiseDispatchDate;
     }
 
-    public void setPromiseDispatchDate(Object promiseDispatchDate) {
+    public void setPromiseDispatchDate(String promiseDispatchDate) {
         this.promiseDispatchDate = promiseDispatchDate;
     }
 
-    public Object getPromiseDeliveryDate() {
+    public String getPromiseDeliveryDate() {
         return promiseDeliveryDate;
     }
 
-    public void setPromiseDeliveryDate(Object promiseDeliveryDate) {
+    public void setPromiseDeliveryDate(String promiseDeliveryDate) {
         this.promiseDeliveryDate = promiseDeliveryDate;
     }
 
-    public Object getVMergeOrderId() {
+    public String getVMergeOrderId() {
         return vMergeOrderId;
     }
 
-    public void setVMergeOrderId(Object vMergeOrderId) {
+    public void setVMergeOrderId(String vMergeOrderId) {
         this.vMergeOrderId = vMergeOrderId;
     }
 
-    public Object getOrderTotal() {
+    public String getOrderTotal() {
         return orderTotal;
     }
 
-    public void setOrderTotal(Object orderTotal) {
+    public void setOrderTotal(String orderTotal) {
         this.orderTotal = orderTotal;
     }
 
-    public Object getLatestShipDate() {
+    public String getLatestShipDate() {
         return latestShipDate;
     }
 
-    public void setLatestShipDate(Object latestShipDate) {
+    public void setLatestShipDate(String latestShipDate) {
         this.latestShipDate = latestShipDate;
     }
 
-    public Object getEarliestDeliveryDate() {
+    public String getEarliestDeliveryDate() {
         return earliestDeliveryDate;
     }
 
-    public void setEarliestDeliveryDate(Object earliestDeliveryDate) {
+    public void setEarliestDeliveryDate(String earliestDeliveryDate) {
         this.earliestDeliveryDate = earliestDeliveryDate;
     }
 
@@ -466,19 +567,19 @@ public class MyOrdersDataItem {
         this.orderItemDownload = orderItemDownload;
     }
 
-    public Object getLastUpdateDate() {
+    public String getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    public void setLastUpdateDate(Object lastUpdateDate) {
+    public void setLastUpdateDate(String lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public Float getOrderLevelDiscountAmount() {
+    public String getOrderLevelDiscountAmount() {
         return orderLevelDiscountAmount;
     }
 
-    public void setOrderLevelDiscountAmount(Float orderLevelDiscountAmount) {
+    public void setOrderLevelDiscountAmount(String orderLevelDiscountAmount) {
         this.orderLevelDiscountAmount = orderLevelDiscountAmount;
     }
 
@@ -498,11 +599,11 @@ public class MyOrdersDataItem {
         this.id = id;
     }
 
-    public Object getExecutedRuleName() {
+    public String getExecutedRuleName() {
         return executedRuleName;
     }
 
-    public void setExecutedRuleName(Object executedRuleName) {
+    public void setExecutedRuleName(String executedRuleName) {
         this.executedRuleName = executedRuleName;
     }
 
@@ -514,11 +615,11 @@ public class MyOrdersDataItem {
         this.paymentReceived = paymentReceived;
     }
 
-    public Object getMarketplaceCountryName() {
+    public String getMarketplaceCountryName() {
         return marketplaceCountryName;
     }
 
-    public void setMarketplaceCountryName(Object marketplaceCountryName) {
+    public void setMarketplaceCountryName(String marketplaceCountryName) {
         this.marketplaceCountryName = marketplaceCountryName;
     }
 

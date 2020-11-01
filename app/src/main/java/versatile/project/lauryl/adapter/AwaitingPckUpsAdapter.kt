@@ -11,10 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.awaiting_pckup_lst_item.view.*
 import versatile.project.lauryl.R
 import versatile.project.lauryl.model.AwaitingPickUpModel
+import versatile.project.lauryl.model.MyOrdersDataItem
 import versatile.project.lauryl.screens.HomeScreen
 
 interface RescheduleCancelListener {
-    fun rescheduleClicked(position: Int)
+    fun rescheduleClicked(position: Int,myOrdersDataItem: MyOrdersDataItem)
     fun cancelClicked(position: Int)
 }
 
@@ -45,7 +46,7 @@ class AwaitingPckUpsAdapter(
             rescheduleCancelListener.cancelClicked(position)
         }
         requiredViewHolder.reschedule_pickup_btn.setOnClickListener {
-            rescheduleCancelListener.rescheduleClicked(position)
+            rescheduleCancelListener.rescheduleClicked(position, awtngPckUpList!!.get(position).myOrdersDataItem)
         }
 
     }

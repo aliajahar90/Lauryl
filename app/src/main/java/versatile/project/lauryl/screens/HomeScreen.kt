@@ -24,13 +24,13 @@ import versatile.project.lauryl.fragment.*
 import versatile.project.lauryl.home.HomeFragment
 import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.orders.history.OrderHistoryFragment
+import versatile.project.lauryl.orders.reschedule.ReSchedulePckUpFragment
 import versatile.project.lauryl.payment.PaymentFragment
 import versatile.project.lauryl.pickup.CnfSchedulePckUpFragment
 import versatile.project.lauryl.profile.data.GetProfileResponse
 import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
-import java.sql.Time
 import java.util.*
 
 class HomeScreen : BaseActivity(), LocationListener {
@@ -138,6 +138,13 @@ class HomeScreen : BaseActivity(), LocationListener {
         botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
     }
 
+    fun selectReschedulePckUp() {
+        homeNameMdlVwTxt.text = getString(R.string.schedule_pckup_txt)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+       // botmNavVw.menu.findItem(R.id.schedulePckUpId).isChecked = true
+    }
     fun selectShedulePckUpDashBoard() {
         homeNameMdlVwTxt.text = getString(R.string.chose_servcs_txt)
         homeNameMdlVwTxt.visibility = View.VISIBLE
@@ -267,6 +274,18 @@ class HomeScreen : BaseActivity(), LocationListener {
     fun displayCnfPckUpFragment() {
         selectCnfPckUp()
         val fragment = CnfSchedulePckUpFragment.newInstance()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragContainer, fragment)
+        transaction.addToBackStack(fragment::class.java.name)
+        transaction.commit()
+    }
+
+    fun displayReschedulePickUpFragment(orderData: String) {
+        val bundle = Bundle()
+        bundle.putString(AllConstants.PickUp.PickUpData, orderData)
+        selectReschedulePckUp()
+        val fragment = ReSchedulePckUpFragment()
+        fragment.arguments = bundle
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragContainer, fragment)
         transaction.addToBackStack(fragment::class.java.name)

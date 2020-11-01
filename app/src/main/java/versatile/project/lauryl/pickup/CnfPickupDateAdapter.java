@@ -82,7 +82,7 @@ public class CnfPickupDateAdapter  extends RecyclerView.Adapter<CnfPickupDateAda
     }
 
 
-    interface OnDateClickListener{
+    public interface OnDateClickListener{
         void onDateClicked(String date);
     }
     String getReadableDay(String stringDate){

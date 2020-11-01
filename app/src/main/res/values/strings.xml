@@ -142,4 +142,6 @@
     <string name="select_service_msg">Please select a service</string>
     <string name="order_not_created">Couldn\'t create an order</string>
     <string name="order_creation_error_after_payment">Something went wrong while placing the order.Any money deducted from bank account will be reverted soon</string>
+    <string name="order_update_error">Couldn\'t update the order</string>
+    <string name="order_update_success">Your order has been updated</string>
 </resources>

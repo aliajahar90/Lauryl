@@ -731,9 +731,13 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         details.setShippingPostCode(addressModel!=null?addressModel.getPinCode():"");
         details.setTransactionId(paymentSuccess.getPaymentTransactionId());
         details.setServiceList(localServiceList);
-        details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
+        details.setPhoneNumber(myApplication.getMobileNumber());
         details.setOrderStage(AllConstants.Orders.OrderStage.Awaiting_Pickup);
-        details.setEmailId(getProfileResponse.getProfileData().getEmail());
+        if(getProfileResponse!=null && getProfileResponse.getProfileData()!=null) {
+            details.setEmailId(getProfileResponse.getProfileData().getEmail());
+        }else {
+            details.setEmailId("");
+        }
         details.setPickupDate(selectedDate);
         details.setPickupSlot(selectedTime);
         details.setLatitude(addressModel!=null?addressModel.getLatitude():"");
