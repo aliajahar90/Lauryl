@@ -66,8 +66,8 @@ android {
     productFlavors {
         lauryl {
             applicationId "versatilecommerce.project.lauryl"
-            versionCode 3
-            versionName "1.2"
+            versionCode 4
+            versionName "1.3"
             signingConfig signingConfigs.release
         }
     }
