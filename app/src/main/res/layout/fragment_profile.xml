@@ -201,14 +201,32 @@
                 android:background="@color/grey_color"></View>
         </LinearLayout>
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <LinearLayout
                 android:paddingBottom="@dimen/dp_10"
-                android:textColor="@color/orange"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
-                android:text="Powered by VERSATILE COMMERCE "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></androidx.appcompat.widget.AppCompatTextView>
-        </RelativeLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="@color/grey_color"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:text="Powered by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </androidx.appcompat.widget.AppCompatTextView>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="@color/dark_grey"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:text="VERSATILE COMMERCE "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </androidx.appcompat.widget.AppCompatTextView>
+            </LinearLayout>
+               </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
