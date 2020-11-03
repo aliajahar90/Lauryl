@@ -1,29 +1,23 @@
 package versatile.project.lauryl.pickup;
 
-import android.os.Build;
 import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import versatile.project.lauryl.base.SingleLiveEvent;
-import versatile.project.lauryl.data.source.LaurylRepository;
-import versatile.project.lauryl.model.TopServicesResponse;
-import versatile.project.lauryl.orders.create.CreateOrderRepository;
+import versatile.project.lauryl.orders.OrderRepository;
 import versatile.project.lauryl.pickup.data.CnfPickupResponse;
 import versatile.project.lauryl.pickup.data.DateTimeMap;
 
-public class CnfSchedulePickupRepository extends CreateOrderRepository {
+public class CnfSchedulePickupRepository extends OrderRepository {
 
     private SingleLiveEvent<Set<String>> cnfPickupResponseSingleLiveEvent=new SingleLiveEvent<>();
     private SingleLiveEvent<String> cnfPickupErrorLiveEvent=new SingleLiveEvent<>();

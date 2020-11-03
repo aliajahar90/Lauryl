@@ -211,11 +211,13 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/inputSpclInstruction"
+                    android:background="@drawable/border_box"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit,sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam"/>
+                    android:hint="@string/you_can_type_here_in_case_of_any_special_instruction"/>
 
             </LinearLayout>
 

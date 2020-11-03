@@ -16,7 +16,7 @@ import versatile.project.lauryl.screens.HomeScreen
 
 interface RescheduleCancelListener {
     fun rescheduleClicked(position: Int,myOrdersDataItem: MyOrdersDataItem)
-    fun cancelClicked(position: Int)
+    fun cancelClicked(position: Int,myOrdersDataItem: MyOrdersDataItem)
 }
 
 class AwaitingPckUpsAdapter(
@@ -43,7 +43,7 @@ class AwaitingPckUpsAdapter(
 //            (activity as HomeScreen).displayOrderHstryFragment()
 //        }
         requiredViewHolder.cancelBtn.setOnClickListener {
-            rescheduleCancelListener.cancelClicked(position)
+            rescheduleCancelListener.cancelClicked(position,awtngPckUpList!!.get(position).myOrdersDataItem)
         }
         requiredViewHolder.reschedule_pickup_btn.setOnClickListener {
             rescheduleCancelListener.rescheduleClicked(position, awtngPckUpList!!.get(position).myOrdersDataItem)

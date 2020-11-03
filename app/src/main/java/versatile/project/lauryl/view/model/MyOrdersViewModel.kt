@@ -4,15 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
 import timber.log.Timber
+import versatile.project.lauryl.base.SingleLiveEvent
 import versatile.project.lauryl.data.source.LaurylRepository
-import versatile.project.lauryl.model.AwaitingCompleteModel
-import versatile.project.lauryl.model.AwaitingDeliveryModel
-import versatile.project.lauryl.model.AwaitingPickUpModel
-import versatile.project.lauryl.model.MyOrdersResponse
+import versatile.project.lauryl.model.*
+import versatile.project.lauryl.orders.OrderRepository
 
 class MyOrdersViewModel:ViewModel() {
 
-    private var laurylRepository: LaurylRepository = LaurylRepository()
+    private var laurylRepository: OrderRepository = OrderRepository()
     private var myOrdersResponse: LiveData<MyOrdersResponse> = laurylRepository.getMyOrdersLiveDta()
     var awaitingPckUpDtaLst:ArrayList<AwaitingPickUpModel> = ArrayList()
     var awaitingPckUpDevryDtaLst:ArrayList<AwaitingDeliveryModel> = ArrayList()
@@ -50,6 +49,17 @@ class MyOrdersViewModel:ViewModel() {
 
     fun clearAwaitingPckUpCmpltdDta(){
         this.awaitingPckUpCompletedDtaLst.clear()
+    }
+    fun cancelOrder(accessToken: String,jsonObject: JsonObject){
+        laurylRepository.cancelOrder(accessToken,jsonObject)
+    }
+    fun cancelOrderSuccessObserver():SingleLiveEvent<BooleanResponse>
+    {
+        return laurylRepository.cancelOrderSuccessEvent
+    }
+    fun cancelOrderErrorObserver():SingleLiveEvent<String>
+    {
+        return laurylRepository.cancelOrderErrorEvent
     }
 
 }

@@ -139,6 +139,28 @@ public class CreateOrderData implements Serializable {
         @SerializedName("pickupSlot")
         @Expose
         private String pickupSlot;
+        @SerializedName("specialInstructions")
+        @Expose
+        private String specialInstructions;
+        @SerializedName("buyerName")
+        @Expose
+        private String buyerName;
+
+        public String getSpecialInstructions() {
+            return specialInstructions;
+        }
+
+        public void setSpecialInstructions(String specialInstructions) {
+            this.specialInstructions = specialInstructions;
+        }
+
+        public String getBuyerName() {
+            return buyerName;
+        }
+
+        public void setBuyerName(String buyerName) {
+            this.buyerName = buyerName;
+        }
 
         public String getLatitude() {
             return latitude;

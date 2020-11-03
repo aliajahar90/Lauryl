@@ -341,6 +341,13 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         details.setPickupSlot(selectedTime);
         details.setLatitude(addressModel!=null?addressModel.getLatitude():"");
         details.setLongitude(addressModel!=null?addressModel.getLongitude():"");
+        details.setSpecialInstructions(cnfSchdulePckupFragmentBinding.inputSpclInstruction.getText().toString());
+        if(getProfileResponse!=null && getProfileResponse.getProfileData()!=null) {
+            details.setBuyerName(getProfileResponse.getProfileData().getFirstName() + " " + getProfileResponse.getProfileData().getFirstName());
+        }
+        else {
+            details.setBuyerName("");
+        }
         createOrderData.setDetails(details);
         cnfSchedulePickupViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), createOrderData);
     }

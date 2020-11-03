@@ -50,6 +50,18 @@ public class AllConstants {
             public static final String Awaiting_Delivery = "Awaiting Delivery";
             public static final String Completed_Delivery = "Completed Delivery";
         }
+        public static class Errors {
+            public static final String ERROR_API_FAILED= "Something went wrong!";
+
+        }
+    }
+
+    public static class Services{
+        public static class Errors {
+            public static final String ERROR_LIST_EMPTY = "No data found";
+            public static final String ERROR_API_FAILED= "Something went wrong!";
+
+        }
     }
 
 

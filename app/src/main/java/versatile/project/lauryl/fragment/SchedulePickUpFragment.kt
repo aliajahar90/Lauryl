@@ -20,11 +20,13 @@ import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.model.TopServicesDataItem
 import versatile.project.lauryl.model.TopServicesResponse
 import versatile.project.lauryl.screens.HomeScreen
+import versatile.project.lauryl.services.ServiceListAdapter
+import versatile.project.lauryl.services.ServiceModel
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
 import versatile.project.lauryl.view.model.SchedulePickUpFragmentViewModel
 
-class SchedulePickUpFragment : Fragment(), SchedulePickUpAdapterJava.OnItemClickListener {
+class SchedulePickUpFragment : Fragment(), ServiceListAdapter.OnItemClickListener {
 
     lateinit var schedulePickUpViewModel: SchedulePickUpFragmentViewModel
     private var selectedItems = SparseBooleanArray()
@@ -39,21 +41,21 @@ class SchedulePickUpFragment : Fragment(), SchedulePickUpAdapterJava.OnItemClick
     private fun observeDataSources() {
 
         schedulePickUpViewModel.geTopServicesToObserve()
-            .observe(this, Observer<TopServicesResponse> {
+            .observe(this, Observer<List<ServiceModel>> {
 
                 if (it != null) {
-                    if (it.getData().totalCount > 0) {
+                    if (it.size > 0) {
                         progressLyot.visibility = View.GONE
                         schdlePckUpBtn.visibility = View.VISIBLE
                        // selectedItems.clear()
 
-                        val schedulePickUpAdapter = SchedulePickUpAdapterJava(
-                            it.getData().list as ArrayList<TopServicesDataItem>,
-                            this, selectedItems
+                        val serviceListAdapter = ServiceListAdapter(
+                           it,
+                            this,selectedItems
                         )
                         recyclerVw.layoutManager =
                             LinearLayoutManager(activity!!.applicationContext)
-                            recyclerVw.adapter = schedulePickUpAdapter
+                            recyclerVw.adapter = serviceListAdapter
                     } else {
                         progressLyot.visibility = View.GONE
                         Globals.showToastMsg(
@@ -89,8 +91,8 @@ class SchedulePickUpFragment : Fragment(), SchedulePickUpAdapterJava.OnItemClick
         schdlePckUpBtn.setOnClickListener {
             if (selectedItems.size() > 0) {
                 val selectedServices=ArrayList<TopServicesDataItem>()
-                for(item in (recyclerVw.adapter as SchedulePickUpAdapterJava).topServicesDataItems){
-                    if(selectedItems.get((recyclerVw.adapter as SchedulePickUpAdapterJava).topServicesDataItems.indexOf(item))){
+                for(item in (recyclerVw.adapter as ServiceListAdapter).topServicesDataItems){
+                    if(selectedItems.get((recyclerVw.adapter as ServiceListAdapter).topServicesDataItems.indexOf(item))){
                         selectedServices.add(item)
                     }
                 }

@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:weightSum="1"
+    android:padding="@dimen/dp_5"
+    android:weightSum="10"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        android:layout_weight="0.8">
+        android:layout_weight="8.5">
 
         <include
             layout="@layout/recyclerview_lyout"/>
@@ -23,7 +23,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="1.5"
         android:gravity="center">
 
         <Button
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/shedule_pck_up_txt"
-            android:padding="8dp"
+            android:padding="@dimen/dp_5"
             android:textAllCaps="true"
             android:textSize="12sp"
             android:textStyle="bold"
