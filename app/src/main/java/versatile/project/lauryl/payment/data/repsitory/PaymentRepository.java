@@ -1,18 +1,13 @@
 package versatile.project.lauryl.payment.data.repsitory;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.lifecycle.MutableLiveData;
-
-import com.google.gson.JsonObject;
 import com.razorpay.Order;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultWithDataListener;
 import com.razorpay.Razorpay;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
-import com.razorpay.Utils;
 import com.razorpay.ValidateVpaCallback;
 
 import org.json.JSONException;
@@ -25,12 +20,10 @@ import java.util.Map;
 
 import versatile.project.lauryl.base.SingleLiveEvent;
 import versatile.project.lauryl.base.asyncjob.TaskRunner;
-import versatile.project.lauryl.data.source.LaurylRepository;
-import versatile.project.lauryl.orders.create.CreateOrderRepository;
+import versatile.project.lauryl.orders.OrderRepository;
 import versatile.project.lauryl.payment.backgroundjob.PaymentBackgroundTask;
 import versatile.project.lauryl.payment.data.NetBanking;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
-import versatile.project.lauryl.payment.viewModel.Signature;
 import versatile.project.lauryl.utils.AllConstants;
 
 import static versatile.project.lauryl.utils.AllConstants.Payment.HotBanks.BARB_R;
@@ -40,7 +33,7 @@ import static versatile.project.lauryl.utils.AllConstants.Payment.HotBanks.ICIC;
 import static versatile.project.lauryl.utils.AllConstants.Payment.HotBanks.KKBK;
 import static versatile.project.lauryl.utils.AllConstants.Payment.HotBanks.SBIN;
 
-public class PaymentRepository extends CreateOrderRepository {
+public class PaymentRepository extends OrderRepository {
     // static variable single_instance of type Singleton
     private static PaymentRepository single_instance = null;
     private Razorpay razorpay;
@@ -316,7 +309,7 @@ public class PaymentRepository extends CreateOrderRepository {
                 public Object notifyDoBackground() {
                     JSONObject options = new JSONObject();
                     try {
-                        options.put("amount", 100);
+                        options.put("amount", 1*100);
                         options.put("currency", "INR");
                         Order order = razorpayClient.Orders.create(options);
                         return order;

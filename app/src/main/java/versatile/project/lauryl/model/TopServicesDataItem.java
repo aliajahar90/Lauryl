@@ -52,6 +52,10 @@ public class TopServicesDataItem {
     @SerializedName("isDeleted")
     @Expose
     private Boolean isDeleted;
+    @SerializedName("ServiceType")
+    @Expose
+    private String ServiceType;
+
 
     public String getProductTitle() {
         return productTitle;
@@ -167,5 +171,13 @@ public class TopServicesDataItem {
 
     public String getImgUrl() {
         return imgUrl;
+    }
+
+    public String getServiceType() {
+        return ServiceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        ServiceType = serviceType;
     }
 }

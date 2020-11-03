@@ -4,13 +4,13 @@ import org.joda.time.DateTime;
 
 import versatile.project.lauryl.base.BaseViewModel;
 import versatile.project.lauryl.base.SingleLiveEvent;
+import versatile.project.lauryl.orders.OrderRepository;
 import versatile.project.lauryl.orders.create.model.CreateOrderData;
-import versatile.project.lauryl.utils.AllConstants;
 
 public class CreateOrderViewModel extends BaseViewModel {
-    CreateOrderRepository createOrderRepository;
+    OrderRepository createOrderRepository;
     public CreateOrderViewModel() {
-        this.createOrderRepository = new CreateOrderRepository();
+        this.createOrderRepository = new OrderRepository();
     }
    public void createOrderOnServerWithoutPayment(String accessToken,CreateOrderData createOrderReq){
         createOrderRepository.createOrder(accessToken,createOrderReq);

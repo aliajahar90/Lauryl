@@ -12,6 +12,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.google.gson.JsonPrimitive
 import kotlinx.android.synthetic.main.my_orders_fragment.*
 import versatile.project.lauryl.R
 import versatile.project.lauryl.adapter.AwaitingCompleteAdapter
@@ -143,6 +144,18 @@ class MyOrdersFragment : Fragment() {
                     "${resources.getString(R.string.server_error_txt)}"
                 )
             }
+        })
+
+        myOrdersViewModel.cancelOrderSuccessObserver().observe(this, Observer {
+            if(it.status){
+                getMyOrdersData()
+                (activity as HomeScreen).shout("Cancelled order..")
+            }else{
+                (activity as HomeScreen).shout("Cancelled order failed")
+            }
+        })
+        myOrdersViewModel.cancelOrderErrorObserver().observe(this, Observer {
+            (activity as HomeScreen).shout(it)
         })
     }
 
@@ -277,8 +290,16 @@ class MyOrdersFragment : Fragment() {
                         (activity as HomeScreen).displayReschedulePickUpFragment(orderData)
                     }
 
-                    override fun cancelClicked(position: Int) {
-                        (activity as HomeScreen).shout("Cancelled order..")
+                    override fun cancelClicked(position: Int,myOrdersDataItem: MyOrdersDataItem) {
+                        val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
+                        val inputJson = JsonObject()
+                        val jArray = JsonArray()
+                        val element = JsonPrimitive(myOrdersDataItem.orderNumber);
+                        jArray.add(element)
+                        inputJson.add("orderIds", jArray)
+                        inputJson.addProperty("stage", "Canceled")
+                        if (myApplication != null)
+                        myOrdersViewModel.cancelOrder(myApplication.accessToken,inputJson)
                     }
 
                 })

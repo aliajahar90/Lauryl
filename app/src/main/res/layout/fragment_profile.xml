@@ -218,6 +218,7 @@
                     android:layout_height="wrap_content">
                 </androidx.appcompat.widget.AppCompatTextView>
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:letterSpacing=".4"
                     android:textColor="@color/dark_grey"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"

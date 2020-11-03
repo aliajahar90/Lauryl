@@ -117,4 +117,9 @@ interface ApiServices {
         @Body inputJsonBody: JsonObject
     ): Call<CreateOrderResponse>
 
+    @POST("api/v1/order/item/update/stage")
+    fun cancelOrder(
+        @Query("access_token") accessToken: String,
+        @Body inputJsonBody: JsonObject
+    ): Call<BooleanResponse>
 }

@@ -145,4 +145,5 @@
     <string name="order_update_error">Couldn\'t update the order</string>
     <string name="order_update_success">Your order has been updated</string>
     <string name="note_the_final_amount_for_this_order_will_be_shared_at_the_time_of_delivery">Note: The final amount for this order will be shared at the time of delivery</string>
+    <string name="you_can_type_here_in_case_of_any_special_instruction">You can type here in case of any special instruction</string>
 </resources>
