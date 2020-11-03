@@ -343,7 +343,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         details.setLongitude(addressModel!=null?addressModel.getLongitude():"");
         details.setSpecialInstructions(cnfSchdulePckupFragmentBinding.inputSpclInstruction.getText().toString());
         if(getProfileResponse!=null && getProfileResponse.getProfileData()!=null) {
-            details.setBuyerName(getProfileResponse.getProfileData().getFirstName() + " " + getProfileResponse.getProfileData().getFirstName());
+            details.setBuyerName(getProfileResponse.getProfileData().getFirstName() + " " + getProfileResponse.getProfileData().getLastName());
         }
         else {
             details.setBuyerName("");
