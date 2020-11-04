@@ -56,11 +56,23 @@ class AwaitingCompleteAdapter(var activity: FragmentActivity?, var context: Cont
         var orderIdTxt = itemView.orderIdTxt
         var ordrDteTme : TextView? = itemView.ordrDteTme
         var pckUpAdrsTxt = itemView.pckUpAdrsTxt
+        var orderStage = itemView.txtOrderStage
 
         fun bindDta(awtngDlvry: AwaitingCompleteModel){
-            orderIdTxt.text = "Order Id. ${awtngDlvry.orderIdVal}"
-            ordrDteTme!!.text = "${awtngDlvry.date}"
-            pckUpAdrsTxt.text = awtngDlvry.pickUpAddress
+            if(awtngDlvry.orderStage.equals(itemView.context.resources.getString(R.string.model_cancelled))) {
+                orderIdTxt.text = "Order Id. ${awtngDlvry.orderIdVal}"
+                ordrDteTme!!.text = "${awtngDlvry.date}"
+                pckUpAdrsTxt.text = awtngDlvry.pickUpAddress
+                orderStage.text=itemView.context.resources.getString(R.string.cancelled_txt)
+                orderStage.setBackgroundColor(itemView.context.resources.getColor(R.color.lit_red))
+            }else{
+                orderIdTxt.text = "Order Id. ${awtngDlvry.orderIdVal}"
+                ordrDteTme!!.text = "${awtngDlvry.date}"
+                pckUpAdrsTxt.text = awtngDlvry.pickUpAddress
+                orderStage.text=itemView.context.resources.getString(R.string.completed_txt)
+                orderStage.setBackgroundColor(itemView.context.resources.getColor(R.color.lit_green))
+
+            }
         }
 
     }

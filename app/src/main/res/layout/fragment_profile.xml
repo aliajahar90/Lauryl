@@ -202,7 +202,7 @@
         </LinearLayout>
 
             <LinearLayout
-                android:paddingBottom="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_60"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:layout_centerHorizontal="true"

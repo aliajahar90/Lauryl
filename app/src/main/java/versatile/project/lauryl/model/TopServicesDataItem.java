@@ -55,7 +55,17 @@ public class TopServicesDataItem {
     @SerializedName("ServiceType")
     @Expose
     private String ServiceType;
+    @SerializedName("costprice")
+    @Expose
+    private String costprice;
 
+    public String getCostprice() {
+        return costprice;
+    }
+
+    public void setCostprice(String costprice) {
+        this.costprice = costprice;
+    }
 
     public String getProductTitle() {
         return productTitle;

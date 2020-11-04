@@ -1,5 +1,6 @@
 package versatile.project.lauryl.services;
 
+import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import versatile.project.lauryl.R;
 import versatile.project.lauryl.databinding.ListItemTypeofserviceBinding;
 import versatile.project.lauryl.databinding.SchedulePickUpLstItemBinding;
 import versatile.project.lauryl.model.TopServicesDataItem;
+import versatile.project.lauryl.utils.AllConstants;
 
 public class ServiceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private SparseBooleanArray selectedItems;
@@ -88,18 +90,22 @@ public class ServiceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                  itemPaymentNetbankingBinding.sevrcsLyot.setBackgroundResource(R.drawable.item_netbank_selected);
                  itemPaymentNetbankingBinding.srvcTitleTxt.setTextColor(itemPaymentNetbankingBinding.getRoot().getContext().getResources().getColor(R.color.white));
                  itemPaymentNetbankingBinding.srvcDescTxt.setTextColor(itemPaymentNetbankingBinding.getRoot().getContext().getResources().getColor(R.color.white));
+                 itemPaymentNetbankingBinding.txtPrice.setTextColor(itemPaymentNetbankingBinding.getRoot().getContext().getResources().getColor(R.color.white));
 
              } else {
                  itemPaymentNetbankingBinding.sevrcsLyot.setBackgroundResource(R.drawable.grey_corner_radius_stroke_bckgrnd);
                  itemPaymentNetbankingBinding.srvcTitleTxt.setTextColor(itemPaymentNetbankingBinding.getRoot().getContext().getResources().getColor(R.color.orange));
                  itemPaymentNetbankingBinding.srvcDescTxt.setTextColor(itemPaymentNetbankingBinding.getRoot().getContext().getResources().getColor(R.color.grey_color));
-
+                 itemPaymentNetbankingBinding.txtPrice.setTextColor(itemPaymentNetbankingBinding.getRoot().getContext().getResources().getColor(R.color.colorPrimary));
              }
              Glide.with(itemPaymentNetbankingBinding.getRoot().getContext())
                     .load(netBanking.getImgUrl())
                     .centerCrop()
                     .placeholder(R.drawable.wash_fold_icon)
                     .into(itemPaymentNetbankingBinding.srvcsItemImg);
+             if(TextUtils.equals(netBanking.getServiceType(), AllConstants.Services.SERVICE_TYPE_SUBSCRIPTION)) {
+                 itemPaymentNetbankingBinding.txtPrice.setText("\u20B9 " + netBanking.getCostprice()+"/Month");
+             }
              itemPaymentNetbankingBinding.srvcTitleTxt.setText(netBanking.getProductTitle());
              itemPaymentNetbankingBinding.srvcDescTxt.setText(netBanking.getDescription());
              itemPaymentNetbankingBinding.executePendingBindings();
