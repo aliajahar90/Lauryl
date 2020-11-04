@@ -44,6 +44,7 @@ public class AllConstants {
         public static String vAccountId="3";
         public static String pickupDate="pickupDate";
         public static String pickupTime="pickupTime";
+        public static String spclInst="spclInst";
 
         public class OrderStage{
             public static final String Awaiting_Pickup = "Awaiting Pickup";
@@ -57,6 +58,7 @@ public class AllConstants {
     }
 
     public static class Services{
+        public static final String SERVICE_TYPE_SUBSCRIPTION = "SUBSCRIPTION";
         public static class Errors {
             public static final String ERROR_LIST_EMPTY = "No data found";
             public static final String ERROR_API_FAILED= "Something went wrong!";

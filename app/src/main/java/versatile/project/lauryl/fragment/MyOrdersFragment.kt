@@ -167,7 +167,9 @@ class MyOrdersFragment : Fragment() {
             when (dataItem.orderStage) {
 
                 getString(R.string.model_awaiting_pckup) -> {
-                    val dateTimeString = getDateTimeString(dataItem.orderDateTime)
+                   // val dateTimeString = getDateTimeString(dataItem.orderDateTime)
+                    val dateTimeString =dataItem.pickupDate +" & "+ dataItem.pickupSlot
+
                     myOrdersViewModel.addAwaitingPckUpDta(
                         AwaitingPickUpModel(
                             (dataItem.orderNumber),
@@ -180,7 +182,8 @@ class MyOrdersFragment : Fragment() {
                 }
 
                 getString(R.string.model_awaiting_dlvry) -> {
-                    val dateTimeString = getDateTimeString(dataItem.orderDateTime)
+                   // val dateTimeString = getDateTimeString(dataItem.orderDateTime)
+                    val dateTimeString =dataItem.pickupDate +" & "+ dataItem.pickupSlot
                     myOrdersViewModel.addAwaitingDlvryDta(
                         AwaitingDeliveryModel(
                             (dataItem.orderNumber),
@@ -192,13 +195,26 @@ class MyOrdersFragment : Fragment() {
                 }
 
                 getString(R.string.model_awaiting_cmpltd) -> {
-                    val dateTimeString = getDateTimeString(dataItem.orderDateTime)
+                  //  val dateTimeString = getDateTimeString(dataItem.orderDateTime)
+                    val dateTimeString =dataItem.pickupDate +" & "+ dataItem.pickupSlot
                     myOrdersViewModel.addAwaitingPckUpCmpltdDta(
                         AwaitingCompleteModel(
                             (dataItem.orderNumber),
                             dateTimeString,
                             "",
-                            "${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}"
+                            "${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}",dataItem.orderStage
+                        )
+                    )
+                }
+                getString(R.string.model_cancelled) -> {
+                    //val dateTimeString = getDateTimeString(dataItem.orderDateTime)
+                    val dateTimeString =dataItem.pickupDate +" & "+ dataItem.pickupSlot
+                    myOrdersViewModel.addAwaitingPckUpCmpltdDta(
+                        AwaitingCompleteModel(
+                            (dataItem.orderNumber),
+                            dateTimeString,
+                            "",
+                            "${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}",dataItem.orderStage
                         )
                     )
                 }

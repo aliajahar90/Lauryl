@@ -289,6 +289,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         JsonObject pickupTimingJson=new JsonObject();
         pickupTimingJson.addProperty(AllConstants.Orders.pickupDate,selectedDate);
         pickupTimingJson.addProperty(AllConstants.Orders.pickupTime,selectedTime);
+        pickupTimingJson.addProperty(AllConstants.Orders.spclInst,cnfSchdulePckupFragmentBinding.inputSpclInstruction.getText().toString());
         myApplication.setActiveSessionPickupSlots(mGson.toJson(pickupTimingJson));
         List<String> localServiceList=new ArrayList<>();
         if(topServicesDataItemList!=null) {

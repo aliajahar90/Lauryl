@@ -71,7 +71,7 @@ interface ApiServices {
         @Field("password") password: String
     ): Call<VersatileLoginResponse>
 
-    @POST("api/v1/inventory/list")
+    @POST("api/v1/inventory/service/list")
     fun getTopServices(
         @Query("access_token") accessToken: String,
         @Body inputJsonBody: JsonObject

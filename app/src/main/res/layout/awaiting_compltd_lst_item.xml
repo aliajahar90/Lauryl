@@ -36,6 +36,7 @@
                 android:gravity="end|right">
 
                 <TextView
+                    android:id="@+id/txtOrderStage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"

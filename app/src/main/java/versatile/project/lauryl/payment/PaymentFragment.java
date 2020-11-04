@@ -689,9 +689,11 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         JsonObject pickupSlotJson = mGson.fromJson(myApplication.getActiveSessionPickupSlots(), JsonObject.class);
         String selectedDate="";
         String selectedTime="";
+        String spclInst="";
         if(pickupSlotJson!=null){
             selectedDate=pickupSlotJson.get(AllConstants.Orders.pickupDate).getAsString();
             selectedTime=pickupSlotJson.get(AllConstants.Orders.pickupTime).getAsString();
+            spclInst=pickupSlotJson.get(AllConstants.Orders.spclInst).getAsString();
         }
 
         List<String> localServiceList = new ArrayList<>();
@@ -743,6 +745,13 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         details.setLatitude(addressModel!=null?addressModel.getLatitude():"");
         details.setLongitude(addressModel!=null?addressModel.getLongitude():"");
         details.setRazorPayOrderId(paymentSuccess.getRazorOrderId());
+        details.setSpecialInstructions(spclInst);
+        if(getProfileResponse!=null && getProfileResponse.getProfileData()!=null) {
+            details.setBuyerName(getProfileResponse.getProfileData().getFirstName() + " " + getProfileResponse.getProfileData().getLastName());
+        }
+        else {
+            details.setBuyerName("");
+        }
         createOrderData.setDetails(details);
         capturePaymentSuccessRequiredData(paymentSuccess,createOrderData);
         paymentViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), createOrderData);

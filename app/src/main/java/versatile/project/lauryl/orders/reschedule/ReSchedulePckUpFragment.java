@@ -309,15 +309,17 @@ public class ReSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewMo
         details.setPickupState(myOrdersDataItem.getInvoiceState());
         details.setPickupCountry(myOrdersDataItem.getInvoiceCountry());
         details.setShippingPostCode(myOrdersDataItem.getShippingPostCode());
-        //details.setTransactionId(myOrdersDataItem.getId());
+        details.setTransactionId(myOrdersDataItem.getTransactionId());
+        details.setRazorPayOrderId(myOrdersDataItem.getRazorPayOrderId());
         details.setServiceList(myOrdersDataItem.getServiceList());
-        details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
+        details.setPhoneNumber(myOrdersDataItem.getPhoneNumber());
         details.setOrderStage(myOrdersDataItem.getOrderStage());
         details.setEmailId(myOrdersDataItem.getEmailId());
         details.setPickupDate(selectedDate);
         details.setPickupSlot(selectedTime);
-        //details.setLatitude(myOrdersDataItem?addressModel.getLatitude():"");
-        //details.setLongitude(addressModel!=null?addressModel.getLongitude():"");
+        details.setLatitude(myOrdersDataItem.getLatitude());
+        details.setLongitude(myOrdersDataItem.getLongitude());
+        details.setBuyerName(myOrdersDataItem.getBuyerName());
         createOrderData.setDetails(details);
         cnfSchedulePickupViewModel.createOrderOnServerWithoutPayment(myApplication.getAccessToken(), createOrderData);
     }

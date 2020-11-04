@@ -150,6 +150,84 @@ public class MyOrdersDataItem {
     @Expose
     private Boolean magentoInvoice;
 
+    @SerializedName("specialInstructions")
+    @Expose
+    private String specialInstructions;
+    @SerializedName("latitude")
+    @Expose
+    private String latitude;
+    @SerializedName("longitude")
+    @Expose
+    private String longitude;
+    @SerializedName("razorPayOrderId")
+    @Expose
+    private String razorPayOrderId;
+    @SerializedName("transactionId")
+    @Expose
+    private String transactionId;
+    @SerializedName("pickupSlot")
+    @Expose
+    private String pickupSlot;
+    @SerializedName("pickupDate")
+    @Expose
+    private String pickupDate;
+
+    public String getSpecialInstructions() {
+        return specialInstructions;
+    }
+
+    public void setSpecialInstructions(String specialInstructions) {
+        this.specialInstructions = specialInstructions;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getRazorPayOrderId() {
+        return razorPayOrderId;
+    }
+
+    public void setRazorPayOrderId(String razorPayOrderId) {
+        this.razorPayOrderId = razorPayOrderId;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public String getPickupSlot() {
+        return pickupSlot;
+    }
+
+    public void setPickupSlot(String pickupSlot) {
+        this.pickupSlot = pickupSlot;
+    }
+
+    public String getPickupDate() {
+        return pickupDate;
+    }
+
+    public void setPickupDate(String pickupDate) {
+        this.pickupDate = pickupDate;
+    }
+
     public String getvOrderNumber() {
         return vOrderNumber;
     }
