@@ -71,6 +71,7 @@ public class PaymentErrorFragment extends BaseBinding<PaymentErrorViewModel, Fra
             myApplication.setCreateOrderSerializedService(paymentBaseShareData.getPaymentError().getSerializedServiceInformation());
             myApplication.setCreateOrderSerializdedAddressData(paymentBaseShareData.getPaymentError().getSerializedAddressInformation());
             myApplication.setCreateOrderSerializdedProfile(paymentBaseShareData.getPaymentError().getSerializedProfileInformation());
+            myApplication.setActiveSessionOrderValue(paymentBaseShareData.getPaymentError().getSerializedOrderValueInformation());
             HomeNavigationController.getInstance(getActivity()).enableBackButton();
             getActivity().getSupportFragmentManager().popBackStackImmediate();
 

@@ -100,7 +100,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:text="@string/debited_amount"></androidx.appcompat.widget.AppCompatTextView>
+                    android:text="@string/debited_amount">
+
+                </androidx.appcompat.widget.AppCompatTextView>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtDebitedAmount"

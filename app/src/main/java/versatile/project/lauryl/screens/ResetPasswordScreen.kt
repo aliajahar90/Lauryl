@@ -37,7 +37,7 @@ class ResetPasswordScreen : AppCompatActivity() {
         sendBtn.setOnClickListener {
 
             val newPswrdTxt = newPswrdEdt.text.toString()
-            val newCnfPswrdTxt = newPswrdEdt.text.toString()
+            val newCnfPswrdTxt = newCnfPswrdEdt.text.toString()
 
             if(newPswrdTxt == null || newPswrdTxt.isEmpty()){
                 Globals.showPopoUpDialog(this,getString(R.string.validation),getString(R.string.enter_psrd_num_txt))

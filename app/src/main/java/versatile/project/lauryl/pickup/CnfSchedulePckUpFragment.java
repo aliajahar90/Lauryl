@@ -3,6 +3,7 @@ package versatile.project.lauryl.pickup;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +76,12 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     String selectedTime = null;
     String selectedDate = null;
     private Gson mGson;
-
+    private boolean isPayAsServiceSelected=false;
+    private double totalOrderValue = 0.0;
+    boolean isServiceSubscribed = false;
+    boolean isESubscription = false;
+    PaymentBaseShareData paymentBaseShareData;
+    private GetProfileResponse getProfileResponse;
     public static CnfSchedulePckUpFragment newInstance() {
         CnfSchedulePckUpFragment cnfSchedulePckUpFragment = new CnfSchedulePckUpFragment();
         try {
@@ -96,43 +102,9 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         cnfSchdulePckupFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.cnf_schdule_pckup_fragment, container, false);
         mGson=new Gson();
-        resetState();
-        loadDateTimeFromApi();
-        if (adapter == null) {
-            adapter = new CnfPickupDateAdapter(uniqueDates, this);
-            cnfSchdulePckupFragmentBinding.horztlScrlVw.setAdapter(adapter);
-            // horizontal RecyclerView
-            cnfSchdulePckupFragmentBinding.horztlScrlVw.setHasFixedSize(true);
-            mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-            cnfSchdulePckupFragmentBinding.horztlScrlVw.setLayoutManager(mLayoutManager);
-            cnfSchdulePckupFragmentBinding.horztlScrlVw.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.HORIZONTAL));
-            cnfSchdulePckupFragmentBinding.horztlScrlVw.setItemAnimator(new DefaultItemAnimator());
-        }
-        cnfSchedulePickupViewModel.observePickupDateTimeSuccessResponse().observe(this, cnfPickupResponse -> {
-            hideLoader();
-            rawDates.addAll(cnfPickupResponse);
-            Set<String> uniqueDateSet = new LinkedHashSet<>(rawDates);
-            for (String s : uniqueDateSet) {
-                //uniqueDates.clear();
-                if (!uniqueDates.contains(s)) {
-                    if (isTodayOrFuture(s)) {
-                        uniqueDates.add(s);
-                    }
-                }
-            }
-            adapter.notifyDataSetChanged();
-            //adapter.notifyItemRangeInserted(adapter.getItemCount(), uniqueDates.size() - 1);
-            //((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(0, adapter.getItemCount());
-
-            listenOnScroll();
-
-        });
-        cnfSchedulePickupViewModel.observePickupDateTimeErrorResponse().observe(this, error -> {
-            hideLoader();
-            Globals.Companion.showPopoUpDialog(getActivity(), "Error", "Error fetching date and time");
-        });
-
-        setUpTimeView();
+        MyApplication myApplication = (MyApplication) getActivity().getApplicationContext();
+        showLoader();
+        getProfile();
         cnfSchedulePickupViewModel.isLastItemReached().observe(this, aBoolean -> {
             if (aBoolean) {
                 isLastPage = true;
@@ -147,9 +119,16 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
             }
         });
         cnfSchedulePickupViewModel.getCreateOrderSuccessEvent().observe(this, it -> {
+            JsonObject pickupTimingJson = new JsonObject();
+            pickupTimingJson.addProperty(AllConstants.Orders.totalOrderValue, totalOrderValue);
+            myApplication.setActiveSessionOrderValue(mGson.toJson(pickupTimingJson));
             if (getActivity() instanceof HomeScreen) {
-                ((HomeScreen) getActivity()).selectPayment();
-                HomeNavigationController.getInstance(getActivity()).addPaymentFragment();
+                if (isServiceSubscribed && isESubscription && !isPayAsServiceSelected) {
+                    HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment(new Gson().toJson(paymentBaseShareData));
+                } else {
+                    ((HomeScreen) getActivity()).selectPayment();
+                    HomeNavigationController.getInstance(getActivity()).addPaymentFragment();
+                }
             }
         });
         cnfSchedulePickupViewModel.getCreateOrderFailedEvent().observe(this, it->{
@@ -161,7 +140,6 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
                     })
                     .show();
         });
-
         return cnfSchdulePckupFragmentBinding.getRoot();
     }
 
@@ -264,6 +242,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     }
 
     void resetState() {
+        totalOrderValue=0.0;
         selectedTime = null;
         selectedDate=null;
         adapter = null;
@@ -300,7 +279,8 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         CreateOrderData createOrderData=new CreateOrderData();
         //keeping static as of now
         details.setOrderNumber(currentDateTimeInMilis);
-        details.setOrderTotal("100");
+        calculateOrderTotal();
+        details.setOrderTotal(String.valueOf(totalOrderValue));
         details.setVAccountId(AllConstants.Orders.vAccountId);
         details.setMarketPlaceName(AllConstants.Orders.MARKET_PLACE_NAME);
         details.setOrderDateTime(currentDateTimeInMilis);
@@ -332,7 +312,12 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         details.setTransactionId("");
         details.setServiceList(localServiceList);
         details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
-        details.setOrderStage("On Hold");
+        if(isServiceSubscribed && !isPayAsServiceSelected && isESubscription) {
+            details.setOrderStage(AllConstants.Orders.OrderStage.Awaiting_Pickup);
+        }
+        else {
+            details.setOrderStage("On Hold");
+        }
         if(getProfileResponse!=null && getProfileResponse.getProfileData()!=null) {
             details.setEmailId(getProfileResponse.getProfileData().getEmail());
         }else {
@@ -349,11 +334,123 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         else {
             details.setBuyerName("");
         }
+        details.setReSchedule(false);
         createOrderData.setDetails(details);
+        capturePaymentSuccessRequiredData(new PaymentBaseShareData.PaymentSuccess(),createOrderData);
         cnfSchedulePickupViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), createOrderData);
     }
     String getCurrentDateTime(){
         DateTime dateTime=DateTime.now();
         return String.valueOf(dateTime.getMillis());
     }
+
+    void calculateOrderTotal() {
+        MyApplication myApplication = (MyApplication) getActivity().getApplicationContext();
+        List<TopServicesDataItem> topServicesDataItemList = mGson.fromJson(myApplication.getCreateOrderSerializedService(), new TypeToken<List<TopServicesDataItem>>() {
+        }.getType());
+        for (TopServicesDataItem topServicesDataItem : topServicesDataItemList) {
+            if (!TextUtils.equals(topServicesDataItem.getServiceType(), AllConstants.Services.SERVICE_TYPE_SUBSCRIPTION)) {
+                totalOrderValue = totalOrderValue + Double.parseDouble(topServicesDataItem.getCostprice());
+                isPayAsServiceSelected=true;
+                isServiceSubscribed = false;
+            } else {
+                totalOrderValue = totalOrderValue + Double.parseDouble(topServicesDataItem.getCostprice());
+                isServiceSubscribed = true;
+            }
+        }
+        if (isESubscription) {
+            for (TopServicesDataItem topServicesDataItem : topServicesDataItemList) {
+                if (TextUtils.equals(topServicesDataItem.getServiceType(), AllConstants.Services.SERVICE_TYPE_SUBSCRIPTION)) {
+                    totalOrderValue = totalOrderValue - Double.parseDouble(topServicesDataItem.getCostprice());
+                }
+            }
+        }
+    }
+    void capturePaymentSuccessRequiredData(PaymentBaseShareData.PaymentSuccess paymentSuccess,CreateOrderData createOrderData){
+        paymentBaseShareData=new PaymentBaseShareData();
+        PaymentBaseShareData.PaymentSuccess thisPaymentSuccess=new PaymentBaseShareData.PaymentSuccess();
+        thisPaymentSuccess.setPaymentData(paymentSuccess.getPaymentData());
+        thisPaymentSuccess.setPaymentTransactionId(paymentSuccess.getPaymentTransactionId());
+        thisPaymentSuccess.setCreateOrderData(createOrderData);
+        thisPaymentSuccess.setPaymenMethod("E-Subscription");
+        paymentBaseShareData.setPaymentSuccess(thisPaymentSuccess);
+
+    }
+
+    private void getProfile() {
+        MyApplication myApplication = (MyApplication) getActivity().getApplicationContext();
+        cnfSchedulePickupViewModel.getProfile(myApplication.getUserAccessToken());
+        cnfSchedulePickupViewModel.profileFetchSuccessHandler().observe(this, getProfileResponse -> {
+            hideLoader();
+            if (getProfileResponse != null) {
+                this.getProfileResponse = getProfileResponse;
+                if (getProfileResponse.getProfileData() != null) {
+                    isESubscription = getProfileResponse.getProfileData().getSubscribed();
+                }
+                ((HomeScreen) getActivity()).updateUserName(getProfileResponse);
+                resetState();
+                loadDateTimeFromApi();
+                if (adapter == null) {
+                    adapter = new CnfPickupDateAdapter(uniqueDates, this);
+                    cnfSchdulePckupFragmentBinding.horztlScrlVw.setAdapter(adapter);
+                    // horizontal RecyclerView
+                    cnfSchdulePckupFragmentBinding.horztlScrlVw.setHasFixedSize(true);
+                    mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+                    cnfSchdulePckupFragmentBinding.horztlScrlVw.setLayoutManager(mLayoutManager);
+                    cnfSchdulePckupFragmentBinding.horztlScrlVw.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.HORIZONTAL));
+                    cnfSchdulePckupFragmentBinding.horztlScrlVw.setItemAnimator(new DefaultItemAnimator());
+                }
+                cnfSchedulePickupViewModel.observePickupDateTimeSuccessResponse().observe(this, cnfPickupResponse -> {
+                    hideLoader();
+                    rawDates.addAll(cnfPickupResponse);
+                    Set<String> uniqueDateSet = new LinkedHashSet<>(rawDates);
+                    for (String s : uniqueDateSet) {
+                        //uniqueDates.clear();
+                        if (!uniqueDates.contains(s)) {
+                            if (isTodayOrFuture(s)) {
+                                uniqueDates.add(s);
+                            }
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                    //adapter.notifyItemRangeInserted(adapter.getItemCount(), uniqueDates.size() - 1);
+                    //((LinearLayoutManager) mLayoutManager).scrollToPositionWithOffset(0, adapter.getItemCount());
+
+                    listenOnScroll();
+
+                });
+                cnfSchedulePickupViewModel.observePickupDateTimeErrorResponse().observe(this, error -> {
+                    hideLoader();
+                    Globals.Companion.showPopoUpDialog(getActivity(), "Error", "Error fetching date and time");
+                });
+
+                setUpTimeView();
+            } else {
+                Globals.Companion.showPopoUpDialog(getActivity(), getString(R.string.lauryl), AllConstants.Orders.Errors.ERROR_API_FAILED);
+            }
+
+        });
+        cnfSchedulePickupViewModel.profileFetchErrorHandler().observe(this, throwable -> {
+            hideLoader();
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.lauryl))
+                    .setMessage(AllConstants.Orders.Errors.ERROR_API_FAILED)
+                    .setPositiveButton("Retry", (dialog, which) -> {
+                        dialog.dismiss();
+                        showLoader();
+                        getProfile();
+                    })
+                    .setCancelable(false)
+                    .setNegativeButton("No", (dialogInterface, j) -> {
+                        dialogInterface.dismiss();
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        for(int i = 1; i < fm.getBackStackEntryCount(); ++i) {
+                            fm.popBackStack();
+                        }
+                        ((HomeScreen) getActivity()).displaySPFragment();
+                    })
+                    .show();
+        });
+    }
+
 }

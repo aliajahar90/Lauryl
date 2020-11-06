@@ -309,7 +309,7 @@ public class PaymentRepository extends OrderRepository {
                 public Object notifyDoBackground() {
                     JSONObject options = new JSONObject();
                     try {
-                        options.put("amount", 1*100);
+                        options.put("amount", payload.get("amount"));
                         options.put("currency", "INR");
                         Order order = razorpayClient.Orders.create(options);
                         return order;

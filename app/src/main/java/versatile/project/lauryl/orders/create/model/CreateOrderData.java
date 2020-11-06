@@ -145,6 +145,17 @@ public class CreateOrderData implements Serializable {
         @SerializedName("buyerName")
         @Expose
         private String buyerName;
+        @SerializedName("reSchedule")
+        @Expose
+        private boolean reSchedule;
+
+        public boolean isReSchedule() {
+            return reSchedule;
+        }
+
+        public void setReSchedule(boolean reSchedule) {
+            this.reSchedule = reSchedule;
+        }
 
         public String getSpecialInstructions() {
             return specialInstructions;

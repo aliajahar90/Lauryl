@@ -142,9 +142,7 @@ public class ServiceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         List<TopServicesDataItem> topServicesDataItemList=new ArrayList<>();
         for(ServiceModel serviceModel:serviceModels)
         {
-            if(!serviceModel.isServiceType()){
-                topServicesDataItemList.add(serviceModel.getTopServicesDataItem());
-            }
+            topServicesDataItemList.add(serviceModel.getTopServicesDataItem());
         }
         return topServicesDataItemList;
     }

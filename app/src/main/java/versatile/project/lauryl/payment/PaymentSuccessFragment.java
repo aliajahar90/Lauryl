@@ -65,8 +65,9 @@ public class PaymentSuccessFragment extends BaseBinding<PaymentSuccessViewModel,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        paymentSuccessBinding.txtDebitedAmount.setText("\u20B9 "+paymentBaseShareData.getPaymentSuccess().getCreateOrderData().getDetails().getOrderTotal());
         paymentSuccessBinding.txtOrderId.setText(paymentBaseShareData.getPaymentSuccess().getCreateOrderData().getDetails().getOrderNumber());
-        paymentSuccessBinding.txtDateTime.setText(getOrderDate(paymentBaseShareData.getPaymentSuccess().getCreateOrderData().getDetails().getOrderDateTime())+" "+getOrderTime(paymentBaseShareData.getPaymentSuccess().getCreateOrderData().getDetails().getOrderDateTime()));
+        paymentSuccessBinding.txtDateTime.setText(getPickupDate(paymentBaseShareData.getPaymentSuccess().getCreateOrderData().getDetails().getPickupDate())+" "+paymentBaseShareData.getPaymentSuccess().getCreateOrderData().getDetails().getPickupSlot());
         paymentSuccessBinding.txtMethod.setText(paymentBaseShareData.getPaymentSuccess().getPaymenMethod());
 //       // paymentSuccessBinding.btnOderStatus.setText(paymentBaseShareData.getPaymentSuccess().getPaymentTransactionId());
         paymentSuccessBinding.btnOderStatus.setOnClickListener(view -> {
@@ -101,6 +102,17 @@ public class PaymentSuccessFragment extends BaseBinding<PaymentSuccessViewModel,
             DateTime someDate = new DateTime(java.lang.Long.valueOf(date), DateTimeZone.forID("Asia/Kolkata"));
             DateTimeFormatter dateTimeFormate = DateTimeFormat.forPattern("hh:mm a");
             return "" + someDate.toString(dateTimeFormate).toUpperCase();
+        } catch (Exception e) {
+
+        }
+        return "";
+    }
+    private String getPickupDate(String date) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+            DateTime someDate =formatter.parseDateTime(date);
+            DateTimeFormatter dateTimeFormate = DateTimeFormat.forPattern("MMM dd,yyyy");
+            return  someDate.toString(dateTimeFormate);
         } catch (Exception e) {
 
         }

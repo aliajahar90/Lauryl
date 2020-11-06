@@ -83,6 +83,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     private String paymentMethod;
     private boolean isUserCanRetry=false;
     private  Gson mGson;
+    private double orderValue=1.0;
 
 
     public static PaymentFragment newInstance(int viewType) {
@@ -107,11 +108,18 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         paymentFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.payment_fragment, container, false);
         displayView(paymentBaseShareData.getViewType());
+        mGson=new Gson();
+        MyApplication myApplication=(MyApplication) getActivity().getApplicationContext();
+        try {
+            JsonObject orderValueJson = mGson.fromJson(myApplication.getActiveSessionOrderValue(), JsonObject.class);
+            orderValue = Double.parseDouble(orderValueJson.get(AllConstants.Orders.totalOrderValue).getAsString());
+        }catch (Exception e){
+            Log.d("Error", e.getMessage());
+        }
         initRazorpay();
         createWebView();
         paymentFragmentBinding.setViewmodel(paymentViewModel);
         paymentViewModel.setRazorpay(razorpay);
-        mGson=new Gson();
         return paymentFragmentBinding.getRoot();
     }
 
@@ -154,6 +162,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        paymentFragmentBinding.txtAmount.setText("\u20B9 "+orderValue);
         showLoading();
         paymentViewModel.getValidPaymentMethods();
         controlViewVisibility();
@@ -489,7 +498,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                     GetProfileResponse getProfileResponse=new Gson().fromJson(((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getCreateOrderSerializdedProfile(),GetProfileResponse.class);
                     paymentMethod = "upi";
                     JSONObject payload = new JSONObject("{currency: 'INR'}");
-                    payload.put("amount", 1*100);
+                    payload.put("amount",  (int) (orderValue* 100));
                     if (getProfileResponse != null && getProfileResponse.getProfileData() != null && getProfileResponse.getProfileData().getEmail() != null && !(getProfileResponse.getProfileData().getEmail().isEmpty())) {
                         payload.put("email", getProfileResponse.getProfileData().getEmail());
 
@@ -530,7 +539,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
                     GetProfileResponse getProfileResponse=new Gson().fromJson(((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getCreateOrderSerializdedProfile(),GetProfileResponse.class);
                     paymentMethod = "card";
                     JSONObject data = new JSONObject("{currency: 'INR'}");
-                    data.put("amount", 1 * 100);
+                    data.put("amount", (int) (orderValue* 100));
                     if (getProfileResponse != null && getProfileResponse.getProfileData() != null && getProfileResponse.getProfileData().getEmail() != null && !(getProfileResponse.getProfileData().getEmail().isEmpty())) {
                         data.put("email", getProfileResponse.getProfileData().getEmail());
 
@@ -566,7 +575,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             showLoading();
             try {
                 JSONObject data = new JSONObject("{currency: 'INR'}");
-                data.put("amount", 1 * 100);
+                data.put("amount", (int) (orderValue* 100));
                 if (getProfileResponse != null && getProfileResponse.getProfileData() != null && getProfileResponse.getProfileData().getEmail() != null && !(getProfileResponse.getProfileData().getEmail().isEmpty())) {
                     data.put("email", getProfileResponse.getProfileData().getEmail());
                 } else {
@@ -752,6 +761,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         else {
             details.setBuyerName("");
         }
+        details.setReSchedule(false);
         createOrderData.setDetails(details);
         capturePaymentSuccessRequiredData(paymentSuccess,createOrderData);
         paymentViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), createOrderData);
@@ -772,11 +782,13 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
          String getProfileResponseJson = myApplication.getCreateOrderSerializdedProfile();
          String addressModelJson =myApplication.getCreateOrderSerializdedAddressData();
          String topServicesDataItemListJson =myApplication.getCreateOrderSerializedService();
+          String totalOrderValue= myApplication.getActiveSessionOrderValue();
          PaymentBaseShareData.PaymentError thisPaymentError=new PaymentBaseShareData.PaymentError();
          thisPaymentError.setSerializedOrderInformation(orderNumberJson);
          thisPaymentError.setSerializedProfileInformation(getProfileResponseJson);
          thisPaymentError.setSerializedAddressInformation(addressModelJson);
          thisPaymentError.setSerializedServiceInformation(topServicesDataItemListJson);
+         thisPaymentError.setSerializedOrderValueInformation(totalOrderValue);
          thisPaymentError.setPaymentData(paymentError.getPaymentData());
          thisPaymentError.setDescription(paymentError.getDescription());
          thisPaymentError.setCode(paymentError.getCode());

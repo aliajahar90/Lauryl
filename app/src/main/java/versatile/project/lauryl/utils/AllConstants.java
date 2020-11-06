@@ -45,11 +45,13 @@ public class AllConstants {
         public static String pickupDate="pickupDate";
         public static String pickupTime="pickupTime";
         public static String spclInst="spclInst";
+        public static String totalOrderValue="totalOrderValue";
 
         public class OrderStage{
             public static final String Awaiting_Pickup = "Awaiting Pickup";
             public static final String Awaiting_Delivery = "Awaiting Delivery";
             public static final String Completed_Delivery = "Completed Delivery";
+            public static final String Cancelled_Delivery = "Canceled";
         }
         public static class Errors {
             public static final String ERROR_API_FAILED= "Something went wrong!";

@@ -65,6 +65,12 @@ public class GetProfileResponse implements Serializable {
         @SerializedName("firstTimeLogin")
         @Expose
         private Boolean firstTimeLogin;
+        @SerializedName("subscribed")
+        @Expose
+        private Boolean subscribed;
+        @SerializedName("appVersion")
+        @Expose
+        private String appVersion;
 
         public String getId() {
             return id;
@@ -184,6 +190,22 @@ public class GetProfileResponse implements Serializable {
 
         public void setFirstTimeLogin(Boolean firstTimeLogin) {
             this.firstTimeLogin = firstTimeLogin;
+        }
+
+        public Boolean getSubscribed() {
+            return subscribed;
+        }
+
+        public void setSubscribed(Boolean subscribed) {
+            this.subscribed = subscribed;
+        }
+
+        public String getAppVersion() {
+            return appVersion;
+        }
+
+        public void setAppVersion(String appVersion) {
+            this.appVersion = appVersion;
         }
     }
 
