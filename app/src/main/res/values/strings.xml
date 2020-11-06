@@ -60,6 +60,7 @@
     <string name="login_success_txt">Login Successful</string>
     <string name="server_error_txt">Server Error</string>
     <string name="internet_error_txt">Check internet connection</string>
+    <string name="login_error">Incorrect Username or Password</string>
     <string name="home_txt">Lauryl</string>
     <string name="orders_txt">My Orders</string>
     <string name="order_histry_txt">Order Details</string>
@@ -148,4 +149,6 @@
     <string name="note_the_final_amount_for_this_order_will_be_shared_at_the_time_of_delivery">Note: The final amount for this order will be shared at the time of delivery</string>
     <string name="you_can_type_here_in_case_of_any_special_instruction">You can type here in case of any special instruction</string>
     <string name="cancelled_txt">Cancelled</string>
+    <string name="cancelled_on">Cancelled On</string>
+    <string name="completed_on">Completed On</string>
 </resources>

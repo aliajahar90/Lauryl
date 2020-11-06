@@ -237,6 +237,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializdedProfile = ""
         (application as MyApplication).createOrderSerializedService = ""
         (application as MyApplication).activeSessionPickupSlots = ""
+        (application as MyApplication).selectedServiceArray.clear()
     }
 
     private fun displayHomeFragment() {
@@ -260,6 +261,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializdedProfile = ""
         (application as MyApplication).createOrderSerializedService = ""
         (application as MyApplication).activeSessionPickupSlots = ""
+        (application as MyApplication).selectedServiceArray.clear()
     }
 
     private fun loadMyFragment(fragment: Fragment) {
@@ -313,6 +315,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializdedProfile = ""
         (application as MyApplication).createOrderSerializedService = ""
         (application as MyApplication).activeSessionPickupSlots = ""
+        (application as MyApplication).selectedServiceArray.clear()
     }
 
     private fun displayProfileFragment() {
@@ -363,6 +366,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializdedProfile = ""
         (application as MyApplication).createOrderSerializedService = ""
         (application as MyApplication).activeSessionPickupSlots = ""
+        (application as MyApplication).selectedServiceArray.clear()
 
     }
 

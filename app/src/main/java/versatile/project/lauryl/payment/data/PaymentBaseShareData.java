@@ -78,6 +78,7 @@ public class PaymentBaseShareData implements Serializable {
         private String serializedServiceInformation;
         private String serializedProfileInformation;
         private String serializedAddressInformation;
+        private String serializedOrderValueInformation;
 
         public int getCode() {
             return code;
@@ -135,6 +136,13 @@ public class PaymentBaseShareData implements Serializable {
             this.serializedAddressInformation = serializedAddressInformation;
         }
 
+        public String getSerializedOrderValueInformation() {
+            return serializedOrderValueInformation;
+        }
+
+        public void setSerializedOrderValueInformation(String serializedOrderValueInformation) {
+            this.serializedOrderValueInformation = serializedOrderValueInformation;
+        }
     }
 
     public PaymentSuccess getPaymentSuccess() {

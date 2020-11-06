@@ -20,6 +20,7 @@ import versatile.project.lauryl.home.viewmodel.HomeFragmentViewModel
 import versatile.project.lauryl.model.TopServicesResponse
 import versatile.project.lauryl.profile.data.GetProfileResponse
 import versatile.project.lauryl.screens.HomeScreen
+import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Globals
 
 
@@ -187,8 +188,8 @@ class HomeFragment : Fragment() {
                 txtPickUpProcess.visibility=View.VISIBLE
                 txtNoAwaitingPickups.visibility=View.GONE
                 txtOrderId.text = "Order Id: " + ordersDataItem.orderNumber
-                txtOrderDate.text = getOrderDate(ordersDataItem.orderDateTime.toString())
-                txtOrderTime.text = getOrderTime(ordersDataItem.orderDateTime.toString())
+                txtOrderDate.text = "Scheduled On "+getPickupDate(ordersDataItem.pickupDate)
+                txtOrderTime.text = ordersDataItem.pickupSlot
             }else{
                 txtPickUpProcess.visibility=View.GONE
                 txtNoAwaitingPickups.visibility=View.VISIBLE
@@ -198,8 +199,8 @@ class HomeFragment : Fragment() {
             if (it != null && it.isNotEmpty()) {
                 val ordersDataItem = it[0]
                 txtOrderDeliveryId.text = "Order Id: " + ordersDataItem.orderNumber
-                txtOrderDeliveryDate.text = getOrderDate(ordersDataItem.orderDateTime.toString())
-                txtOrderDeliveryTime.text = getOrderTime(ordersDataItem.orderDateTime.toString())
+                txtOrderDeliveryDate.text = "Scheduled On " + getOrderDate(ordersDataItem.modifiedAt.toString())
+                txtOrderDeliveryTime.text = getOrderTime(ordersDataItem.modifiedAt.toString())
             }else{
                 txtDeliveryProcess.visibility=View.GONE
                 txtNoAwaitingDeliveryOrders.visibility=View.VISIBLE
@@ -207,12 +208,21 @@ class HomeFragment : Fragment() {
         })
         homeFragmentViewModel.getCompletedDeliveryList()?.observe(this, Observer {
             if (it != null && it.isNotEmpty()) {
-                txtCompleted.visibility=View.VISIBLE
+                txtCompleted.visibility = View.VISIBLE
                 txtNoCompletedDelivery.visibility=View.GONE
                 val ordersDataItem = it[0]
                 txtCompletedId.text = "Order Id: " + ordersDataItem.orderNumber
-                txtCompletedDate.text = getOrderDate(ordersDataItem.orderDateTime.toString())
-                txtCompletedTime.text = getOrderTime(ordersDataItem.orderDateTime.toString())
+                if(it[0].orderStage.equals(AllConstants.Orders.OrderStage.Cancelled_Delivery)) {
+                    txtCompleted.setBackgroundColor(resources.getColor(R.color.lit_red))
+                    txtCompleted.text=getString(R.string.cancelled_txt)
+                    txtCompletedDate.text = getString(R.string.cancelled_on) +" "+getOrderDate(ordersDataItem.modifiedAt.toString())
+                    txtCompletedTime.text = getOrderTime(ordersDataItem.modifiedAt.toString())
+                }else{
+                    txtCompleted.setBackgroundColor(resources.getColor(R.color.lit_green))
+                    txtCompleted.text=getString(R.string.completed_txt)
+                    txtCompletedDate.text = getString(R.string.completed_on) +" "+getOrderDate(ordersDataItem.modifiedAt.toString())
+                    txtCompletedTime.text = getOrderTime(ordersDataItem.modifiedAt.toString())
+                }
             }else{
                 txtCompleted.visibility=View.GONE
                 txtNoCompletedDelivery.visibility=View.VISIBLE
@@ -294,7 +304,7 @@ class HomeFragment : Fragment() {
         inputJson.addProperty("currentPage", 0)
         inputJson.addProperty("pageSize", 100)
         inputJson.addProperty("sort", "DESC")
-        inputJson.addProperty("sortBy", "orderDateTime")
+        inputJson.addProperty("sortBy", "modifiedAt")
         val searchJson = JsonObject()
         searchJson.addProperty("key", "phoneNumber")
         if (myApplication != null)
@@ -309,12 +319,23 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun getPickupDate(date: String): CharSequence? {
+        try {
+            val formatter = DateTimeFormat.forPattern("MM/dd/yyyy")
+            val someDate =formatter.parseDateTime(date)
+            val dateTimeFormate = DateTimeFormat.forPattern("MMM dd,yyyy")
+            return  someDate.toString(dateTimeFormate)
+        } catch (e: Exception) {
+
+        }
+        return "";
+    }
     private fun getOrderDate(date: String): CharSequence? {
         try {
             val milliseconds = date
             val someDate = DateTime(java.lang.Long.valueOf(milliseconds), DateTimeZone.forID("Asia/Kolkata"))
             val dateTimeFormate = DateTimeFormat.forPattern("MMM dd,yyyy")
-            return "Placed on " + someDate.toString(dateTimeFormate)
+            return  someDate.toString(dateTimeFormate)
         } catch (e: Exception) {
 
         }

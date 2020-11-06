@@ -1,6 +1,7 @@
 package versatile.project.lauryl.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -19,9 +20,11 @@ import versatile.project.lauryl.adapter.SchedulePickUpAdapterJava
 import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.model.TopServicesDataItem
 import versatile.project.lauryl.model.TopServicesResponse
+import versatile.project.lauryl.profile.data.GetProfileResponse
 import versatile.project.lauryl.screens.HomeScreen
 import versatile.project.lauryl.services.ServiceListAdapter
 import versatile.project.lauryl.services.ServiceModel
+import versatile.project.lauryl.utils.AllConstants
 import versatile.project.lauryl.utils.Constants
 import versatile.project.lauryl.utils.Globals
 import versatile.project.lauryl.view.model.SchedulePickUpFragmentViewModel
@@ -91,8 +94,9 @@ class SchedulePickUpFragment : Fragment(), ServiceListAdapter.OnItemClickListene
         schdlePckUpBtn.setOnClickListener {
             if (selectedItems.size() > 0) {
                 val selectedServices=ArrayList<TopServicesDataItem>()
-                for(item in (recyclerVw.adapter as ServiceListAdapter).topServicesDataItems){
-                    if(selectedItems.get((recyclerVw.adapter as ServiceListAdapter).topServicesDataItems.indexOf(item))){
+                var allServices= (recyclerVw.adapter as ServiceListAdapter).topServicesDataItems as ArrayList<TopServicesDataItem>
+                for(item in allServices){
+                    if(selectedItems.get(allServices.indexOf(item))){
                         selectedServices.add(item)
                     }
                 }
@@ -138,5 +142,7 @@ class SchedulePickUpFragment : Fragment(), ServiceListAdapter.OnItemClickListene
         super.onDetach()
         (activity as HomeScreen).myApplication.selectedServiceArray.clear()
     }
+
+
 
 }

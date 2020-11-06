@@ -14,6 +14,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import kotlinx.android.synthetic.main.my_orders_fragment.*
+import org.joda.time.format.DateTimeFormat
 import versatile.project.lauryl.R
 import versatile.project.lauryl.adapter.AwaitingCompleteAdapter
 import versatile.project.lauryl.adapter.AwaitingDevliveryAdapter
@@ -105,7 +106,7 @@ class MyOrdersFragment : Fragment() {
         inputJson.addProperty("currentPage", 0)
         inputJson.addProperty("pageSize", 100)
         inputJson.addProperty("sort", "DESC")
-        inputJson.addProperty("sortBy", "orderDateTime")
+        inputJson.addProperty("sortBy", "modifiedAt")
         val searchJson = JsonObject()
         searchJson.addProperty("key", "phoneNumber")
         if (myApplication != null)
@@ -168,8 +169,10 @@ class MyOrdersFragment : Fragment() {
 
                 getString(R.string.model_awaiting_pckup) -> {
                    // val dateTimeString = getDateTimeString(dataItem.orderDateTime)
-                    val dateTimeString =dataItem.pickupDate +" & "+ dataItem.pickupSlot
-
+                    var dateTimeString=""
+                    if(dataItem.pickupDate!=null) {
+                        dateTimeString = getPickupDate(dataItem.pickupDate) + " Between " + dataItem.pickupSlot
+                    }
                     myOrdersViewModel.addAwaitingPckUpDta(
                         AwaitingPickUpModel(
                             (dataItem.orderNumber),
@@ -183,7 +186,10 @@ class MyOrdersFragment : Fragment() {
 
                 getString(R.string.model_awaiting_dlvry) -> {
                    // val dateTimeString = getDateTimeString(dataItem.orderDateTime)
-                    val dateTimeString =dataItem.pickupDate +" & "+ dataItem.pickupSlot
+                    var dateTimeString=""
+                    if(dataItem.pickupDate!=null) {
+                        dateTimeString = getPickupDate(dataItem.pickupDate) + " Between " + dataItem.pickupSlot
+                    }
                     myOrdersViewModel.addAwaitingDlvryDta(
                         AwaitingDeliveryModel(
                             (dataItem.orderNumber),
@@ -195,8 +201,9 @@ class MyOrdersFragment : Fragment() {
                 }
 
                 getString(R.string.model_awaiting_cmpltd) -> {
-                  //  val dateTimeString = getDateTimeString(dataItem.orderDateTime)
-                    val dateTimeString =dataItem.pickupDate +" & "+ dataItem.pickupSlot
+                    val dateTimeString = getDateTimeString(dataItem.modifiedAt.toLong())
+                    //  val dateTimeString = getDateTimeString(dataItem.orderDateTime)
+                   // val dateTimeString =dataItem.pickupDate +" & "+ dataItem.pickupSlot
                     myOrdersViewModel.addAwaitingPckUpCmpltdDta(
                         AwaitingCompleteModel(
                             (dataItem.orderNumber),
@@ -207,8 +214,8 @@ class MyOrdersFragment : Fragment() {
                     )
                 }
                 getString(R.string.model_cancelled) -> {
-                    //val dateTimeString = getDateTimeString(dataItem.orderDateTime)
-                    val dateTimeString =dataItem.pickupDate +" & "+ dataItem.pickupSlot
+                    val dateTimeString = getDateTimeString(dataItem.modifiedAt.toLong())
+                    //val dateTimeString =dataItem.pickupDate +" & "+ dataItem.pickupSlot
                     myOrdersViewModel.addAwaitingPckUpCmpltdDta(
                         AwaitingCompleteModel(
                             (dataItem.orderNumber),
@@ -227,7 +234,17 @@ class MyOrdersFragment : Fragment() {
         //setUpAwaitingPckUps(myOrdersViewModel.awaitingPckUpDtaLst)
 
     }
+    private fun getPickupDate(date: String): String {
+        try {
+            val formatter = DateTimeFormat.forPattern("MM/dd/yyyy")
+            val someDate =formatter.parseDateTime(date)
+            val dateTimeFormate = DateTimeFormat.forPattern("MMM dd,yyyy")
+            return  someDate.toString(dateTimeFormate)
+        } catch (e: Exception) {
 
+        }
+        return "";
+    }
     private fun getDateTimeString(orderDateTime: Long): String {
         val dateFormat = SimpleDateFormat("dd MMM yyyy HH:mm aa")
         val date = Date(orderDateTime)

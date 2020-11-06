@@ -320,6 +320,7 @@ public class ReSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewMo
         details.setLatitude(myOrdersDataItem.getLatitude());
         details.setLongitude(myOrdersDataItem.getLongitude());
         details.setBuyerName(myOrdersDataItem.getBuyerName());
+        details.setReSchedule(true);
         createOrderData.setDetails(details);
         cnfSchedulePickupViewModel.createOrderOnServerWithoutPayment(myApplication.getAccessToken(), createOrderData);
     }

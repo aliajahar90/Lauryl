@@ -6,6 +6,7 @@ import com.google.gson.JsonObject
 import versatile.project.lauryl.base.SingleLiveEvent
 import versatile.project.lauryl.data.source.LaurylRepository
 import versatile.project.lauryl.model.TopServicesResponse
+import versatile.project.lauryl.profile.data.GetProfileResponse
 import versatile.project.lauryl.services.ServiceModel
 import versatile.project.lauryl.services.ServicesRepository
 
@@ -22,6 +23,16 @@ class SchedulePickUpFragmentViewModel: ViewModel()  {
         laurylRepository.getAllServices(accessToken,inputJsonObj)
     }
 
+    fun getProfileInformation(accessToken: String){
+        return laurylRepository.getProfileInformation(accessToken);
+    }
+    fun profileFetchSuccessHandler(): SingleLiveEvent<GetProfileResponse> {
+        return laurylRepository.getProfileResponseLiveData
+    }
+
+    fun profileFetchErrorHandler(): LiveData<Throwable?>? {
+        return laurylRepository.throwableMutableLiveData
+    }
 //    fun getTopServicesData():String{
 //
 //        if(topServicesResponse == null || topServicesResponse.value == null){

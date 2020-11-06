@@ -57,15 +57,19 @@ class AwaitingCompleteAdapter(var activity: FragmentActivity?, var context: Cont
         var ordrDteTme : TextView? = itemView.ordrDteTme
         var pckUpAdrsTxt = itemView.pckUpAdrsTxt
         var orderStage = itemView.txtOrderStage
+        var orderDateTimeLbl = itemView.txtLblDateTime
+
 
         fun bindDta(awtngDlvry: AwaitingCompleteModel){
             if(awtngDlvry.orderStage.equals(itemView.context.resources.getString(R.string.model_cancelled))) {
+                orderDateTimeLbl.text=itemView.context.resources.getString(R.string.cancelled_on)
                 orderIdTxt.text = "Order Id. ${awtngDlvry.orderIdVal}"
                 ordrDteTme!!.text = "${awtngDlvry.date}"
                 pckUpAdrsTxt.text = awtngDlvry.pickUpAddress
                 orderStage.text=itemView.context.resources.getString(R.string.cancelled_txt)
                 orderStage.setBackgroundColor(itemView.context.resources.getColor(R.color.lit_red))
             }else{
+                orderDateTimeLbl.text=itemView.context.resources.getString(R.string.completed_on)
                 orderIdTxt.text = "Order Id. ${awtngDlvry.orderIdVal}"
                 ordrDteTme!!.text = "${awtngDlvry.date}"
                 pckUpAdrsTxt.text = awtngDlvry.pickUpAddress

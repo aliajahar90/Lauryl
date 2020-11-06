@@ -188,14 +188,16 @@ class SignUpOrLoginScreen : BaseActivity() {
 //                                                    })
 
                                             } else {
-                                                val errorResponse = Gson().fromJson(
-                                                    response.errorBody()!!.charStream(),
-                                                    ErrorResponse::class.java
-                                                )
+//                                                val errorResponse = Gson().fromJson(
+//                                                    response.errorBody()!!.charStream(),
+//                                                    ErrorResponse::class.java
+//                                                )
                                                 Globals.showPopoUpDialog(
                                                     this@SignUpOrLoginScreen,
                                                     getString(R.string.login_fail_hdng_txt),
-                                                    errorResponse.errorDescription!!
+                                                    getString(
+                                                        R.string.login_error
+                                                    )
                                                 )
                                             }
 
@@ -235,7 +237,9 @@ class SignUpOrLoginScreen : BaseActivity() {
                                 Globals.showPopoUpDialog(
                                     this@SignUpOrLoginScreen,
                                     getString(R.string.login_fail_hdng_txt),
-                                    errorResponse.errorDescription!!
+                                    getString(
+                                        R.string.login_error
+                                    )
                                 )
                             }
 

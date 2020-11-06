@@ -69,7 +69,7 @@ public class HomeRepository  extends LaurylRepository {
     }
     List<MyOrdersDataItem> getCompletedDeliveryList(MyOrdersResponse response){
         for(MyOrdersDataItem myOrdersDataItem:response.getData().getList()){
-            if(TextUtils.equals(myOrdersDataItem.getOrderStage(), AllConstants.Orders.OrderStage.Completed_Delivery))
+            if(TextUtils.equals(myOrdersDataItem.getOrderStage(), AllConstants.Orders.OrderStage.Completed_Delivery)|| TextUtils.equals(myOrdersDataItem.getOrderStage(), AllConstants.Orders.OrderStage.Cancelled_Delivery))
             {
                 List<MyOrdersDataItem> completedList=new ArrayList<>();
                 completedList.add(myOrdersDataItem);
