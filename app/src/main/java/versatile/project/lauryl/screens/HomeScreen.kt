@@ -3,9 +3,11 @@ package versatile.project.lauryl.screens
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.location.*
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
@@ -16,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_home_screen.*
 import timber.log.Timber
+import versatile.project.lauryl.BuildConfig
 import versatile.project.lauryl.R
 import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.base.BaseActivity
@@ -487,6 +490,7 @@ class HomeScreen : BaseActivity(), LocationListener {
         (application as MyApplication).createOrderSerializdedProfile =
             Gson().toJson(profileResponse)
         homeNameTxt.text = "Hello, " + profileResponse.profileData.firstName
+        compareAppVersion(profileResponse)
     }
 
     override fun onResume() {
@@ -517,6 +521,42 @@ class HomeScreen : BaseActivity(), LocationListener {
             displayManageAddressFragment()
         }
         builder.setCancelable(true)
+        builder.show()
+    }
+
+    private fun compareAppVersion(profileResponse: GetProfileResponse) {
+        var s: Any? = profileResponse.profileData.appVersion;
+        if (s != null) {
+            var apiVersion = profileResponse.profileData.appVersion.toInt()
+            var currentVersion = BuildConfig.VERSION_CODE
+            if (currentVersion < apiVersion) {
+                showUpdateDialog()
+            }
+        }
+    }
+
+    private fun showUpdateDialog() {
+        val uriString="market://details?id="+BuildConfig.APPLICATION_ID
+        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("A New Update is Available")
+        builder.setPositiveButton(
+            "Update"
+        ) { dialog, _ ->
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(uriString)
+                )
+            )
+            // dialog.dismiss()
+        }
+        builder.setNegativeButton(
+            "Exit"
+        ) { _, _ ->
+            shout("You selected to exit app")
+            finishAffinity()
+        }
+        builder.setCancelable(false)
         builder.show()
     }
 }
