@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_sign_up_or_login_screen.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import versatile.project.lauryl.BuildConfig
 import versatile.project.lauryl.R
 import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.base.BaseActivity
@@ -109,7 +110,8 @@ class SignUpOrLoginScreen : BaseActivity() {
                 RetrofitObj.getApiObj()!!.executeLogin(
                     getString(R.string.grant_type_txt),
                     mblNumEdtVal,
-                    pswrdEdtVal
+                    pswrdEdtVal,
+                    BuildConfig.VERSION_CODE.toString()
                 ).enqueue(object : Callback<LoginResponse> {
 
                     override fun onResponse(
@@ -474,7 +476,7 @@ class SignUpOrLoginScreen : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-       // getCurrentVersion()
+        // getCurrentVersion()
         val isPreferenceExisted = Globals.checkBoolFromPreferences(
             applicationContext,
             Constants.IS_PREFS_EXISTED
@@ -635,46 +637,5 @@ class SignUpOrLoginScreen : BaseActivity() {
         Globals.clearLaurylPrefs(applicationContext)
     }
 
-    var apiVersion = 1
-    var currentVersion = 1
-    private fun getCurrentVersion() {
-        val pm = this.packageManager
-        var pInfo: PackageInfo? = null
-        try {
-            pInfo = pm.getPackageInfo(this.packageName, 0)
-        } catch (e1: PackageManager.NameNotFoundException) {
-            e1.printStackTrace()
-        }
-        pInfo?.versionCode?.let {
-            currentVersion = it
-            if (currentVersion != apiVersion) {
-                showUpdateDialog()
-            }
-        }
-    }
-
-    private fun showUpdateDialog() {
-        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(this)
-        builder.setTitle("A New Update is Available")
-        builder.setPositiveButton(
-            "Update"
-        ) { dialog, _ ->
-            startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("market://details?id=versatile.project.lauryl")
-                )
-            )
-            // dialog.dismiss()
-        }
-        builder.setNegativeButton(
-            "Exit"
-        ) { _, _ ->
-            shout("You selected to exit app")
-            finishAffinity()
-        }
-        builder.setCancelable(false)
-        builder.show()
-    }
 
 }

@@ -123,6 +123,7 @@ public class ProfileFragment extends BaseBinding<ProfileViewModel, FragmentProfi
             hideLoading();
             if (getProfileResponse != null) {
                 profileUiController(getProfileResponse.getProfileData());
+                ((HomeScreen) getActivity()).updateUserName(getProfileResponse);
             }
 
         });

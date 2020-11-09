@@ -41,7 +41,8 @@ interface ApiServices {
     fun executeLogin(
         @Field("grant_type") grantType: String,
         @Field("username") userName: String,
-        @Field("password") password: String
+        @Field("password") password: String,
+        @Field("appVersion") appVersion: String
     ): Call<LoginResponse>
 
     @POST("static/user/otp/validate")
