@@ -93,6 +93,7 @@ class AddressModel : Serializable {
     @Expose
     var longitude: String? = null
 
+    var isSelected = false
 
     override fun toString(): String {
         return "$streetName, $landmark, $city, $state, $pinCode"

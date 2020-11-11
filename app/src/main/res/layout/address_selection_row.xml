@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:elevation="@dimen/dp_10"
+    android:padding="@dimen/dp_10"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+
+
+        <RadioButton
+            android:id="@+id/address_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:textColor="@drawable/radio_selector"
+            android:layout_weight="1.3"
+            android:clickable="false"
+            android:buttonTint="@drawable/radio_selector"
+            android:text="Home"
+            android:textSize="@dimen/sp_18"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:textSize="@dimen/dp_10"
+            android:padding="3dp"
+            android:visibility="visible"
+            android:id="@+id/delete_address_btn"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="@drawable/blue_bckgrnd_round_corners_bckgrnd"
+            android:text="Select"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textSize="@dimen/dp_10"
+            android:padding="3dp"
+            android:textColor="@color/white"
+            android:id="@+id/edit_address_btn"
+            android:gravity="center"
+            android:background="@drawable/blue_bckgrnd_round_corners_bckgrnd"
+            android:text="Edit"
+            />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:layout_marginStart="25dp"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_weight="1"
+        android:padding="@dimen/dp_5"
+        android:maxLines="4"
+        android:paddingBottom="@dimen/dp_10"
+        android:text="Sri ram nagar colony Sri ram nagar colony Sri ram nagar colony"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/dark_grey" />
+</LinearLayout>
