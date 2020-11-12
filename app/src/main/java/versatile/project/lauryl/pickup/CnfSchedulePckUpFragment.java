@@ -125,6 +125,8 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
             if (getActivity() instanceof HomeScreen) {
                 if (isServiceSubscribed && isESubscription && !isPayAsServiceSelected) {
                     HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment(new Gson().toJson(paymentBaseShareData));
+                } else if (isPayAsServiceSelected && totalOrderValue <= 0.0) {
+                    HomeNavigationController.getInstance(getActivity()).addPaymentSuccessFragment(new Gson().toJson(paymentBaseShareData));
                 } else {
                     ((HomeScreen) getActivity()).selectPayment();
                     HomeNavigationController.getInstance(getActivity()).addPaymentFragment();
@@ -313,6 +315,8 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         details.setServiceList(localServiceList);
         details.setPhoneNumber(((MyApplication) getActivity().getApplicationContext()).getMobileNumber());
         if(isServiceSubscribed && !isPayAsServiceSelected && isESubscription) {
+            details.setOrderStage(AllConstants.Orders.OrderStage.Awaiting_Pickup);
+        }else if(isPayAsServiceSelected && totalOrderValue<=0.0){
             details.setOrderStage(AllConstants.Orders.OrderStage.Awaiting_Pickup);
         }
         else {

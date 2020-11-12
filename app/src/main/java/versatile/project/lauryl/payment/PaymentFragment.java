@@ -712,7 +712,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         CreateOrderData createOrderData=new CreateOrderData();
         //keeping static as of now
         details.setOrderNumber(currentDateTimeInMilis);
-        details.setOrderTotal("100");
+        details.setOrderTotal(String.valueOf(orderValue));
         details.setVAccountId(AllConstants.Orders.vAccountId);
         details.setMarketPlaceName(AllConstants.Orders.MARKET_PLACE_NAME);
         details.setOrderDateTime(currentDateTimeInMilis);
