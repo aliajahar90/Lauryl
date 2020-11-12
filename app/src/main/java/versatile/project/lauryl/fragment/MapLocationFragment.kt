@@ -238,6 +238,9 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
                 Timber.e("city ${addressModel.city}")
                 validateServiceAvailability(city = it)
             }
+            addresses[0].let {
+                addressModel.address1=address
+            }
             addresses[0].adminArea.let {
                 addressModel.state = it
                 Timber.e("state ${addressModel.state}")
@@ -266,6 +269,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
             val city: String = addresses[0].locality
             city_name.text = city
             address_geo.text = address
+
             (activity as HomeScreen).setLocation(city)
 //            val state: String = addresses[0].adminArea
 //            val country: String = addresses[0].countryName

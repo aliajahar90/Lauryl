@@ -6,10 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.RadioButton
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +15,6 @@ import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.change_address_fragment.*
 import timber.log.Timber
 import versatile.project.lauryl.R
-import versatile.project.lauryl.adapter.AddressSpinnerAdapter
 import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.model.address.AddressModel
 import versatile.project.lauryl.model.city.CityModel
@@ -34,23 +29,14 @@ class ChangeAddressFragment : Fragment() {
 
     lateinit var myApplication: MyApplication
     lateinit var changeAddressViewModel: ChangeAddressViewModel
-    lateinit var cityFromMap: String
-    lateinit var city: CityModel
-    lateinit var state: CityModel
-    lateinit var cityList: List<CityModel>
     lateinit var number: String
-    var addressType: String = "Home"
-    var addreList = ArrayList<AddressModel>()
     var mAddress = AddressModel()
 
-    //var pinCodes = ArrayList<String>()
-    var supportedCities = ArrayList<String>()
     lateinit var action: String
     lateinit var origin: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.e("hi")
         changeAddressViewModel = ViewModelProvider(this)[ChangeAddressViewModel::class.java]
         myApplication = (activity?.applicationContext as MyApplication)
         number = myApplication.mobileNumber
@@ -59,56 +45,41 @@ class ChangeAddressFragment : Fragment() {
 
     }
 
-    private fun isAddressTypeUsed(addressTpe: String): String? {
-        for (item in addreList) {
-            if (addressTpe == item.addresType)
-                return item.id
-        }
-        return "-"
-    }
-
     private fun validateFields() {
         val flatNo = flat_no.text.toString()
         val streetName = street_name.text.toString()
         val landMark = landmark.text.toString()
-        val pinCode = pincode.text.toString()
+        val profileName = profile_name.text.toString()
+        val completeAddress = complete_address.text.toString()
         if (flatNo.isNotEmpty()) {
             if (streetName.isNotEmpty()) {
                 if (landMark.isNotEmpty()) {
-                    if (pinCode.isNotEmpty()) {
-                        if (pinCode.length == 6) {
-                            if (validateServiceAvailability(city = city.city)) {
-                                Timber.e("validation success")
-                                mAddress.landmark = landMark
-                                mAddress.streetName = streetName
-                                mAddress.city = city.city
-                                mAddress.state = state.state
-                                mAddress.pinCode = pinCode
-                                mAddress.country = state.country
-                                mAddress.addresType = addressType
-                                mAddress.latitude = addressModel?.latitude
-                                mAddress.longitude = addressModel?.longitude
-                                fetchLatLongFromAddress(mAddress)
-                            } else {
-                                Globals.showPopoUpDialog(
-                                    context!!,
-                                    getString(R.string.validation),
-                                    "Our services are not available in this province !!\n" +
-                                            "Please select a different City.."
-                                )
-                            }
+                    if (profileName.isNotEmpty()) {
+                        if (completeAddress.isNotEmpty()) {
+
+                            Timber.e("validation success")
+                            mAddress.landmark = landMark
+                            mAddress.streetName = streetName
+                            mAddress.address1 = addressModel?.address1
+                            mAddress.city = addressModel?.city
+                            mAddress.state = addressModel?.state
+                            mAddress.pinCode = addressModel?.pinCode
+                            mAddress.country = addressModel?.country
+                            mAddress.addresType = profileName
+                            mAddress.latitude = addressModel?.latitude
+                            mAddress.longitude = addressModel?.longitude
+                            fetchLatLongFromAddress(mAddress)
 
                         } else {
                             Globals.showPopoUpDialog(
                                 context!!,
-                                getString(R.string.validation), "Enter a valid 6 digit pincode"
+                                getString(R.string.validation), "Address is Mandatory"
                             )
                         }
-
                     } else {
                         Globals.showPopoUpDialog(
                             context!!,
-                            getString(R.string.validation), "Pincode is Mandatory"
+                            getString(R.string.validation), "Profile name is Mandatory"
                         )
                     }
 
@@ -136,12 +107,11 @@ class ChangeAddressFragment : Fragment() {
         flat_no.text.clear()
         street_name.text.clear()
         landmark.text.clear()
-        pincode.text.clear()
+        profile_name.text.clear()
+        complete_address.text.clear()
     }
 
     private fun observeDataSources() {
-        Timber.e("hi")
-
         changeAddressViewModel.saveAddressLiveData.observe(this, Observer {
             if (it.status) {
                 Timber.e("hi")
@@ -149,10 +119,10 @@ class ChangeAddressFragment : Fragment() {
                 emptyFields()
                 //continue to order use mAddress
                 if (isEditing) {
-                    shout("Address Updated..")
+                    (activity as HomeScreen).shout("Address Updated..")
                     activity?.onBackPressed()
                 } else
-                    shout("Address saved..")
+                    (activity as HomeScreen).shout("Address saved..")
                 (activity as HomeScreen).setLocation(mAddress.city.toString())
 
                 when {
@@ -178,94 +148,9 @@ class ChangeAddressFragment : Fragment() {
             }
         })
 
-        changeAddressViewModel.getCitiesToObserve().observe(this, Observer { list ->
-            cityList = list
-            for (city in list) {
-                supportedCities.add(city.city.toLowerCase())
-            }
-            val adapter: ArrayAdapter<String> = ArrayAdapter(
-                this.context!!,
-                R.layout.state_spinner_item, list.map { it.city }
-            )
-            city = cityList.first()
-            adapter.setDropDownViewResource(R.layout.state_spinner_item)
-            city_spinner.adapter = adapter
-            city_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                }
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    state = cityList[position]
-
-                }
-
-            }
-
-            val stateAdapter: ArrayAdapter<String> = ArrayAdapter(
-                this.context!!,
-                R.layout.state_spinner_item,
-                list.map { it.state }
-            )
-            state = cityList.first()
-            stateAdapter.setDropDownViewResource(R.layout.state_spinner_item)
-            state_spinner.adapter = stateAdapter
-            state_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                }
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    state = cityList[position]
-
-                }
-
-            }
-        })
-        changeAddressViewModel.getStatesToObserve().observe(this, Observer {
-
-        })
-
-        changeAddressViewModel.getAddressesToObserve().observe(this, Observer {
-            addreList = it
-            val adapter = AddressSpinnerAdapter(this.context!!, it)
-            address_spinner.adapter = adapter
-            address_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                }
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    if (mSpinnerInitialized) {
-                        mAddress = addreList[position]
-                        emptyFields()
-                        shouldValidte = false
-                        shout("Previous address selected, continue to order")
-                    }
-                    mSpinnerInitialized = true
-                }
-            }
-        })
-
     }
 
     var addressModel: AddressModel? = null
-    private var mSpinnerInitialized = false
     private var shouldValidte = true
     private var isEditing = false
     override fun onCreateView(
@@ -307,66 +192,27 @@ class ChangeAddressFragment : Fragment() {
         if (addressModel?.id != null) {
             isEditing = true
             continue_location_btn.text = "Update address"
-            address_spinner.visibility = View.GONE
-            addressType = addressModel?.addresType.toString()
-            Timber.e("AddressType $addressType")
         }
         if (action == Constants.EDIT_ADDRESS_ACTION || action == Constants.ADD_LOCATION_ACTION) {
             continue_location_btn.text = "Confirm address"
-            address_spinner.visibility = View.GONE
+            // address_spinner.visibility = View.GONE
         }
 
-        when (addressModel?.addresType.toString()) {
-            "Home" -> {
-                address_type_radio.check(R.id.home)
-            }
-            "Work" -> {
-                address_type_radio.check(R.id.work)
-            }
-            "Other" -> {
-                address_type_radio.check(R.id.other)
-
-            }
-            else -> {
-                address_type_radio.check(R.id.home)
-            }
-        }
-        addressModel?.pinCode.let {
-            pincode.setText(it)
-        }
-        addressModel?.address1.let {
+        addressModel?.streetName.let {
             street_name.setText(it)
         }
         addressModel?.landmark.let {
             landmark.setText(it)
         }
-
+        addressModel?.address1.let {
+            complete_address.setText(it)
+        }
+        addressModel?.addresType.let {
+            profile_name.setText(it)
+        }
         observeDataSources()
 
-        address_type_radio.setOnCheckedChangeListener { radioGroup, _ ->
-            run {
-                addressType =
-                    (radioGroup?.findViewById(radioGroup.checkedRadioButtonId) as RadioButton).text as String
-                Timber.e("AddressType $addressType")
-
-            }
-        }
     }
-
-
-    private fun shout(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
-
-    //    private fun validateServiceAvailability(pinCode: String): Boolean {
-//        return pinCodes.contains(pinCode)
-//
-//    }
-    private fun validateServiceAvailability(city: String): Boolean {
-        return true
-       // return supportedCities.contains(city.toLowerCase())
-    }
-
 
     private fun fetchLatLongFromAddress(mAddress: AddressModel) {
         if (myApplication.changeButtonClicked) {
@@ -394,12 +240,12 @@ class ChangeAddressFragment : Fragment() {
         inputJson.addProperty("phoneNumber", number)
         val addressObj = JsonObject()
         addressObj.addProperty("addresType", mAddress.addresType)
-        addressObj.addProperty("address1", "${addressType}1")
+        addressObj.addProperty("address1", mAddress.address1)
         addressObj.addProperty("streetName", mAddress.streetName)
         addressObj.addProperty("landmark", mAddress.landmark)
-        addressObj.addProperty("city", city.city)
-        addressObj.addProperty("state", state.state)
-        addressObj.addProperty("country", state.country)
+        addressObj.addProperty("city", mAddress.city)
+        addressObj.addProperty("state", mAddress.state)
+        addressObj.addProperty("country", mAddress.country)
         addressObj.addProperty("pinCode", mAddress.pinCode)
         mAddress.latitude?.let {
             addressObj.addProperty("latitude", it)
@@ -411,24 +257,13 @@ class ChangeAddressFragment : Fragment() {
         if (isEditing) {
 //updating address
             addressObj.addProperty("id", addressModel?.id)
-        } else {
-            if (isAddressTypeUsed(addressType) != "-") {
-//overriding previous address
-                addressObj.addProperty("id", isAddressTypeUsed(addressType))
-            }
         }
         val addresList = JsonArray()
         addresList.add(addressObj)
         inputJson.add("addressList", addresList)
-
-        Timber.e("AddressType $addressType")
         changeAddressViewModel.saveAddress(myApplication.userAccessToken, jsonObject = inputJson)
     }
 
-    override fun onPause() {
-        super.onPause()
-        mSpinnerInitialized=false
-    }
     override fun onResume() {
         super.onResume()
 

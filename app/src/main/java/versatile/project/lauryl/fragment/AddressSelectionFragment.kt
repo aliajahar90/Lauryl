@@ -94,4 +94,12 @@ class AddressSelectionFragment : Fragment(), AddressSelectionListener {
         editAddressAdapter.notifyDataSetChanged()
     }
 
+    override fun onEditSelected(rowIndex: Int) {
+        val activity = activity as HomeScreen
+        activity.displayChangeAddressFragment(
+            addressList[rowIndex],
+            action = Constants.EDIT_ADDRESS_ACTION,
+            origin = Constants.MANAGE_ADDRESS
+        )
+    }
 }

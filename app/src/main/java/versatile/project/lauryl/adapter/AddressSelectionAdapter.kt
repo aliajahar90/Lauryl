@@ -12,7 +12,7 @@ import versatile.project.lauryl.model.address.AddressModel
 
 class AddressSelectionAdapter(
     private val list: List<AddressModel>,
-    private var editDeleteListener: AddressSelectionFragment
+    private var editDeleteListener: AddressSelectionListener
 ) : RecyclerView.Adapter<AddressSelectionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddressSelectionViewHolder {
@@ -26,6 +26,9 @@ class AddressSelectionAdapter(
         holder.bind(addressModel)
         holder.itemView.setOnClickListener {
             editDeleteListener.addressSelected(position)
+        }
+        holder.editBtn?.setOnClickListener {
+            editDeleteListener.onEditSelected(position)
         }
     }
 
@@ -54,6 +57,7 @@ class AddressSelectionViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         mTitleView?.isChecked = addressModel.isSelected
         mTitleView?.text = addressModel.addresType
         address?.text = addressModel.toString()
+
     }
 
 }
