@@ -67,7 +67,7 @@ android {
         lauryl {
             applicationId "versatilecommerce.project.lauryl"
             versionCode 6
-            versionName "1.4"
+            versionName "1.5"
             signingConfig signingConfigs.release
         }
     }
