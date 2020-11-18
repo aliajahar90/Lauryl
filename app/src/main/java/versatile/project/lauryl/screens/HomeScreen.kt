@@ -176,6 +176,15 @@ class HomeScreen : BaseActivity(), LocationListener {
     }
 
      fun selectManageAddressDashBoard() {
+        homeNameMdlVwTxt.text = getString(R.string.select_address)
+        homeNameMdlVwTxt.visibility = View.VISIBLE
+        homeNameTxt.visibility = View.GONE
+        filterTxt.visibility = View.GONE
+        bckBtn.visibility = View.VISIBLE
+    }
+
+
+     fun selectAddressSelectionDashBoard() {
         homeNameMdlVwTxt.text = getString(R.string.manage_address)
         homeNameMdlVwTxt.visibility = View.VISIBLE
         homeNameTxt.visibility = View.GONE
@@ -219,6 +228,13 @@ class HomeScreen : BaseActivity(), LocationListener {
         //selectMyOrdersDashboard()
     }
 
+    fun displayAddressSelectionFragment() {
+        val fragment = AddressSelectionFragment()
+        loadMyFragment(fragment)
+        selectAddressSelectionDashBoard()
+        // botmNavVw.menu.findItem(R.id.myOrdersId).isChecked = true
+        //selectMyOrdersDashboard()
+    }
 
     fun displayMyOrdersFragment(initPosition: Int) {
         myApplication.selectedOrderTab = initPosition

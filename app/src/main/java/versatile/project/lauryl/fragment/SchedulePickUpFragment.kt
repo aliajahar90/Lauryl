@@ -104,7 +104,8 @@ class SchedulePickUpFragment : Fragment(), ServiceListAdapter.OnItemClickListene
                 if (myApplication != null) {
                     myApplication.createOrderSerializedService=Gson().toJson(selectedServices)
                 }
-                (activity as HomeScreen).displayMapLocationFragment(Constants.SELECT_ADDRESS_ACTION,Constants.CNF)
+               // (activity as HomeScreen).displayMapLocationFragment(Constants.SELECT_ADDRESS_ACTION,Constants.CNF)
+                (activity as HomeScreen).displayAddressSelectionFragment()
             } else {
                 Globals.showToastMsg(activity!!.applicationContext, getString(R.string.select_service_msg))
             }

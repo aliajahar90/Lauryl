@@ -295,6 +295,7 @@ class ChangeAddressFragment : Fragment() {
             else {
                 (activity as HomeScreen).setLocation(mAddress.city.toString())
                 val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
+                Timber.e(Gson().toJson(mAddress))
                 myApplication.createOrderSerializdedAddressData = Gson().toJson(mAddress)
                 if (origin == Constants.PAYMENT_FRAG)
                     (activity as HomeScreen).displayPaymentFragment()

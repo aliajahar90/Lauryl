@@ -133,6 +133,7 @@
     <string name="transaction_id">Transaction ID:</string>
     <string name="change_password">Change Password</string>
     <string name="manage_address">Manage Address</string>
+    <string name="select_address">Select Address</string>
     <string name="logout">Logout</string>
     <string name="my_profile">My Profile</string>
     <string name="pickup_process">Pickup Process</string>
