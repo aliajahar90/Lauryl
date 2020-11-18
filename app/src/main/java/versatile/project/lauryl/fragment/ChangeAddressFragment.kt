@@ -56,11 +56,10 @@ class ChangeAddressFragment : Fragment() {
                 if (landMark.isNotEmpty()) {
                     if (profileName.isNotEmpty()) {
                         if (completeAddress.isNotEmpty()) {
-
                             Timber.e("validation success")
                             mAddress.landmark = landMark
-                            mAddress.streetName = streetName
-                            mAddress.address1 = addressModel?.address1
+                            mAddress.streetName = "$streetName,$completeAddress"
+                            mAddress.address1 = flatNo
                             mAddress.city = addressModel?.city
                             mAddress.state = addressModel?.state
                             mAddress.pinCode = addressModel?.pinCode
@@ -114,8 +113,6 @@ class ChangeAddressFragment : Fragment() {
     private fun observeDataSources() {
         changeAddressViewModel.saveAddressLiveData.observe(this, Observer {
             if (it.status) {
-                Timber.e("hi")
-
                 emptyFields()
                 //continue to order use mAddress
                 if (isEditing) {
@@ -159,8 +156,6 @@ class ChangeAddressFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.change_address_fragment, container, false)
-        Timber.e("hi")
-
         addressModel = try {
             arguments?.getSerializable("address") as AddressModel
         } catch (e: TypeCastException) {
@@ -172,14 +167,12 @@ class ChangeAddressFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as HomeScreen).selectChangeAddressDashBoard()
-        Timber.e("hi")
-
         continue_location_btn.setOnClickListener {
             if (shouldValidte)
                 validateFields()
             else {
                 (activity as HomeScreen).setLocation(mAddress.city.toString())
-                val myApplication: MyApplication = (activity!!.applicationContext as MyApplication)
+                val myApplication: MyApplication = (activity?.applicationContext as MyApplication)
                 Timber.e(Gson().toJson(mAddress))
                 myApplication.createOrderSerializdedAddressData = Gson().toJson(mAddress)
                 if (origin == Constants.PAYMENT_FRAG)
@@ -199,13 +192,14 @@ class ChangeAddressFragment : Fragment() {
         }
 
         addressModel?.streetName.let {
-            street_name.setText(it)
+            street_name.setText(it?.substringBefore(","))
+            complete_address.setText(it?.substringAfter(","))
         }
         addressModel?.landmark.let {
             landmark.setText(it)
         }
         addressModel?.address1.let {
-            complete_address.setText(it)
+            flat_no.setText(it)
         }
         addressModel?.addresType.let {
             profile_name.setText(it)
@@ -221,11 +215,15 @@ class ChangeAddressFragment : Fragment() {
                 val addresses: ArrayList<Address> =
                     coder.getFromLocationName(
                         "${mAddress.streetName}, ${mAddress.landmark}, ${mAddress.city}," +
-                                "${mAddress.state}, ${mAddress.country}, ${mAddress.pinCode}", 5
+                                "${mAddress.state}, ${if (mAddress.country.isNullOrBlank()) mAddress.country else "India"}, ${mAddress.pinCode}",
+                        5
                     ) as ArrayList<Address>
-                val add = addresses[0]
-                mAddress.latitude = add.latitude.toString()
-                mAddress.longitude = add.longitude.toString()
+                if (addresses.size > 0)
+                    addresses[0]?.let {
+                        mAddress.latitude = it.latitude.toString()
+                        mAddress.longitude = it.longitude.toString()
+                    }
+
                 makeApiCall(mAddress)
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -239,20 +237,41 @@ class ChangeAddressFragment : Fragment() {
         val inputJson = JsonObject()
         inputJson.addProperty("phoneNumber", number)
         val addressObj = JsonObject()
-        addressObj.addProperty("addresType", mAddress.addresType)
-        addressObj.addProperty("address1", mAddress.address1)
-        addressObj.addProperty("streetName", mAddress.streetName)
-        addressObj.addProperty("landmark", mAddress.landmark)
-        addressObj.addProperty("city", mAddress.city)
-        addressObj.addProperty("state", mAddress.state)
-        addressObj.addProperty("country", mAddress.country)
-        addressObj.addProperty("pinCode", mAddress.pinCode)
-        mAddress.latitude?.let {
-            addressObj.addProperty("latitude", it)
-        }
-        mAddress.longitude?.let {
-            addressObj.addProperty("longitude", it)
-        }
+        addressObj.addProperty(
+            "addresType",
+            if (mAddress.addresType.isNullOrBlank()) "" else mAddress.addresType
+        )
+        addressObj.addProperty(
+            "address1",
+            if (mAddress.address1.isNullOrBlank()) "" else mAddress.address1
+        )
+        addressObj.addProperty(
+            "streetName",
+            if (mAddress.streetName.isNullOrBlank()) "" else mAddress.streetName
+        )
+        addressObj.addProperty(
+            "landmark",
+            if (mAddress.landmark.isNullOrBlank()) "" else mAddress.landmark
+        )
+        addressObj.addProperty("city", if (mAddress.city.isNullOrBlank()) "" else mAddress.city)
+        addressObj.addProperty("state", if (mAddress.state.isNullOrBlank()) "" else mAddress.state)
+        addressObj.addProperty(
+            "country",
+            if (mAddress.country.isNullOrBlank()) "" else mAddress.country
+        )
+        addressObj.addProperty(
+            "pinCode",
+            if (mAddress.pinCode.isNullOrBlank()) "" else mAddress.pinCode
+        )
+
+        addressObj.addProperty(
+            "latitude",
+            if (mAddress.latitude.isNullOrBlank()) "" else mAddress.latitude
+        )
+        addressObj.addProperty(
+            "longitude",
+            if (mAddress.longitude.isNullOrBlank()) "" else mAddress.longitude
+        )
 
         if (isEditing) {
 //updating address
@@ -261,6 +280,8 @@ class ChangeAddressFragment : Fragment() {
         val addresList = JsonArray()
         addresList.add(addressObj)
         inputJson.add("addressList", addresList)
+
+        Timber.e(inputJson.toString())
         changeAddressViewModel.saveAddress(myApplication.userAccessToken, jsonObject = inputJson)
     }
 

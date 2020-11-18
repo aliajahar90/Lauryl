@@ -218,18 +218,19 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
             ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             val address: String = addresses[0]
                 .getAddressLine(0)
-            addressModel.address1 = (address.split(",").dropLast(3).toList()).joinToString(
-                prefix = " ",
-                separator = ",",
-                postfix = "",
-                truncated = "...",
-                transform = { it.capitalize()})
-            Timber.e( "Joined list ${(address.split(",").dropLast(3).toList()).joinToString(
-                prefix = " ",
-                separator = ",",
-                postfix = "",
-                truncated = "...",
-                transform = { it.capitalize()})}")
+            addressModel.address1=address
+//            addressModel.address1 = (address.split(",").dropLast(3).toList()).joinToString(
+//                prefix = " ",
+//                separator = ",",
+//                postfix = "",
+//                truncated = "...",
+//                transform = { it.capitalize()})
+//            Timber.e( "Joined list ${(address.split(",").dropLast(3).toList()).joinToString(
+//                prefix = " ",
+//                separator = ",",
+//                postfix = "",
+//                truncated = "...",
+//                transform = { it.capitalize()})}")
             // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
             addresses[0].locality?.let {
                 addressModel.city = it
@@ -261,7 +262,9 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
 
             }
             addresses[0].thoroughfare.let {
-                addressModel.streetName = it
+                addressModel.streetName="$it,${addressModel.address1}"
+                addressModel.address1=""
+               // addressModel.streetName = it
                 Timber.e("streetName ${addressModel.streetName}")
 
             }

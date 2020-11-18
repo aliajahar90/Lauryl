@@ -49,7 +49,7 @@ class EditAddressViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
 
     fun bind(addressModel: AddressModel) {
         mTitleView?.text = addressModel.addresType
-        address?.text = addressModel.toString()
+        address?.text = "${addressModel.address1},${addressModel.landmark},${addressModel.streetName},"
     }
 
 }

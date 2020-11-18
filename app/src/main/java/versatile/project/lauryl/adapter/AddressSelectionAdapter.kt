@@ -56,8 +56,7 @@ class AddressSelectionViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     fun bind(addressModel: AddressModel) {
         mTitleView?.isChecked = addressModel.isSelected
         mTitleView?.text = addressModel.addresType
-        address?.text = addressModel.toString()
-
+        address?.text = "${addressModel.address1},${addressModel.landmark},${addressModel.streetName}"
     }
 
 }
