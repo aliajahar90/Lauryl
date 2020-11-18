@@ -50,13 +50,17 @@ class AddressSelectionFragment : Fragment(), AddressSelectionListener {
     private fun observeDataSources() {
         manageAddressViewModel.getAddressesToObserve().observe(this, Observer {
             addressList = it
-            if (it.isEmpty())
+            if (it.isEmpty()){
                 continue_button.visibility=View.GONE
-            it.first().isSelected=true
-            editAddressAdapter = AddressSelectionAdapter(list = it, editDeleteListener = this)
-            val linearLayoutManager = LinearLayoutManager(context)
-            address_rv.layoutManager = linearLayoutManager
-            address_rv.adapter = editAddressAdapter
+            }
+            else{
+                it.first().isSelected=true
+                editAddressAdapter = AddressSelectionAdapter(list = it, editDeleteListener = this)
+                val linearLayoutManager = LinearLayoutManager(context)
+                address_rv.layoutManager = linearLayoutManager
+                address_rv.adapter = editAddressAdapter
+            }
+
         })
 
     }
@@ -94,4 +98,12 @@ class AddressSelectionFragment : Fragment(), AddressSelectionListener {
         editAddressAdapter.notifyDataSetChanged()
     }
 
+    override fun onEditSelected(rowIndex: Int) {
+        val activity = activity as HomeScreen
+        activity.displayChangeAddressFragment(
+            addressList[rowIndex],
+            action = Constants.EDIT_ADDRESS_ACTION,
+            origin = Constants.MANAGE_ADDRESS
+        )
+    }
 }
