@@ -120,8 +120,7 @@ class ChangeAddressFragment : Fragment() {
                     activity?.onBackPressed()
                 } else
                     (activity as HomeScreen).shout("Address saved..")
-                (activity as HomeScreen).setLocation(mAddress.city.toString())
-
+                //(activity as HomeScreen).setLocation(mAddress.city.toString())
                 when {
                     origin == Constants.CNF -> {
                         val myApplication: MyApplication =
@@ -171,7 +170,9 @@ class ChangeAddressFragment : Fragment() {
             if (shouldValidte)
                 validateFields()
             else {
-                (activity as HomeScreen).setLocation(mAddress.city.toString())
+                if (mAddress.city.isNullOrBlank()) {
+                    (activity as HomeScreen).setLocation(mAddress.city.toString())
+                }
                 val myApplication: MyApplication = (activity?.applicationContext as MyApplication)
                 Timber.e(Gson().toJson(mAddress))
                 myApplication.createOrderSerializdedAddressData = Gson().toJson(mAddress)
