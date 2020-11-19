@@ -33,8 +33,14 @@ android {
 
     buildTypes {
         release {
+            buildConfigField 'String', 'BASE_URL_GENERAL', '"https://api.lauryl.in:8080/Lauryl/"'
+            buildConfigField 'String', 'BASE_URL_VERSATILE_GENERAL', '"https://api.versatilecommerce.co.uk/vcApi/"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            buildConfigField 'String', 'BASE_URL_GENERAL', '"https://api.lauryl.in:8080/Lauryl/"'
+            buildConfigField 'String', 'BASE_URL_VERSATILE_GENERAL', '"https://api.versatilecommerce.co.uk/vcApi/"'
         }
     }
 

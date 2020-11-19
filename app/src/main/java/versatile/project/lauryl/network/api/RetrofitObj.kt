@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import versatile.project.lauryl.BuildConfig
 import versatile.project.lauryl.utils.Constants
 import java.util.concurrent.TimeUnit
 
@@ -15,8 +16,8 @@ class RetrofitObj {
 
         var retrofit: Retrofit? = null
         var versatileRetrofit: Retrofit? = null
-        private const val BASE_URL_GENERAL = "https://api.lauryl.in:8080/Lauryl/"
-        private const val BASE_URL_VERSATILE_GENERAL = "https://api.versatilecommerce.co.uk/vcApi/"
+        private const val BASE_URL_GENERAL = BuildConfig.BASE_URL_GENERAL
+        private const val BASE_URL_VERSATILE_GENERAL = BuildConfig.BASE_URL_VERSATILE_GENERAL
 
         fun getApiObj(): ApiServices? {
             val interceptor = HttpLoggingInterceptor()
