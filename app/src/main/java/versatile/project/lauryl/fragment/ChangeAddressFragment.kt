@@ -61,7 +61,7 @@ class ChangeAddressFragment : Fragment() {
                             mAddress.state = addressModel?.state
                             mAddress.pinCode = addressModel?.pinCode
                             mAddress.country = addressModel?.country
-                            mAddress.addresType = if (profileName.isNotEmpty()) profileName else "Other"
+                            mAddress.addresType = if (profileName.isEmpty()) profileName else "Other"
                             mAddress.latitude = addressModel?.latitude
                             mAddress.longitude = addressModel?.longitude
                             fetchLatLongFromAddress(mAddress)
