@@ -218,7 +218,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
             ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             val address: String = addresses[0]
                 .getAddressLine(0)
-            addressModel.address1=address
+            addressModel.streetName=address
 //            addressModel.address1 = (address.split(",").dropLast(3).toList()).joinToString(
 //                prefix = " ",
 //                separator = ",",
@@ -239,9 +239,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
                 Timber.e("city ${addressModel.city}")
                 validateServiceAvailability(city = it)
             }
-            addresses[0].let {
-                addressModel.address1=address
-            }
+
             addresses[0].adminArea.let {
                 addressModel.state = it
                 Timber.e("state ${addressModel.state}")
@@ -261,13 +259,7 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
                 Timber.e("landmark ${addressModel.landmark}")
 
             }
-            addresses[0].thoroughfare.let {
-                addressModel.streetName="$it,${addressModel.address1}"
-                addressModel.address1=""
-               // addressModel.streetName = it
-                Timber.e("streetName ${addressModel.streetName}")
 
-            }
             // Toast.makeText(context, address, Toast.LENGTH_SHORT).show()
             val city: String = addresses[0].locality
             city_name.text = city
