@@ -58,16 +58,16 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/street_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:hint="Street name"
-                    android:inputType="text"
-                    android:paddingBottom="15dp"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+<!--                <EditText-->
+<!--                    android:id="@+id/street_name"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/dp_10"-->
+<!--                    android:hint="Street name"-->
+<!--                    android:inputType="text"-->
+<!--                    android:paddingBottom="15dp"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:textStyle="bold" />-->
 
                 <TextView
                     android:layout_width="match_parent"

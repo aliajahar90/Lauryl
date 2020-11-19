@@ -47,24 +47,21 @@ class ChangeAddressFragment : Fragment() {
 
     private fun validateFields() {
         val flatNo = flat_no.text.toString()
-        val streetName = street_name.text.toString()
         val landMark = landmark.text.toString()
         val profileName = profile_name.text.toString()
         val completeAddress = complete_address.text.toString()
         if (flatNo.isNotEmpty()) {
-            if (streetName.isNotEmpty()) {
                 if (landMark.isNotEmpty()) {
-                    if (profileName.isNotEmpty()) {
                         if (completeAddress.isNotEmpty()) {
                             Timber.e("validation success")
                             mAddress.landmark = landMark
-                            mAddress.streetName = "$streetName,$completeAddress"
+                            mAddress.streetName = completeAddress
                             mAddress.address1 = flatNo
                             mAddress.city = addressModel?.city
                             mAddress.state = addressModel?.state
                             mAddress.pinCode = addressModel?.pinCode
                             mAddress.country = addressModel?.country
-                            mAddress.addresType = profileName
+                            mAddress.addresType = if (profileName.isNotEmpty()) profileName else "Other"
                             mAddress.latitude = addressModel?.latitude
                             mAddress.longitude = addressModel?.longitude
                             fetchLatLongFromAddress(mAddress)
@@ -75,12 +72,7 @@ class ChangeAddressFragment : Fragment() {
                                 getString(R.string.validation), "Address is Mandatory"
                             )
                         }
-                    } else {
-                        Globals.showPopoUpDialog(
-                            context!!,
-                            getString(R.string.validation), "Profile name is Mandatory"
-                        )
-                    }
+
 
                 } else {
                     Globals.showPopoUpDialog(
@@ -88,12 +80,7 @@ class ChangeAddressFragment : Fragment() {
                         getString(R.string.validation), "LandMark is Mandatory"
                     )
                 }
-            } else {
-                Globals.showPopoUpDialog(
-                    context!!,
-                    getString(R.string.validation), "Street name is Mandatory"
-                )
-            }
+
         } else {
             Globals.showPopoUpDialog(
                 context!!,
@@ -104,7 +91,6 @@ class ChangeAddressFragment : Fragment() {
 
     private fun emptyFields() {
         flat_no.text.clear()
-        street_name.text.clear()
         landmark.text.clear()
         profile_name.text.clear()
         complete_address.text.clear()
@@ -193,8 +179,7 @@ class ChangeAddressFragment : Fragment() {
         }
 
         addressModel?.streetName.let {
-            street_name.setText(it?.substringBefore(","))
-            complete_address.setText(it?.substringAfter(","))
+            complete_address.setText(it)
         }
         addressModel?.landmark.let {
             landmark.setText(it)
