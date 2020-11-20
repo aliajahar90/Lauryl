@@ -254,11 +254,11 @@ open class MapLocationFragment : Fragment(), OnMapReadyCallback, LocationListene
                 Timber.e("pinCode ${addressModel.pinCode}")
                 // validateServiceAvailability(pinCode = it)
             }
-            addresses[0].featureName.let {
-                addressModel.landmark = it
-                Timber.e("landmark ${addressModel.landmark}")
-
-            }
+//            addresses[0].featureName.let {
+//                addressModel.landmark = it
+//                Timber.e("landmark ${addressModel.landmark}")
+//
+//            }
 
             // Toast.makeText(context, address, Toast.LENGTH_SHORT).show()
             val city: String = addresses[0].locality
