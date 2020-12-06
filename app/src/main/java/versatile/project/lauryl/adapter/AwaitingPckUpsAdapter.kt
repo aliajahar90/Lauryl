@@ -67,6 +67,7 @@ class AwaitingPckUpsAdapter(
         var pckUpAdrsTxt = itemView.pckUpAdrsTxt
         var reschedule_pickup_btn = itemView.reschedule_pickup_btn
         var cancelBtn: TextView = itemView.cancel_order_btn
+        var otp: TextView = itemView.otp
 
         fun bindDta(awtngPckUp: AwaitingPickUpModel) {
             orderIdTxt.text = "Order Id. ${awtngPckUp.orderIdVal}"

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
@@ -58,6 +59,8 @@ class AwaitingDevliveryAdapter(
         var orderIdTxt = itemView.orderIdTxt
         var ordrDteTme : TextView? = itemView.ordrDteTme
         var pckUpAdrsTxt = itemView.pckUpAdrsTxt
+        var otp = itemView.otp
+        var paynow = itemView.paynow_btn
 
         fun bindDta(awtngDlvry: AwaitingDeliveryModel){
             orderIdTxt.text = "Order Id. ${awtngDlvry.orderIdVal}"

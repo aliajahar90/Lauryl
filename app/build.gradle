@@ -40,7 +40,7 @@ android {
         }
         debug{
             buildConfigField 'String', 'BASE_URL_GENERAL', '"https://api.lauryl.in:8080/Lauryl/"'
-            buildConfigField 'String', 'BASE_URL_VERSATILE_GENERAL', '"https://api.versatilecommerce.co.uk/vcApi/"'
+            buildConfigField 'String', 'BASE_URL_VERSATILE_GENERAL', '"https://apiqa.versatilecommerce.co.uk/vcApi/"'
         }
     }
 

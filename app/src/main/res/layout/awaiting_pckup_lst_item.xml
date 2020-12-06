@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6"
@@ -117,27 +117,41 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_marginTop="5dp"
+                    android:id="@+id/pp"
                     android:gravity="center"
                     android:text="Pickup Address"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/otp"
+                    android:visibility="gone"
+                    android:gravity="center"
+                    android:text="Otp:1234"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/pckUpAdrsTxt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
                     android:layout_marginTop="5dp"
+                    android:layout_below="@id/pp"
                     android:gravity="left|start"
                     android:text=""
                     android:textColor="@android:color/darker_gray"
                     android:textSize="10sp"
                     android:textStyle="bold" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
 
         </LinearLayout>
