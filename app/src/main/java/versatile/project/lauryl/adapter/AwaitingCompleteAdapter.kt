@@ -35,9 +35,10 @@ class AwaitingCompleteAdapter(var activity: FragmentActivity?, var context: Cont
         requiredViewHolder.bindDta(awtngCmpltdList!![position])
         requiredViewHolder.mainLyot.setOnClickListener {
             val orderDate= OrderData()
-            orderDate.orderIdVal=this.awtngCmpltdList!!.get(position).orderIdVal
-            orderDate.date=this.awtngCmpltdList!!.get(position).date
+            orderDate.orderIdVal= this.awtngCmpltdList!![position].orderIdVal
+            orderDate.date= this.awtngCmpltdList!![position].date
             orderDate.orderStage=AllConstants.Orders.OrderStage.Completed_Delivery
+            orderDate.zohoInvoiceId= this.awtngCmpltdList!![position].dataItem.zohoInvoiceId
             var jsonString =Gson().toJson(orderDate)
             (activity as HomeScreen).displayOrderHstryFragment(jsonString)
         }

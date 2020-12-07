@@ -100,7 +100,7 @@
     <string name="no_orders">No orders found</string>
     <string name="model_awaiting_pckup">Awaiting Pickup</string>
     <string name="model_awaiting_dlvry">Awaiting Delivery</string>
-    <string name="model_awaiting_cmpltd">Completed Delivery</string>
+    <string name="model_awaiting_cmpltd">Completed</string>
     <string name="model_cancelled">Canceled</string>
     <string name="no_data">No data found</string>
     <string name="bank_account">Bank Account</string>

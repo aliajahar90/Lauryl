@@ -50,7 +50,7 @@ public class AllConstants {
         public class OrderStage{
             public static final String Awaiting_Pickup = "Awaiting Pickup";
             public static final String Awaiting_Delivery = "Awaiting Delivery";
-            public static final String Completed_Delivery = "Completed Delivery";
+            public static final String Completed_Delivery = "Completed";
             public static final String Cancelled_Delivery = "Canceled";
         }
         public static class Errors {

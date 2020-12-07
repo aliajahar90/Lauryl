@@ -332,6 +332,65 @@ public class MyOrdersDataItem {
     @SerializedName("isOrderItemDownload")
     @Expose
     private Boolean isOrderItemDownload;
+    @SerializedName("pickupOtp")
+    @Expose
+    private String pickupOtp;
+
+    @SerializedName("deliveryOtp")
+    @Expose
+    private String deliveryOtp;
+
+    @SerializedName("zohoInvoiceId")
+    @Expose
+    private String zohoInvoiceId;
+
+    @SerializedName("zohoInvoiceNumber")
+    @Expose
+    private String zohoInvoiceNumber;
+
+    public String getZohoInvoiceId() {
+        return zohoInvoiceId;
+    }
+
+    public void setZohoInvoiceId(String zohoInvoiceId) {
+        this.zohoInvoiceId = zohoInvoiceId;
+    }
+
+    public String getZohoInvoiceNumber() {
+        return zohoInvoiceNumber;
+    }
+
+    public void setZohoInvoiceNumber(String zohoInvoiceNumber) {
+        this.zohoInvoiceNumber = zohoInvoiceNumber;
+    }
+
+    @SerializedName("payNow")
+    @Expose
+    private Boolean payNow;
+
+    public String getDeliveryOtp() {
+        return deliveryOtp;
+    }
+
+    public void setDeliveryOtp(String deliveryOtp) {
+        this.deliveryOtp = deliveryOtp;
+    }
+
+    public Boolean getPayNow() {
+        return payNow;
+    }
+
+    public void setPayNow(Boolean payNow) {
+        this.payNow = payNow;
+    }
+
+    public String getPickupOtp() {
+        return pickupOtp;
+    }
+
+    public void setPickupOtp(String pickupOtp) {
+        this.pickupOtp = pickupOtp;
+    }
 
     public String getVOrderNumber() {
         return vOrderNumber;

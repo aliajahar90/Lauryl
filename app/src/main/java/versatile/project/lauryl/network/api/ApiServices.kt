@@ -104,6 +104,8 @@ interface ApiServices {
 
     @GET("api/v1/country/list")
     fun getCities(@Query("access_token") accessToken: String): Call<CitiResponse>
+    @GET("api/v1/order/get/invoice/{invoice}")
+    fun getInvoice(@Path("invoice") invoice:String,@Query("access_token") accessToken: String): Call<String>
 
     @POST("api/v1/user/address/save")
     fun saveAddress(@Query("access_token") accessToken: String,
@@ -117,6 +119,9 @@ interface ApiServices {
         @Query("access_token") accessToken: String,
         @Body inputJsonBody: JsonObject
     ): Call<CreateOrderResponse>
+
+
+
 
     @POST("api/v1/order/item/update/stage")
     fun cancelOrder(

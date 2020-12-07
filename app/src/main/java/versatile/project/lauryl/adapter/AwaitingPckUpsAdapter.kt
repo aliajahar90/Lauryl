@@ -15,8 +15,8 @@ import versatile.project.lauryl.model.MyOrdersDataItem
 import versatile.project.lauryl.screens.HomeScreen
 
 interface RescheduleCancelListener {
-    fun rescheduleClicked(position: Int,myOrdersDataItem: MyOrdersDataItem)
-    fun cancelClicked(position: Int,myOrdersDataItem: MyOrdersDataItem)
+    fun rescheduleClicked(position: Int, myOrdersDataItem: MyOrdersDataItem)
+    fun cancelClicked(position: Int, myOrdersDataItem: MyOrdersDataItem)
 }
 
 class AwaitingPckUpsAdapter(
@@ -43,10 +43,16 @@ class AwaitingPckUpsAdapter(
 //            (activity as HomeScreen).displayOrderHstryFragment()
 //        }
         requiredViewHolder.cancelBtn.setOnClickListener {
-            rescheduleCancelListener.cancelClicked(position,awtngPckUpList!!.get(position).myOrdersDataItem)
+            rescheduleCancelListener.cancelClicked(
+                position,
+                awtngPckUpList!!.get(position).myOrdersDataItem
+            )
         }
         requiredViewHolder.reschedule_pickup_btn.setOnClickListener {
-            rescheduleCancelListener.rescheduleClicked(position, awtngPckUpList!!.get(position).myOrdersDataItem)
+            rescheduleCancelListener.rescheduleClicked(
+                position,
+                awtngPckUpList!!.get(position).myOrdersDataItem
+            )
         }
 
     }
@@ -70,6 +76,13 @@ class AwaitingPckUpsAdapter(
         var otp: TextView = itemView.otp
 
         fun bindDta(awtngPckUp: AwaitingPickUpModel) {
+
+            if (awtngPckUp.myOrdersDataItem.pickupOtp!=null && awtngPckUp.myOrdersDataItem.pickupOtp.isNotEmpty()) {
+                otp.visibility=View.VISIBLE
+                otp.text = "OTP: ${awtngPckUp.myOrdersDataItem.pickupOtp}"
+            }else
+                otp.visibility=View.GONE
+
             orderIdTxt.text = "Order Id. ${awtngPckUp.orderIdVal}"
             ordrDteTme!!.text = "${awtngPckUp.date}"
             pckUpAdrsTxt.text = awtngPckUp.pickUpAddress

@@ -24,6 +24,9 @@ allprojects {
         flatDir {
             dirs 'libs'
         }
+        repositories {
+            maven { url "https://jitpack.io" }
+        }
         
     }
 }

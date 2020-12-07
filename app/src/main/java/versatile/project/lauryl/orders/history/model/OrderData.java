@@ -7,6 +7,16 @@ public class OrderData implements Serializable {
     private String date;
     private String OrderStage;
 
+    public String getZohoInvoiceId() {
+        return zohoInvoiceId;
+    }
+
+    public void setZohoInvoiceId(String zohoInvoiceId) {
+        this.zohoInvoiceId = zohoInvoiceId;
+    }
+
+    private String zohoInvoiceId="";
+
     public String getOrderIdVal() {
         return orderIdVal;
     }

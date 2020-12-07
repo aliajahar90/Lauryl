@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import versatile.project.lauryl.BuildConfig
 import versatile.project.lauryl.utils.Constants
 import java.util.concurrent.TimeUnit
@@ -53,6 +54,7 @@ class RetrofitObj {
 
             if (versatileRetrofit == null && BASE_URL_VERSATILE_GENERAL.isNotEmpty()) {
                 versatileRetrofit = Retrofit.Builder()
+                    .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
                     .client(okHttpClient)
                     .baseUrl(BASE_URL_VERSATILE_GENERAL).build()

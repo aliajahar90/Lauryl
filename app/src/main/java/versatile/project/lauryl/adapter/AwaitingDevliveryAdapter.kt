@@ -17,16 +17,25 @@ import kotlinx.android.synthetic.main.awaiting_pckup_lst_item.view.ordrDteTme
 import kotlinx.android.synthetic.main.awaiting_pckup_lst_item.view.pckUpAdrsTxt
 import versatile.project.lauryl.R
 import versatile.project.lauryl.model.AwaitingDeliveryModel
+import versatile.project.lauryl.model.MyOrdersDataItem
 import versatile.project.lauryl.orders.history.model.OrderData
 import versatile.project.lauryl.screens.HomeScreen
 import versatile.project.lauryl.utils.AllConstants
 
+
+interface AwaitingDevliveryListener {
+    fun paynow(position: Int, myOrdersDataItem: MyOrdersDataItem)
+}
+
+
 class AwaitingDevliveryAdapter(
     var activity: FragmentActivity?,
-    var context: Context, var awtngDlvryList:ArrayList<AwaitingDeliveryModel>?): RecyclerView.Adapter<AwaitingDevliveryAdapter.MyViewHolder>() {
+    var context: Context, var awtngDlvryList: ArrayList<AwaitingDeliveryModel>?
+) : RecyclerView.Adapter<AwaitingDevliveryAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        var itemView: View = LayoutInflater.from(context).inflate(R.layout.awaiting_dlvry_lst_item,parent,false)
+        var itemView: View =
+            LayoutInflater.from(context).inflate(R.layout.awaiting_dlvry_lst_item, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -37,12 +46,15 @@ class AwaitingDevliveryAdapter(
     override fun onBindViewHolder(requiredViewHolder: MyViewHolder, position: Int) {
         requiredViewHolder.bindDta(awtngDlvryList!![position])
         requiredViewHolder.mainLyot.setOnClickListener {
-            val orderDate= OrderData()
-            orderDate.orderIdVal=this.awtngDlvryList!!.get(position).orderIdVal
-            orderDate.date=this.awtngDlvryList!!.get(position).date
-            orderDate.orderStage=AllConstants.Orders.OrderStage.Awaiting_Delivery
-           var jsonString =Gson().toJson(orderDate)
+            val orderDate = OrderData()
+            orderDate.orderIdVal = this.awtngDlvryList!!.get(position).orderIdVal
+            orderDate.date = this.awtngDlvryList!!.get(position).date
+            orderDate.orderStage = AllConstants.Orders.OrderStage.Awaiting_Delivery
+            var jsonString = Gson().toJson(orderDate)
             (activity as HomeScreen).displayOrderHstryFragment(jsonString)
+        }
+        requiredViewHolder.paynow.setOnClickListener {
+            (activity as HomeScreen).displayPaymentFragment()
         }
     }
 
@@ -54,15 +66,29 @@ class AwaitingDevliveryAdapter(
         this.awtngDlvryList!!.clear()
     }
 
-    class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var mainLyot: LinearLayout = itemView.linMain
         var orderIdTxt = itemView.orderIdTxt
-        var ordrDteTme : TextView? = itemView.ordrDteTme
+        var ordrDteTme: TextView? = itemView.ordrDteTme
         var pckUpAdrsTxt = itemView.pckUpAdrsTxt
         var otp = itemView.otp
         var paynow = itemView.paynow_btn
 
-        fun bindDta(awtngDlvry: AwaitingDeliveryModel){
+        fun bindDta(awtngDlvry: AwaitingDeliveryModel) {
+
+            if (awtngDlvry.dataItem.deliveryOtp !=null && awtngDlvry.dataItem.deliveryOtp.isNotEmpty()) {
+                otp.visibility = View.VISIBLE
+                otp.text = "OTP: ${awtngDlvry.dataItem.deliveryOtp}"
+            } else {
+                otp.visibility = View.GONE
+                otp.text = ""
+            }
+            if (awtngDlvry.dataItem.payNow)
+            {
+                paynow.visibility = View.VISIBLE
+            }else
+                paynow.visibility = View.GONE
+
             orderIdTxt.text = "Order Id. ${awtngDlvry.orderIdVal}"
             ordrDteTme!!.text = "${awtngDlvry.date}"
             pckUpAdrsTxt.text = awtngDlvry.pickUpAddress

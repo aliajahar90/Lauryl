@@ -196,7 +196,7 @@ class MyOrdersFragment : Fragment() {
                             dateTimeString,
                             "",
                             "${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}"
-                        )
+                       ,dataItem = dataItem )
                     )
                 }
 
@@ -210,6 +210,7 @@ class MyOrdersFragment : Fragment() {
                             dateTimeString,
                             "",
                             "${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}",dataItem.orderStage
+                                ,dataItem
                         )
                     )
                 }
@@ -222,7 +223,7 @@ class MyOrdersFragment : Fragment() {
                             dateTimeString,
                             "",
                             "${dataItem.shippingAddress1},${dataItem.shippingAddress2},${dataItem.shippingAddress3},${dataItem.shippingCity},${dataItem.shippingState},${dataItem.shippingCountry},${dataItem.shippingPostCode}",dataItem.orderStage
-                        )
+                       ,dataItem )
                     )
                 }
 

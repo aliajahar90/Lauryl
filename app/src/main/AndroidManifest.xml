@@ -35,9 +35,15 @@
             android:screenOrientation="portrait"
             android:name=".screens.IntroScreen"></activity>
         <activity
+            android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor"
+            android:theme="@style/FinestWebViewTheme.Light" />
+        <activity
             android:screenOrientation="portrait"
             android:name=".screens.SignUpOrLoginScreen"
             android:windowSoftInputMode="adjustResize"/>
+
         <activity
             android:screenOrientation="portrait"
             android:name=".screens.SplashScreen">

@@ -338,7 +338,7 @@ class HomeScreen : BaseActivity(), LocationListener {
     }
 
     private fun displayProfileFragment() {
-        homeNavigationController.addProfileFragment();
+        homeNavigationController.addProfileFragment()
     }
 
      fun displayPaymentFragment() {

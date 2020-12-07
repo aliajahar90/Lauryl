@@ -245,6 +245,7 @@ open class LaurylRepository {
                 }
 
                 override fun onFailure(call: Call<MyOrdersResponse>, t: Throwable) {
+                    t.printStackTrace()
                     myOrdersLiveData.postValue(null)
                 }
 
