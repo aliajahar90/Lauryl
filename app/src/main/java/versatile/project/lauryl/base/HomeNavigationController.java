@@ -16,6 +16,7 @@ import versatile.project.lauryl.R;
 import versatile.project.lauryl.home.HomeFragment;
 import versatile.project.lauryl.payment.PaymentErrorFragment;
 import versatile.project.lauryl.payment.PaymentFragment;
+import versatile.project.lauryl.payment.PaymentPayNowFragment;
 import versatile.project.lauryl.payment.PaymentSuccessFragment;
 import versatile.project.lauryl.profile.ProfileFragment;
 import versatile.project.lauryl.screens.HomeScreen;
@@ -37,7 +38,14 @@ public class HomeNavigationController implements FragmentManager.OnBackStackChan
 
     public void addPaymentFragment(){
         FragmentTransaction fragmentTransaction= ourInstance.mFragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragContainer,PaymentFragment.newInstance(PaymentFragment.PaymentTypeUpi),PaymentFragment.TAG);
+        fragmentTransaction.replace(R.id.fragContainer,new PaymentFragment(),PaymentFragment.TAG);
+        enableBackButton();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+    public void addPaymentPayNowFragment(){
+        FragmentTransaction fragmentTransaction= ourInstance.mFragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragContainer, new PaymentPayNowFragment(),PaymentPayNowFragment.TAG);
         enableBackButton();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

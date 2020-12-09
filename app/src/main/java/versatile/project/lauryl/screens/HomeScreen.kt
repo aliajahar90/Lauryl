@@ -344,6 +344,9 @@ class HomeScreen : BaseActivity(), LocationListener {
      fun displayPaymentFragment() {
         homeNavigationController.addPaymentFragment()
     }
+    fun displayPaymentPayNowFragment() {
+        homeNavigationController.addPaymentPayNowFragment()
+    }
 
     fun displaySPFragment() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragContainer)

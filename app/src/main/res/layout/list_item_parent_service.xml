@@ -23,7 +23,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/imgArrow"></androidx.appcompat.widget.AppCompatTextView>
+                android:layout_toLeftOf="@+id/imgArrow">
+
+            </androidx.appcompat.widget.AppCompatTextView>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imgArrow"

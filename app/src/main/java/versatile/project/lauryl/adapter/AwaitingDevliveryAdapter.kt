@@ -55,7 +55,7 @@ class AwaitingDevliveryAdapter(
             (activity as HomeScreen).displayOrderHstryFragment(jsonString)
         }
         requiredViewHolder.paynow.setOnClickListener {
-            (activity as HomeScreen).displayPaymentFragment()
+            (activity as HomeScreen).displayPaymentPayNowFragment()
         }
     }
 

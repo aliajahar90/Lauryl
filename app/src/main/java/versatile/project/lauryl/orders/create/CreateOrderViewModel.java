@@ -1,5 +1,7 @@
 package versatile.project.lauryl.orders.create;
 
+import com.google.gson.JsonObject;
+
 import org.joda.time.DateTime;
 
 import versatile.project.lauryl.base.BaseViewModel;
@@ -14,6 +16,9 @@ public class CreateOrderViewModel extends BaseViewModel {
     }
    public void createOrderOnServerWithoutPayment(String accessToken,CreateOrderData createOrderReq){
         createOrderRepository.createOrder(accessToken,createOrderReq);
+    }
+    public void createOrderOnServerWithoutPayment(String accessToken, JsonObject jsonObject){
+        createOrderRepository.createOrder(accessToken,jsonObject);
     }
 
 //    CreateOrderData getCreateOrderParams(CreateOrderData.Details createOrderReq){

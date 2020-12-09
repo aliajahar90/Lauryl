@@ -70,7 +70,7 @@ import versatile.project.lauryl.utils.Globals;
 
 public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragmentBinding> {
     private PaymentFragmentBinding paymentFragmentBinding;
-    private PaymentViewModel paymentViewModel;
+    PaymentViewModel paymentViewModel;
     public static final int PaymentTypeUpi = 1;
     public static final int PaymentTypeCards = 2;
     public static final int PaymentTypeNetBanking = 3;
@@ -86,29 +86,23 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     private double orderValue=1.0;
 
 
-    public static PaymentFragment newInstance(int viewType) {
-        PaymentFragment paymentFragment = new PaymentFragment();
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        paymentFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.payment_fragment, container, false);
         try {
-            paymentBaseShareData = new Gson().fromJson((String) paymentFragment.getArguments().get(AllConstants.Payment.PaymentData), PaymentBaseShareData.class);
+            paymentBaseShareData = new Gson().fromJson((String) getArguments().get(AllConstants.Payment.PaymentData), PaymentBaseShareData.class);
         } catch (Exception e) {
             Log.d("Error", "Null Pointer");
         }
         if (paymentBaseShareData == null) {
             paymentBaseShareData = new PaymentBaseShareData();
         }
-        paymentBaseShareData.setViewType(viewType);
-        return paymentFragment;
-    }
-
-    private PaymentFragment() {
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        paymentFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.payment_fragment, container, false);
+        paymentBaseShareData.setViewType(1);
         displayView(paymentBaseShareData.getViewType());
         mGson=new Gson();
+        
         MyApplication myApplication=(MyApplication) getActivity().getApplicationContext();
         try {
             JsonObject orderValueJson = mGson.fromJson(myApplication.getActiveSessionOrderValue(), JsonObject.class);
@@ -279,21 +273,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
             displayView(PaymentFragment.PaymentTypeNetBanking);
         });
         paymentFragmentBinding.rlPaymentButton.setOnClickListener(view -> {
-            if (((MyApplication) getActivity().getApplicationContext()).getActiveSessionOrderNumber().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()) {
-                showCreateOrderDialog();
-            } else {
-                switch (activePaymentType) {
-                    case PaymentTypeUpi:
-                        processUpiService();
-                        break;
-                    case PaymentTypeCards:
-                        processCardPaymentService();
-                        break;
-                    case PaymentTypeNetBanking:
-                        processNetBankPaymentService();
-                        break;
-                }
-          }
+            doSubmitValidation();
         });
         paymentFragmentBinding.paymentCard.inputCardNumber.addTextChangedListener(new CardFormattingTextWatcher(paymentFragmentBinding.paymentCard.inputCardNumber, new CardFormattingTextWatcher.CardType() {
             @Override
@@ -312,6 +292,24 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
 
     }
 
+
+    protected void doSubmitValidation(){
+        if (((MyApplication) getActivity().getApplicationContext()).getActiveSessionOrderNumber().isEmpty()||((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedProfile().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializedService().isEmpty() || ((MyApplication) getActivity().getApplicationContext()).getCreateOrderSerializdedAddressData().isEmpty()) {
+            showCreateOrderDialog();
+        } else {
+            switch (activePaymentType) {
+                case PaymentTypeUpi:
+                    processUpiService();
+                    break;
+                case PaymentTypeCards:
+                    processCardPaymentService();
+                    break;
+                case PaymentTypeNetBanking:
+                    processNetBankPaymentService();
+                    break;
+            }
+        }
+    }
     private void hotBankOnclick() {
         paymentFragmentBinding.paymentNetBank.rlSBIN.setOnClickListener(view -> {
             switchToSelectedBackground(paymentFragmentBinding.paymentNetBank.rlSBIN);
@@ -480,7 +478,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         // mAdapter.notifyDataSetChanged();
     }
 
-    private void processUpiService() {
+    void processUpiService() {
 
         if (paymentViewModel.basicInputValidation(paymentFragmentBinding.paymentUPI.inputUPI.getText().toString(), paymentFragmentBinding.paymentUPI.inputUPI.getText().toString().length())) {
             showLoading();
@@ -522,7 +520,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         });
     }
 
-    private void processCardPaymentService() {
+    void processCardPaymentService() {
         showLoading();
         paymentViewModel.validateCard(paymentFragmentBinding.paymentCard.inputCardNumber.getText().toString(),
                 paymentFragmentBinding.paymentCard.inputName.getText().toString(),
@@ -568,7 +566,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         });
     }
 
-    private void processNetBankPaymentService() {
+    void processNetBankPaymentService() {
         GetProfileResponse getProfileResponse=new Gson().fromJson(((MyApplication) Objects.requireNonNull(getActivity()).getApplicationContext()).getCreateOrderSerializdedProfile(),GetProfileResponse.class);
         if (activeBankForCheckout != null) {
             paymentMethod = "netbanking";
@@ -687,7 +685,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
         return String.valueOf(dateTime.getMillis());
     }
 
-    void createMyOrder(PaymentBaseShareData.PaymentSuccess paymentSuccess){
+    protected void createMyOrder(PaymentBaseShareData.PaymentSuccess paymentSuccess){
         CreateOrderData.Details details = new CreateOrderData.Details();
         MyApplication myApplication=(MyApplication) getActivity().getApplicationContext();
         JsonObject jsonObject = mGson.fromJson(myApplication.getActiveSessionOrderNumber(), JsonObject.class);
