@@ -301,13 +301,13 @@ public class ReSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewMo
         details.setShippingCity(myOrdersDataItem.getShippingCity());
         details.setShippingState(myOrdersDataItem.getShippingState());
         details.setShippingCountry(myOrdersDataItem.getShippingCountry());
-        details.setPickupAddress1(myOrdersDataItem.getInvoiceAddress1());
-        details.setPickupAddress2(myOrdersDataItem.getInvoiceAddress2());
-        details.setPickupAddress3(myOrdersDataItem.getInvoiceAddress3());
+        details.setPickupAddress1(myOrdersDataItem.getShippingAddress1());
+        details.setPickupAddress2(myOrdersDataItem.getShippingAddress2());
+        details.setPickupAddress3(myOrdersDataItem.getShippingAddress3());
         details.setPickupCountryCode(myOrdersDataItem.getShippingCountryCode());
-        details.setPickupCity(myOrdersDataItem.getInvoiceCity());
-        details.setPickupState(myOrdersDataItem.getInvoiceState());
-        details.setPickupCountry(myOrdersDataItem.getInvoiceCountry());
+        details.setPickupCity(myOrdersDataItem.getShippingCity());
+        details.setPickupState(myOrdersDataItem.getShippingState());
+        details.setPickupCountry(myOrdersDataItem.getShippingCountry());
         details.setShippingPostCode(myOrdersDataItem.getShippingPostCode());
         details.setTransactionId(myOrdersDataItem.getTransactionId());
         details.setRazorPayOrderId(myOrdersDataItem.getRazorPayOrderId());
@@ -315,6 +315,7 @@ public class ReSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewMo
         details.setPhoneNumber(myOrdersDataItem.getPhoneNumber());
         details.setOrderStage(myOrdersDataItem.getOrderStage());
         details.setEmailId(myOrdersDataItem.getEmailId());
+        details.setSpecialInstructions(cnfSchdulePckupFragmentBinding.inputSpclInstruction.getText().toString());
         details.setPickupDate(selectedDate);
         details.setPickupSlot(selectedTime);
         details.setLatitude(myOrdersDataItem.getLatitude());

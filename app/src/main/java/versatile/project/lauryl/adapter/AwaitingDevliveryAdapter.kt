@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.awaiting_dlvry_lst_item.view.*
 import kotlinx.android.synthetic.main.awaiting_pckup_lst_item.view.orderIdTxt
 import kotlinx.android.synthetic.main.awaiting_pckup_lst_item.view.ordrDteTme
 import kotlinx.android.synthetic.main.awaiting_pckup_lst_item.view.pckUpAdrsTxt
+import timber.log.Timber
 import versatile.project.lauryl.R
 import versatile.project.lauryl.model.AwaitingDeliveryModel
 import versatile.project.lauryl.model.MyOrdersDataItem
@@ -76,6 +77,7 @@ class AwaitingDevliveryAdapter(
 
         fun bindDta(awtngDlvry: AwaitingDeliveryModel) {
 
+            Timber.e("pay now status ${awtngDlvry.dataItem.payNow}")
             if (awtngDlvry.dataItem.deliveryOtp !=null && awtngDlvry.dataItem.deliveryOtp.isNotEmpty()) {
                 otp.visibility = View.VISIBLE
                 otp.text = "OTP: ${awtngDlvry.dataItem.deliveryOtp}"
