@@ -20,6 +20,9 @@ public class CreateOrderViewModel extends BaseViewModel {
     public void createOrderOnServerWithoutPayment(String accessToken, JsonObject jsonObject){
         createOrderRepository.createOrder(accessToken,jsonObject);
     }
+    public void modifyOrderPayNow(String accessToken, JsonObject jsonObject){
+        createOrderRepository.modifyOrder(accessToken,jsonObject);
+    }
 
 //    CreateOrderData getCreateOrderParams(CreateOrderData.Details createOrderReq){
 //        CreateOrderData createOrderData=new CreateOrderData();

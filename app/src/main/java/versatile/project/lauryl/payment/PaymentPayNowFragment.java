@@ -63,7 +63,10 @@ public class PaymentPayNowFragment extends PaymentFragment {
         myOrdersDataItem.setPaymentReceived(true);
         JsonObject jsonElement = new JsonParser().parse(new Gson().toJson(myOrdersDataItem)).getAsJsonObject();
         JsonObject jsonObject = new JsonObject();
-        jsonObject.add("details", jsonElement);
+        jsonObject.addProperty("orderNumber", myOrdersDataItem.getOrderNumber());
+        jsonObject.addProperty("orderStage", myOrdersDataItem.getOrderStage());
+        jsonObject.addProperty("transactionId", paymentSuccess.getPaymentTransactionId());
+        jsonObject.addProperty("razorPayOrderId", paymentSuccess.getRazorOrderId());
         CreateOrderData createOrderData=new CreateOrderData();
         CreateOrderData.Details details=new CreateOrderData.Details();
         //keeping static as of now
@@ -103,7 +106,7 @@ public class PaymentPayNowFragment extends PaymentFragment {
         details.setReSchedule(false);
         createOrderData.setDetails(details);
         capturePaymentSuccessRequiredData(paymentSuccess,createOrderData);
-        paymentViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), jsonObject);
+        paymentViewModel.modifyOrderPayNow(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), jsonObject);
 
 
     }

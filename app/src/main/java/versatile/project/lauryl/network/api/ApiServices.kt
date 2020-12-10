@@ -120,6 +120,12 @@ interface ApiServices {
         @Body inputJsonBody: JsonObject
     ): Call<CreateOrderResponse>
 
+    @POST(" api/v1/order/modify")
+    fun modifyOrder(
+        @Query("access_token") accessToken: String,
+        @Body inputJsonBody: JsonObject
+    ): Call<BooleanResponse>
+
 
 
 

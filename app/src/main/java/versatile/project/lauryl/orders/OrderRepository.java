@@ -56,6 +56,23 @@ public class OrderRepository extends LaurylRepository {
             }
         });
     }
+    public void modifyOrder(String accessToken,JsonObject jsonObject){
+        getApiVersatileServices().modifyOrder(accessToken,jsonObject).enqueue(new Callback<BooleanResponse>() {
+            @Override
+            public void onResponse(Call<BooleanResponse> call, Response<BooleanResponse> response) {
+                if(response!=null && response.isSuccessful() && response.code()==200 && response.body()!=null){
+                    createOrderSuccessEvent.setValue(""+response.body().getStatus());
+                }else {
+                    createOrderFailedEvent.setValue("true");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BooleanResponse> call, Throwable t) {
+                createOrderFailedEvent.setValue("true");
+            }
+        });
+    }
     public void cancelOrder(String accessToken, JsonObject cancelOrderJson){
        getApiVersatileServices().cancelOrder(accessToken,cancelOrderJson).enqueue(new Callback<BooleanResponse>() {
            @Override
