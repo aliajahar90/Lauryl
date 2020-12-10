@@ -43,9 +43,13 @@ public class HomeNavigationController implements FragmentManager.OnBackStackChan
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public void addPaymentPayNowFragment(){
+    public void addPaymentPayNowFragment(String bundleJsonData){
         FragmentTransaction fragmentTransaction= ourInstance.mFragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragContainer, new PaymentPayNowFragment(),PaymentPayNowFragment.TAG);
+        Bundle bundle=new Bundle();
+        bundle.putString(AllConstants.PickUp.PickUpData,bundleJsonData);
+        PaymentPayNowFragment paymentErrorFragment=new PaymentPayNowFragment();
+        paymentErrorFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragContainer, paymentErrorFragment,PaymentPayNowFragment.TAG);
         enableBackButton();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

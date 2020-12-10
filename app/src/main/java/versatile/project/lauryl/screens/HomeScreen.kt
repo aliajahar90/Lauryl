@@ -344,8 +344,8 @@ class HomeScreen : BaseActivity(), LocationListener {
      fun displayPaymentFragment() {
         homeNavigationController.addPaymentFragment()
     }
-    fun displayPaymentPayNowFragment() {
-        homeNavigationController.addPaymentPayNowFragment()
+    fun displayPaymentPayNowFragment(item:String) {
+        homeNavigationController.addPaymentPayNowFragment(item)
     }
 
     fun displaySPFragment() {

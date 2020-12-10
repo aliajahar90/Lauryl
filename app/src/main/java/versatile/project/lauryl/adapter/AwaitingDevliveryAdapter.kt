@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
@@ -17,6 +16,7 @@ import kotlinx.android.synthetic.main.awaiting_pckup_lst_item.view.ordrDteTme
 import kotlinx.android.synthetic.main.awaiting_pckup_lst_item.view.pckUpAdrsTxt
 import timber.log.Timber
 import versatile.project.lauryl.R
+import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.model.AwaitingDeliveryModel
 import versatile.project.lauryl.model.MyOrdersDataItem
 import versatile.project.lauryl.orders.history.model.OrderData
@@ -55,7 +55,11 @@ class AwaitingDevliveryAdapter(
             (activity as HomeScreen).displayOrderHstryFragment(jsonString)
         }
         requiredViewHolder.paynow.setOnClickListener {
-            (activity as HomeScreen).displayPaymentPayNowFragment()
+            val dataItem= awtngDlvryList!![position].dataItem
+            val pickupTimingJson = JsonObject()
+            pickupTimingJson.addProperty(AllConstants.Orders.totalOrderValue, dataItem.balanceAmount!!)
+            (activity?.application as MyApplication).activeSessionOrderValue = Gson().toJson(pickupTimingJson)
+            (activity as HomeScreen).displayPaymentPayNowFragment(Gson().toJson(dataItem))
         }
     }
 

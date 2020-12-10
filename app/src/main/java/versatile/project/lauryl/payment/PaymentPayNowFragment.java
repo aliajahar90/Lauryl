@@ -60,6 +60,7 @@ public class PaymentPayNowFragment extends PaymentFragment {
     protected void createMyOrder(PaymentBaseShareData.PaymentSuccess paymentSuccess) {
         myOrdersDataItem.setTransactionId(paymentSuccess.getPaymentTransactionId());
         myOrdersDataItem.setRazorPayOrderId(paymentSuccess.getRazorOrderId());
+        myOrdersDataItem.setPaymentReceived(true);
         JsonObject jsonElement = new JsonParser().parse(new Gson().toJson(myOrdersDataItem)).getAsJsonObject();
         JsonObject jsonObject = new JsonObject();
         jsonObject.add("details", jsonElement);

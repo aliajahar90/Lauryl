@@ -171,6 +171,9 @@ public class MyOrdersDataItem {
     @SerializedName("pickupDate")
     @Expose
     private String pickupDate;
+    @SerializedName("balanceAmount")
+    @Expose
+    private String balanceAmount;
 
     public String getSpecialInstructions() {
         return specialInstructions;
@@ -306,6 +309,14 @@ public class MyOrdersDataItem {
 
     public void setModifiedAt(String modifiedAt) {
         this.modifiedAt = modifiedAt;
+    }
+
+    public String getBalanceAmount() {
+        return balanceAmount;
+    }
+
+    public void setBalanceAmount(String balanceAmount) {
+        this.balanceAmount = balanceAmount;
     }
 
     @SerializedName("serviceList")
