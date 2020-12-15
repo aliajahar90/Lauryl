@@ -21,7 +21,7 @@ public class ServiceType implements Parent<ServiceItemType> {
 
   @Override
   public boolean isInitiallyExpanded() {
-    return false;
+    return true;
   }
 
   public String getTile() {

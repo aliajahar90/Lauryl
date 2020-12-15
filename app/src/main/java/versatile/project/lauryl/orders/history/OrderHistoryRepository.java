@@ -29,30 +29,14 @@ public class OrderHistoryRepository  extends LaurylRepository {
 private SingleLiveEvent<List<ServiceType>> listServiceSkuTypeSingleLiveEvent= new SingleLiveEvent<>();
 private SingleLiveEvent<List<OrderItemsResponse.ServiceItem>> listRawListSingleLiveEvent= new SingleLiveEvent<>();
 private SingleLiveEvent<String> stringErrorSingleLiveEvent=new SingleLiveEvent<>();
-    Map<String,ServiceItemType> stringServiceItemTypeMap;;
+
     void getOrderItems(String accessToken, JsonObject orderHistoryRequest){
         getApiVersatileServices().getOrderItems(accessToken,orderHistoryRequest).enqueue(new Callback<OrderItemsResponse>() {
             @Override
             public void onResponse(Call<OrderItemsResponse> call, Response<OrderItemsResponse> response) {
                 if(response!=null && response.isSuccessful() && response.code()==200){
                     if(response.body()!=null && response.body().getData()!=null && !(response.body().getData().getList().isEmpty())){
-                        stringServiceItemTypeMap=new HashMap<>();
-                        List<String> serviceItems=new ArrayList<>();
-                        Map<String, String> nameMap=new HashMap<>();
-                        Map<String, List<ServiceItemType>> stringListHashMap=new HashMap<>();
-                        List<ServiceType> serviceTypeList=new ArrayList<>();
-                        for(OrderItemsResponse.ServiceItem  serviceItem:response.body().getData().getList()){
-                            serviceItems.add(serviceItem.getSku());
-                            nameMap.put(serviceItem.getSku(),serviceItem.getProductName());
-                            ServiceItemType serviceItemType=new ServiceItemType(serviceItem.getScannedItemType(),serviceItem.getQtyPurchased(),serviceItem.getProductPrice());
-                            insertInServiceItemMap(stringListHashMap,serviceItem.getSku(),serviceItemType);
-                        }
-                        Set<String> uniqueServices =new LinkedHashSet<>(serviceItems);
-                                for(String service:uniqueServices){
-                                    ServiceType serviceType=new ServiceType(nameMap.get(service),stringListHashMap.get(service));
-                                    serviceTypeList.add(serviceType);
-                                }
-                        listServiceSkuTypeSingleLiveEvent.setValue(serviceTypeList);
+                        listServiceSkuTypeSingleLiveEvent.setValue(processHistory(response.body().getData().getList()));
                          listRawListSingleLiveEvent.setValue(response.body().getData().getList());
                     }else {
                         stringErrorSingleLiveEvent.setValue(AllConstants.Orders.ORDER_ITEM_ERROR_EMPTY);
@@ -81,28 +65,56 @@ private SingleLiveEvent<String> stringErrorSingleLiveEvent=new SingleLiveEvent<>
         return stringErrorSingleLiveEvent;
     }
 
-    private void insertInServiceItemMap(Map<String,List<ServiceItemType>> listHashMap,String serviceType, ServiceItemType itemType) {
-        if (listHashMap.containsKey(serviceType)) {
-            List<ServiceItemType> serviceItemTypeList=listHashMap.get(serviceType);
-            for(ServiceItemType serviceItemType:serviceItemTypeList){
-                    if(stringServiceItemTypeMap.containsKey(serviceItemType.getScannedItemType())) {
-                        ServiceItemType serviceItemType1 = stringServiceItemTypeMap.get(serviceItemType.getScannedItemType());
-                        serviceItemType1.setQtyPurchased(String.valueOf(Double.valueOf(serviceItemType.getQtyPurchased()) + 1.0));
-                        serviceItemType1.setProductPrice(String.valueOf(Double.valueOf(serviceItemType1.getProductPrice()) + Double.valueOf(serviceItemType.getProductPrice())));
-                        stringServiceItemTypeMap.put(serviceItemType.getScannedItemType(), serviceItemType1);
-                    }else {
-                        stringServiceItemTypeMap.put(serviceItemType.getScannedItemType(), serviceItemType);
-                    }
-             for(int i=0;i<listHashMap.get(serviceType).size();i++){
-                 listHashMap.get(serviceType).set(i,stringServiceItemTypeMap.get(listHashMap.get(serviceType).get(i).getScannedItemType()));
-             }
-            }
-        } else {
-            List<ServiceItemType> serviceItemTypeList = new ArrayList<>();
-            serviceItemTypeList.add(itemType);
-            listHashMap.put(serviceType, serviceItemTypeList);
-            stringServiceItemTypeMap.put(itemType.getScannedItemType(),itemType);
+    List<ServiceType> processHistory(List<OrderItemsResponse.ServiceItem> serviceItems){
+        List<String> headers =new ArrayList<>();
+        List<String> scannedItems =new ArrayList<>();
+        List<ServiceType> serviceTypeList=new ArrayList<>();
+        Map<String,String> ServiceNameMap=new HashMap<>();
+        for(OrderItemsResponse.ServiceItem item:serviceItems){
+            headers.add(item.getEan());
+            ServiceNameMap.put(item.getEan(),item.getProductName());
+            scannedItems.add(item.getScannedItemType());
         }
+        Set<String> uniqueEAN =new LinkedHashSet<>(headers);
+       // Map<String, List<OrderItemsResponse.ServiceItem>> serviceMap=new HashMap<>();
+        for(String s:uniqueEAN){
+            //serviceMap.put(s,getMyList(s,serviceItems));
+            serviceTypeList.add(new ServiceType(ServiceNameMap.get(s),getMyItems(processList(getMyList(s,serviceItems)))));
+        }
+        return serviceTypeList;
     }
 
+    List<OrderItemsResponse.ServiceItem> getMyList(String ser,List<OrderItemsResponse.ServiceItem> serviceItems ){
+        List<OrderItemsResponse.ServiceItem> myList=new ArrayList<>();
+        for(OrderItemsResponse.ServiceItem item:serviceItems){
+            if(TextUtils.equals(item.getEan(),ser)){
+                myList.add(item);
+            }
+        }
+        return myList;
+    }
+
+    Map<String, ServiceItemType> processList(List<OrderItemsResponse.ServiceItem> serviceItems){
+        Map<String, ServiceItemType> itemInside=new HashMap<>();
+        for(OrderItemsResponse.ServiceItem serviceItem:serviceItems){
+            if(itemInside.containsKey(serviceItem.getScannedItemType())){
+                ServiceItemType serviceItemType1 = itemInside.get(serviceItem.getScannedItemType());
+                serviceItemType1.setQtyPurchased(String.valueOf(Double.valueOf(serviceItem.getQtyPurchased()) + 1.0));
+                serviceItemType1.setProductPrice(String.valueOf(Double.valueOf(serviceItemType1.getProductPrice()) + Double.valueOf(serviceItem.getProductPrice())));
+                itemInside.put(serviceItem.getScannedItemType(),serviceItemType1);
+
+            }else {
+                itemInside.put(serviceItem.getScannedItemType(),new ServiceItemType(serviceItem.getScannedItemType(),serviceItem.getQtyPurchased(),serviceItem.getProductPrice()));
+            }
+        }
+        return itemInside;
+    }
+
+    List<ServiceItemType> getMyItems(Map<String, ServiceItemType> itemInside){
+        List<ServiceItemType> toGive=new ArrayList<>();
+        for(Map.Entry<String, ServiceItemType> entry: itemInside.entrySet()){
+            toGive.add(entry.getValue());
+        }
+        return toGive;
+    }
 }
