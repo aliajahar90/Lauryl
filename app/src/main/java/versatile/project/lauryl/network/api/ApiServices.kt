@@ -134,4 +134,7 @@ interface ApiServices {
         @Query("access_token") accessToken: String,
         @Body inputJsonBody: JsonObject
     ): Call<BooleanResponse>
+
+    @GET("static/user/subscribe/{number}")
+    fun updateSubscription(@Path("number") phoneNumber: String): Call<BooleanResponse>
 }
