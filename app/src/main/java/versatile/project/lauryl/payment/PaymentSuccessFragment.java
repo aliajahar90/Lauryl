@@ -1,6 +1,7 @@
 package versatile.project.lauryl.payment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
@@ -21,6 +23,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import timber.log.Timber;
 import versatile.project.lauryl.R;
+import versatile.project.lauryl.base.BaseActivity;
 import versatile.project.lauryl.base.BaseBinding;
 import versatile.project.lauryl.base.HomeNavigationController;
 import versatile.project.lauryl.databinding.FragmentPaymentSuccessBinding;
@@ -69,6 +72,13 @@ public class PaymentSuccessFragment extends BaseBinding<PaymentSuccessViewModel,
         paymentSuccessBinding.txtOrderId.setText(paymentBaseShareData.getPaymentSuccess().getCreateOrderData().getDetails().getOrderNumber());
         paymentSuccessBinding.txtDateTime.setText(getPickupDate(paymentBaseShareData.getPaymentSuccess().getCreateOrderData().getDetails().getPickupDate())+" "+paymentBaseShareData.getPaymentSuccess().getCreateOrderData().getDetails().getPickupSlot());
         paymentSuccessBinding.txtMethod.setText(paymentBaseShareData.getPaymentSuccess().getPaymenMethod());
+        if(TextUtils.equals(paymentBaseShareData.getPaymentSuccess().getPaymenMethod(),"upi") ||TextUtils.equals(paymentBaseShareData.getPaymentSuccess().getPaymenMethod(),"card")||TextUtils.equals(paymentBaseShareData.getPaymentSuccess().getPaymenMethod(),"netbanking")) {
+            showLoading();
+            paymentSuccessViewModel.updateSubscription(paymentBaseShareData.getPaymentSuccess().getCreateOrderData().getDetails().getPhoneNumber());
+        }
+        paymentSuccessViewModel.getSubscriptionCallUpdate().observe(this, aBoolean -> {
+            hideLoading();
+        });
 //       // paymentSuccessBinding.btnOderStatus.setText(paymentBaseShareData.getPaymentSuccess().getPaymentTransactionId());
         paymentSuccessBinding.btnOderStatus.setOnClickListener(view -> {
             if (getActivity() instanceof HomeScreen) {
@@ -118,4 +128,16 @@ public class PaymentSuccessFragment extends BaseBinding<PaymentSuccessViewModel,
         }
         return "";
     }
+    private void showLoading() {
+        if (getActivity() instanceof BaseActivity)
+            ((BaseActivity) getActivity()).showLoading();
+    }
+
+    private void hideLoading() {
+        if (getActivity() instanceof BaseActivity)
+            ((BaseActivity) getActivity()).hideLoading();
+    }
+
+
+
 }
