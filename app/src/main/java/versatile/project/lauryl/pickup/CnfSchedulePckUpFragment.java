@@ -119,6 +119,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
             }
         });
         cnfSchedulePickupViewModel.getCreateOrderSuccessEvent().observe(this, it -> {
+            hideLoading();
             JsonObject pickupTimingJson = new JsonObject();
             pickupTimingJson.addProperty(AllConstants.Orders.totalOrderValue, totalOrderValue);
             myApplication.setActiveSessionOrderValue(mGson.toJson(pickupTimingJson));
@@ -134,6 +135,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
             }
         });
         cnfSchedulePickupViewModel.getCreateOrderFailedEvent().observe(this, it->{
+            hideLoading();
             new AlertDialog.Builder(getActivity())
                     .setTitle(getString(R.string.lauryl))
                     .setMessage(R.string.order_not_created)
@@ -341,6 +343,7 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
         details.setReSchedule(false);
         createOrderData.setDetails(details);
         capturePaymentSuccessRequiredData(new PaymentBaseShareData.PaymentSuccess(),createOrderData);
+        showLoading();
         cnfSchedulePickupViewModel.createOrderOnServerWithoutPayment(((MyApplication) getActivity().getApplicationContext()).getAccessToken(), createOrderData);
     }
     String getCurrentDateTime(){
@@ -455,6 +458,16 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
                     })
                     .show();
         });
+    }
+
+    private void showLoading() {
+        if (getActivity() instanceof BaseActivity)
+            ((BaseActivity) getActivity()).showLoading();
+    }
+
+    private void hideLoading() {
+        if (getActivity() instanceof BaseActivity)
+            ((BaseActivity) getActivity()).hideLoading();
     }
 
 }
