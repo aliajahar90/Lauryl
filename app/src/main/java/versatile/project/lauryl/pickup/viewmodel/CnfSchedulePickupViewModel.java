@@ -12,6 +12,7 @@ import versatile.project.lauryl.base.BaseViewModel;
 import versatile.project.lauryl.orders.create.CreateOrderViewModel;
 import versatile.project.lauryl.pickup.CnfSchedulePickupRepository;
 import versatile.project.lauryl.pickup.data.CnfPickupResponse;
+import versatile.project.lauryl.pickup.data.DateTimeMap;
 import versatile.project.lauryl.profile.data.GetProfileResponse;
 
 public class CnfSchedulePickupViewModel extends CreateOrderViewModel {
@@ -29,8 +30,8 @@ public class CnfSchedulePickupViewModel extends CreateOrderViewModel {
     public LiveData<String> observePickupDateTimeErrorResponse(){
        return cnfSchedulePickupRepository.getCnfPickupErrorLiveEvent();
     }
-    public List<String> getSlotForSelectedDate(String date){
-        return cnfSchedulePickupRepository.getTimesForDate(date);
+    public List<DateTimeMap> getSlotForSelectedDate(String date){
+        return cnfSchedulePickupRepository.getTimesSlotsForDate(date);
     }
     public LiveData<Boolean> isLastItemReached(){
         return cnfSchedulePickupRepository.getIsLastItemReachedEvent();

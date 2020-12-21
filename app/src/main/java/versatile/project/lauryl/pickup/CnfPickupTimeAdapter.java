@@ -20,17 +20,18 @@ import java.util.List;
 import versatile.project.lauryl.R;
 import versatile.project.lauryl.databinding.ItemPickupTimeGridBinding;
 import versatile.project.lauryl.databinding.ListItemCnfSchedulePickupBinding;
+import versatile.project.lauryl.pickup.data.DateTimeMap;
 
 public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdapter.ViewHolder> {
 
-    List<String> stringList;
+    List<DateTimeMap> stringList;
     OnTimeClickListener onDateClickListener;
     Context context;
     private int selectedPosition = -1;
     private String date;
     boolean isSelected=false;
 
-    public CnfPickupTimeAdapter(Context context, List<String> stringList, OnTimeClickListener onDateClickListener,String date) {
+    public CnfPickupTimeAdapter(Context context, List<DateTimeMap> stringList, OnTimeClickListener onDateClickListener, String date) {
         this.context = context;
         this.stringList = stringList;
         this.onDateClickListener = onDateClickListener;
@@ -64,39 +65,45 @@ public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdap
             this.listItemCnfSchedulePickupBinding = listItemCnfSchedulePickupBinding;
         }
 
-        public void bind(String data, int position) {
-            listItemCnfSchedulePickupBinding.txtTime.setText(data);
-            if (isCurrentTimeOrAfter(data)) {
-                if (selectedPosition == position) {
-                    isSelected=true;
-                    listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.verify_otp_bckgrnd);
-                    listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.white));
-                    onDateClickListener.onTimeClicked(isSelected? data : null);
-
-                } else {
-                    isSelected=false;
-                    listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.white_bckgrnd_with_radius);
-                    listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.orange));
-                }
-            } else {
-                if(isFuture(date)) {
+        public void bind(DateTimeMap data, int position) {
+            listItemCnfSchedulePickupBinding.txtTime.setText(data.getTime());
+            if(Integer.parseInt(data.getNoOfSlots())>0) {
+                if (isCurrentTimeOrAfter(data.getTime())) {
                     if (selectedPosition == position) {
-                        isSelected=true;
+                        isSelected = true;
                         listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.verify_otp_bckgrnd);
                         listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.white));
-                        onDateClickListener.onTimeClicked(isSelected? data : null);
+                        onDateClickListener.onTimeClicked(isSelected ? data.getTime() : null);
 
                     } else {
-                        isSelected=false;
+                        isSelected = false;
                         listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.white_bckgrnd_with_radius);
                         listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.orange));
                     }
+                } else {
+                    if (isFuture(date)) {
+                        if (selectedPosition == position) {
+                            isSelected = true;
+                            listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.verify_otp_bckgrnd);
+                            listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.white));
+                            onDateClickListener.onTimeClicked(isSelected ? data.getTime() : null);
+
+                        } else {
+                            isSelected = false;
+                            listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.white_bckgrnd_with_radius);
+                            listItemCnfSchedulePickupBinding.txtTime.setTextColor(context.getResources().getColor(R.color.orange));
+                        }
+                    } else {
+                        isSelected = false;
+                        listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.grey_bckgrnd_with_radius);
+                        listItemCnfSchedulePickupBinding.txtTime.setTextColor(Color.WHITE);
+                    }
                 }
-                else {
-                    isSelected=false;
-                    listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.grey_bckgrnd_with_radius);
-                    listItemCnfSchedulePickupBinding.txtTime.setTextColor(Color.WHITE);
-                }
+            }else {
+                isSelected = false;
+                listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.grey_bckgrnd_with_radius);
+                listItemCnfSchedulePickupBinding.txtTime.setTextColor(Color.WHITE);
+
             }
             listItemCnfSchedulePickupBinding.linTime.setOnClickListener(view -> {
                 selectedPosition = position;

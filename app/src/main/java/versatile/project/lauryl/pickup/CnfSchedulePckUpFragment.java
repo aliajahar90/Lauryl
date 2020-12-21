@@ -50,6 +50,7 @@ import versatile.project.lauryl.model.address.AddressModel;
 import versatile.project.lauryl.orders.create.model.CreateOrderData;
 import versatile.project.lauryl.payment.data.PaymentBaseShareData;
 import versatile.project.lauryl.pickup.data.CnfPickupResponse;
+import versatile.project.lauryl.pickup.data.DateTimeMap;
 import versatile.project.lauryl.pickup.data.PickUpSharedData;
 import versatile.project.lauryl.pickup.viewmodel.CnfSchedulePickupViewModel;
 import versatile.project.lauryl.profile.data.GetProfileResponse;
@@ -213,12 +214,12 @@ public class CnfSchedulePckUpFragment extends BaseBinding<CnfSchedulePickupViewM
     public void onDateClicked(String date) {
         selectedDate=date;
         List<String> uniqueTimes = new ArrayList<>();
-        List<String> timeSlotList = cnfSchedulePickupViewModel.getSlotForSelectedDate(date);
-        Set<String> uniqueTimeSet = new LinkedHashSet<>(timeSlotList);
-        for (String s : uniqueTimeSet) {
-            uniqueTimes.add(s);
-        }
-        cnfPickupTimeAdapter = new CnfPickupTimeAdapter(getActivity(), uniqueTimes, this, date);
+        List<DateTimeMap> timeSlotList = cnfSchedulePickupViewModel.getSlotForSelectedDate(date);
+//        Set<String> uniqueTimeSet = new LinkedHashSet<>(timeSlotList);
+//        for (String s : uniqueTimeSet) {
+//            uniqueTimes.add(s);
+//        }
+        cnfPickupTimeAdapter = new CnfPickupTimeAdapter(getActivity(), timeSlotList, this, date);
         cnfSchdulePckupFragmentBinding.gridPickUpTimer.setAdapter(cnfPickupTimeAdapter);
     }
 

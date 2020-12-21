@@ -42,6 +42,7 @@ public class CnfSchedulePickupRepository extends OrderRepository {
                         DateTimeMap dateTimeMap=new DateTimeMap();
                         dateTimeMap.setDate(dateTimeList.getPickUpDate());
                         dateTimeMap.setTime(dateTimeList.getPickUpTime());
+                        dateTimeMap.setNoOfSlots(dateTimeList.getNoOfSlots());
                         dateTimeMaps.add(dateTimeMap);
                     }
                     Set<String> uniqueDates = new LinkedHashSet<>(dateLists);
@@ -67,6 +68,15 @@ public class CnfSchedulePickupRepository extends OrderRepository {
         for(DateTimeMap dateTimeMap: dateTimeMaps){
             if(TextUtils.equals(dateTimeMap.getDate(),date)){
                 timeList.add(dateTimeMap.getTime());
+            }
+        }
+        return timeList;
+    }
+    public List<DateTimeMap> getTimesSlotsForDate(String date){
+        List<DateTimeMap> timeList=new ArrayList<>();
+        for(DateTimeMap dateTimeMap: dateTimeMaps){
+            if(TextUtils.equals(dateTimeMap.getDate(),date)){
+                timeList.add(dateTimeMap);
             }
         }
         return timeList;
