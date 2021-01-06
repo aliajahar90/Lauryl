@@ -24,6 +24,8 @@ public class ServiceItemViewHolder extends ChildViewHolder {
   public void bind(ServiceItemType recipe) {
       int qty= (int) Double.parseDouble(recipe.getQtyPurchased());
       artistName.setText(qty+" x "+recipe.getScannedItemType());
-     textPrice.setText("\u20B9 "+recipe.getProductPrice());
+      if(recipe.getProductPrice()!=null && !TextUtils.isEmpty(recipe.getProductPrice()) && (Double.parseDouble(recipe.getProductPrice()))>0) {
+          textPrice.setText("\u20B9 " + recipe.getProductPrice());
+      }
   }
 }

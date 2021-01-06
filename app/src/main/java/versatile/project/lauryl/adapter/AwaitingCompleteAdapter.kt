@@ -39,6 +39,7 @@ class AwaitingCompleteAdapter(var activity: FragmentActivity?, var context: Cont
             orderDate.date= this.awtngCmpltdList!![position].date
             orderDate.orderStage=AllConstants.Orders.OrderStage.Completed_Delivery
             orderDate.zohoInvoiceId= this.awtngCmpltdList!![position].dataItem.zohoInvoiceId
+            orderDate.myOrdersDataItem=Gson().toJson(this.awtngCmpltdList!![position].dataItem)
             var jsonString =Gson().toJson(orderDate)
             (activity as HomeScreen).displayOrderHstryFragment(jsonString)
         }

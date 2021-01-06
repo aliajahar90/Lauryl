@@ -795,4 +795,26 @@ public class MyOrdersDataItem {
         this.isOrderItemDownload = isOrderItemDownload;
     }
 
+
+    @SerializedName("weightList")
+    @Expose
+    private List<String> weightList = null;
+    @SerializedName("quantityList")
+    @Expose
+    private List<String> quantityList = null;
+    @SerializedName("servicePrices")
+    @Expose
+    private List<String> servicePrices = null;
+
+    public List<String> getWeightList() {
+        return weightList;
+    }
+
+    public List<String> getQuantityList() {
+        return quantityList;
+    }
+
+    public List<String> getServicePrices() {
+        return servicePrices;
+    }
 }

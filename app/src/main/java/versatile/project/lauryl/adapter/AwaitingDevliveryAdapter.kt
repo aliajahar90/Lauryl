@@ -51,6 +51,7 @@ class AwaitingDevliveryAdapter(
             orderDate.orderIdVal = this.awtngDlvryList!!.get(position).orderIdVal
             orderDate.date = this.awtngDlvryList!!.get(position).date
             orderDate.orderStage = AllConstants.Orders.OrderStage.Awaiting_Delivery
+            orderDate.myOrdersDataItem=Gson().toJson(this.awtngDlvryList!!.get(position).dataItem)
             var jsonString = Gson().toJson(orderDate)
             (activity as HomeScreen).displayOrderHstryFragment(jsonString)
         }

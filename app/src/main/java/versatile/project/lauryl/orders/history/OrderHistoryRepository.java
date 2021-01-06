@@ -19,6 +19,7 @@ import retrofit2.Response;
 import versatile.project.lauryl.R;
 import versatile.project.lauryl.base.SingleLiveEvent;
 import versatile.project.lauryl.data.source.LaurylRepository;
+import versatile.project.lauryl.model.MyOrdersDataItem;
 import versatile.project.lauryl.orders.history.model.OrderItemsResponse;
 import versatile.project.lauryl.orders.history.model.ServiceItemType;
 import versatile.project.lauryl.orders.history.model.ServiceType;
@@ -30,13 +31,13 @@ private SingleLiveEvent<List<ServiceType>> listServiceSkuTypeSingleLiveEvent= ne
 private SingleLiveEvent<List<OrderItemsResponse.ServiceItem>> listRawListSingleLiveEvent= new SingleLiveEvent<>();
 private SingleLiveEvent<String> stringErrorSingleLiveEvent=new SingleLiveEvent<>();
 
-    void getOrderItems(String accessToken, JsonObject orderHistoryRequest){
+    void getOrderItems(String accessToken, JsonObject orderHistoryRequest, MyOrdersDataItem myOrdersDataItem){
         getApiVersatileServices().getOrderItems(accessToken,orderHistoryRequest).enqueue(new Callback<OrderItemsResponse>() {
             @Override
             public void onResponse(Call<OrderItemsResponse> call, Response<OrderItemsResponse> response) {
                 if(response!=null && response.isSuccessful() && response.code()==200){
                     if(response.body()!=null && response.body().getData()!=null && !(response.body().getData().getList().isEmpty())){
-                        listServiceSkuTypeSingleLiveEvent.setValue(processHistory(response.body().getData().getList()));
+                        listServiceSkuTypeSingleLiveEvent.setValue(processHistory(response.body().getData().getList(),myOrdersDataItem));
                          listRawListSingleLiveEvent.setValue(response.body().getData().getList());
                     }else {
                         stringErrorSingleLiveEvent.setValue(AllConstants.Orders.ORDER_ITEM_ERROR_EMPTY);
@@ -65,14 +66,16 @@ private SingleLiveEvent<String> stringErrorSingleLiveEvent=new SingleLiveEvent<>
         return stringErrorSingleLiveEvent;
     }
 
-    List<ServiceType> processHistory(List<OrderItemsResponse.ServiceItem> serviceItems){
+    List<ServiceType> processHistory(List<OrderItemsResponse.ServiceItem> serviceItems, MyOrdersDataItem ordersDataItem){
         List<String> headers =new ArrayList<>();
         List<String> scannedItems =new ArrayList<>();
         List<ServiceType> serviceTypeList=new ArrayList<>();
         Map<String,String> ServiceNameMap=new HashMap<>();
         for(OrderItemsResponse.ServiceItem item:serviceItems){
             headers.add(item.getEan());
-            ServiceNameMap.put(item.getEan(),item.getProductName());
+            String pName=getServiceNameWithWeight(item.getEan(),item.getProductName(),ordersDataItem);
+            pName=getServiceNameWithPrice(item.getEan(),pName,ordersDataItem);
+            ServiceNameMap.put(item.getEan(),pName);
             scannedItems.add(item.getScannedItemType());
         }
         Set<String> uniqueEAN =new LinkedHashSet<>(headers);
@@ -116,5 +119,34 @@ private SingleLiveEvent<String> stringErrorSingleLiveEvent=new SingleLiveEvent<>
             toGive.add(entry.getValue());
         }
         return toGive;
+    }
+
+    String getServiceNameWithWeight(String ean,String productName,MyOrdersDataItem myOrdersDataItem){
+        String pName=productName;
+        if(myOrdersDataItem.getWeightList()!=null) {
+            for (String weightString : myOrdersDataItem.getWeightList()) {
+                if (weightString.contains(ean)) {
+                    String[] arrOfStr = weightString.split("/");
+                    if (arrOfStr[1] != null && !TextUtils.isEmpty(arrOfStr[1])) {
+                        pName = pName + "(" + arrOfStr[1] + "Kg" + ")";
+                    }
+                }
+            }
+        }
+        return pName;
+    }
+    String getServiceNameWithPrice(String ean,String productName,MyOrdersDataItem myOrdersDataItem){
+        String pName=productName;
+        if(myOrdersDataItem.getServicePrices()!=null) {
+            for (String weightString : myOrdersDataItem.getServicePrices()) {
+                if (weightString.contains(ean)) {
+                    String[] arrOfStr = weightString.split("/");
+                    if (arrOfStr[1] != null && !TextUtils.isEmpty(arrOfStr[1])) {
+                        pName = pName + "(" + "\u20B9" + arrOfStr[1] + ")";
+                    }
+                }
+            }
+        }
+        return pName;
     }
 }

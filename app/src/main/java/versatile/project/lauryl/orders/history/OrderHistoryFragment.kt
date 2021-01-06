@@ -26,6 +26,7 @@ import timber.log.Timber
 import versatile.project.lauryl.R
 import versatile.project.lauryl.application.MyApplication
 import versatile.project.lauryl.base.BaseFragment
+import versatile.project.lauryl.model.MyOrdersDataItem
 import versatile.project.lauryl.network.api.RetrofitObj
 import versatile.project.lauryl.orders.history.adapter.OrderListAdapter
 import versatile.project.lauryl.orders.history.model.ServiceType
@@ -39,6 +40,7 @@ class OrderHistoryFragment : BaseFragment<OrderHistoryFragmentViewModel>() {
     var adapter: OrderListAdapter? = null;
     lateinit var orderHistoryFragmentViewModel: OrderHistoryFragmentViewModel
     var orderModel = JsonObject()
+    var ordersDataItem= MyOrdersDataItem()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -69,6 +71,7 @@ class OrderHistoryFragment : BaseFragment<OrderHistoryFragmentViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as HomeScreen).selectOrderHistory()
+        ordersDataItem= Gson().fromJson(orderModel.get("myOrdersDataItem").asString,MyOrdersDataItem::class.java)
         txtOrderNumber.text = "Order Id - " + orderModel.get("orderIdVal").asString
         txtOrderDateTime.text = orderModel.get("date").asString
         txtOrderStage.text = orderModel.get("OrderStage").asString
@@ -126,13 +129,13 @@ class OrderHistoryFragment : BaseFragment<OrderHistoryFragmentViewModel>() {
         searchArray.add(searchJson)
         inputJson.add("search", searchArray)
         //inputJson.addProperty("search","[]")
-        orderHistoryFragmentViewModel.getOrderItems(myApplication.accessToken, inputJson)
+
+        orderHistoryFragmentViewModel.getOrderItems(myApplication.accessToken, inputJson,ordersDataItem)
         orderHistoryFragmentViewModel.onOrderItemReceived().observe(this, Observer {
             it
             serviceList.addAll(it)
-            adapter =
-                OrderListAdapter(
-                    serviceList
+            adapter = OrderListAdapter(
+                serviceList
                 )
             recyclerView.adapter = adapter
             updatePriceInUi()
@@ -149,13 +152,13 @@ class OrderHistoryFragment : BaseFragment<OrderHistoryFragmentViewModel>() {
     }
 
     fun updatePriceInUi() {
-        var total: Double = 0.0
-        for (s in serviceList) {
-            for (itemType in s.childList) {
-                total += itemType.productPrice.toDouble()
-            }
-        }
-        txtTotal.text = "\u20B9 " + total.toString()
+//        var total: Double = 0.0
+//        for (s in serviceList) {
+//            for (itemType in s.childList) {
+//                total += itemType.productPrice.toDouble()
+//            }
+//        }
+        txtTotal.text = "\u20B9 " + ordersDataItem.orderTotal.toString()
     }
 
     private fun getOrderDate(date: String): CharSequence? {

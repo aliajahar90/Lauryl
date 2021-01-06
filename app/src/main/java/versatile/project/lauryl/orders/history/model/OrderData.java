@@ -2,10 +2,14 @@ package versatile.project.lauryl.orders.history.model;
 
 import java.io.Serializable;
 
+import versatile.project.lauryl.model.MyOrdersDataItem;
+
 public class OrderData implements Serializable {
     private String orderIdVal;
     private String date;
     private String OrderStage;
+    private String zohoInvoiceId="";
+    private String myOrdersDataItem;
 
     public String getZohoInvoiceId() {
         return zohoInvoiceId;
@@ -15,7 +19,6 @@ public class OrderData implements Serializable {
         this.zohoInvoiceId = zohoInvoiceId;
     }
 
-    private String zohoInvoiceId="";
 
     public String getOrderIdVal() {
         return orderIdVal;
@@ -39,5 +42,13 @@ public class OrderData implements Serializable {
 
     public void setOrderStage(String orderStage) {
         OrderStage = orderStage;
+    }
+
+    public String getMyOrdersDataItem() {
+        return myOrdersDataItem;
+    }
+
+    public void setMyOrdersDataItem(String myOrdersDataItem) {
+        this.myOrdersDataItem = myOrdersDataItem;
     }
 }
