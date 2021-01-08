@@ -105,6 +105,8 @@ public class ServiceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .into(itemPaymentNetbankingBinding.srvcsItemImg);
              if(TextUtils.equals(netBanking.getServiceType(), AllConstants.Services.SERVICE_TYPE_SUBSCRIPTION)) {
                  itemPaymentNetbankingBinding.txtPrice.setText("\u20B9 " + netBanking.getCostprice()+"/Month");
+             }else {
+                 itemPaymentNetbankingBinding.txtPrice.setText("");
              }
              itemPaymentNetbankingBinding.srvcTitleTxt.setText(netBanking.getProductTitle());
              itemPaymentNetbankingBinding.srvcDescTxt.setText(netBanking.getDescription());
