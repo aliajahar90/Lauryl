@@ -43,6 +43,9 @@ public class CnfSchedulePickupRepository extends OrderRepository {
                         dateTimeMap.setDate(dateTimeList.getPickUpDate());
                         dateTimeMap.setTime(dateTimeList.getPickUpTime());
                         dateTimeMap.setNoOfSlots(dateTimeList.getNoOfSlots());
+                        if(dateTimeList.getTimeSpan()!=null) {
+                            dateTimeMap.setTimeSpan(Integer.parseInt(dateTimeList.getTimeSpan()));
+                        }
                         dateTimeMaps.add(dateTimeMap);
                     }
                     Set<String> uniqueDates = new LinkedHashSet<>(dateLists);

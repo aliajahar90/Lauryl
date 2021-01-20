@@ -1,12 +1,10 @@
 package versatile.project.lauryl.pickup.data;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class DateTimeMap {
     String date;
     String time;
     private String noOfSlots;
+    private Integer timeSpan=0;
 
     public String getDate() {
         return date;
@@ -30,5 +28,13 @@ public class DateTimeMap {
 
     public void setNoOfSlots(String noOfSlots) {
         this.noOfSlots = noOfSlots;
+    }
+
+    public Integer getTimeSpan() {
+        return timeSpan;
+    }
+
+    public void setTimeSpan(Integer timeSpan) {
+        this.timeSpan = timeSpan;
     }
 }

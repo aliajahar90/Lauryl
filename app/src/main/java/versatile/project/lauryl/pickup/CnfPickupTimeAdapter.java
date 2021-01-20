@@ -68,7 +68,7 @@ public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdap
         public void bind(DateTimeMap data, int position) {
             listItemCnfSchedulePickupBinding.txtTime.setText(data.getTime());
             if(Integer.parseInt(data.getNoOfSlots())>0) {
-                if (isCurrentTimeOrAfter(data.getTime())) {
+                if (isCurrentTimeOrAfter(data.getTime(),data.getTimeSpan())) {
                     if (selectedPosition == position) {
                         isSelected = true;
                         listItemCnfSchedulePickupBinding.txtTime.setBackgroundResource(R.drawable.verify_otp_bckgrnd);
@@ -119,7 +119,7 @@ public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdap
         void onTimeClicked(String time);
     }
 
-    boolean isCurrentTimeOrAfter(String time) {
+    boolean isCurrentTimeOrAfter(String time, int timeSpan) {
 
         try {
             String[] arrOfStr = time.toLowerCase().split("-");
@@ -131,7 +131,15 @@ public class CnfPickupTimeAdapter extends RecyclerView.Adapter<CnfPickupTimeAdap
             String tm = StringUtils.leftPad(arrOfStr[0], 4, "0");
             String myTime = tm.replaceAll("..", "$0 ");
             String[] words = myTime.split("\\s");
-            String toSubmit = words[0] + " " + words[1].trim();
+            int timeOnly= Integer.parseInt(words[0])+(timeSpan-1);
+            String ampm=words[1].trim();
+            if(timeOnly>12 && words[1].trim().equalsIgnoreCase("am")) {
+                timeOnly=timeOnly-12;
+                ampm="pm";
+            }else if(timeOnly==12 && words[1].trim().equalsIgnoreCase("am")){
+                ampm="pm";
+            }
+            String toSubmit = timeOnly + " " + ampm;
             LocalTime dateTime = formatter.parseLocalTime(toSubmit);
             return dateTime.isEqual(parseLocalTime) || dateTime.isAfter(parseLocalTime);
         } catch (Exception e) {

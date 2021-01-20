@@ -77,10 +77,10 @@ class Globals {
                 .setContentTitle("OTP")
                 .setContentText("Your OTP: ${otpMsg}")
                 .setColor(context.resources.getColor(R.color.colorPrimary))
-                .setSmallIcon(R.drawable.app_logo)
+                .setSmallIcon(R.drawable.laurylogo)
                 .setAutoCancel(false)
                 .setSound(defaultSoundUri)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.app_logo))
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.laurylogo))
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(108 /* ID of notification */, notificationBuilder.build())
 
@@ -94,10 +94,10 @@ class Globals {
                 .setContentTitle("OTP")
                 .setColor(context.resources.getColor(R.color.colorPrimary))
                 .setContentText("Your OTP: ${otpMsg}")
-                .setSmallIcon(R.drawable.app_logo)
+                .setSmallIcon(R.drawable.laurylogo)
                 .setAutoCancel(false)
                 .setSound(defaultSoundUri)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.app_logo))
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.laurylogo))
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(110 /* ID of notification */, notificationBuilder.build())
 

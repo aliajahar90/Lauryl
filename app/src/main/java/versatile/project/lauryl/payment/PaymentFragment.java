@@ -83,7 +83,7 @@ public class PaymentFragment extends BaseBinding<PaymentViewModel, PaymentFragme
     private String paymentMethod;
     private boolean isUserCanRetry=false;
     private  Gson mGson;
-    private double orderValue=1.0;
+    private double orderValue=0.0;
 
 
 

@@ -102,7 +102,7 @@ private SingleLiveEvent<String> stringErrorSingleLiveEvent=new SingleLiveEvent<>
         for(OrderItemsResponse.ServiceItem serviceItem:serviceItems){
             if(itemInside.containsKey(serviceItem.getScannedItemType())){
                 ServiceItemType serviceItemType1 = itemInside.get(serviceItem.getScannedItemType());
-                serviceItemType1.setQtyPurchased(String.valueOf(Double.valueOf(serviceItem.getQtyPurchased()) + 1.0));
+                serviceItemType1.setQtyPurchased(String.valueOf(Double.valueOf(serviceItemType1.getQtyPurchased()) + 1.0));
                 serviceItemType1.setProductPrice(String.valueOf(Double.valueOf(serviceItemType1.getProductPrice()) + Double.valueOf(serviceItem.getProductPrice())));
                 itemInside.put(serviceItem.getScannedItemType(),serviceItemType1);
 

@@ -88,7 +88,9 @@ public class CnfPickupResponse implements Serializable {
         @SerializedName("modifiedByUser")
         @Expose
         private String modifiedByUser;
-
+        @SerializedName("timeSpan")
+        @Expose
+        private String timeSpan;
         public String getId() {
             return id;
         }
@@ -193,5 +195,12 @@ public class CnfPickupResponse implements Serializable {
             this.modifiedByUser = modifiedByUser;
         }
 
+        public String getTimeSpan() {
+            return timeSpan;
+        }
+
+        public void setTimeSpan(String timeSpan) {
+            this.timeSpan = timeSpan;
+        }
     }
 }
