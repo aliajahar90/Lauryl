@@ -51,35 +51,35 @@ class ChangeAddressFragment : Fragment() {
         val profileName = profile_name.text.toString()
         val completeAddress = complete_address.text.toString()
         if (flatNo.isNotEmpty()) {
-                if (landMark.isNotEmpty()) {
-                        if (completeAddress.isNotEmpty()) {
-                            Timber.e("validation success")
-                            mAddress.landmark = landMark
-                            mAddress.streetName = completeAddress
-                            mAddress.address1 = flatNo
-                            mAddress.city = addressModel?.city
-                            mAddress.state = addressModel?.state
-                            mAddress.pinCode = addressModel?.pinCode
-                            mAddress.country = addressModel?.country
-                            mAddress.addresType = if (profileName.isNotEmpty()) profileName else "Other"
-                            mAddress.latitude = addressModel?.latitude
-                            mAddress.longitude = addressModel?.longitude
-                            fetchLatLongFromAddress(mAddress)
-
-                        } else {
-                            Globals.showPopoUpDialog(
-                                context!!,
-                                getString(R.string.validation), "Address is Mandatory"
-                            )
-                        }
-
+            if (landMark.isNotEmpty()) {
+                if (completeAddress.isNotEmpty()) {
+                    Timber.e("validation success")
+                    mAddress.landmark = landMark
+                    mAddress.streetName = completeAddress
+                    mAddress.address1 = flatNo
+                    mAddress.city = addressModel?.city
+                    mAddress.state = addressModel?.state
+                    mAddress.pinCode = addressModel?.pinCode
+                    mAddress.country = addressModel?.country
+                    mAddress.addresType = if (profileName.isNotEmpty()) profileName else "Other"
+                    mAddress.latitude = addressModel?.latitude
+                    mAddress.longitude = addressModel?.longitude
+                    fetchLatLongFromAddress(mAddress)
 
                 } else {
                     Globals.showPopoUpDialog(
                         context!!,
-                        getString(R.string.validation), "LandMark is Mandatory"
+                        getString(R.string.validation), "Address is Mandatory"
                     )
                 }
+
+
+            } else {
+                Globals.showPopoUpDialog(
+                    context!!,
+                    getString(R.string.validation), "LandMark is Mandatory"
+                )
+            }
 
         } else {
             Globals.showPopoUpDialog(
@@ -143,7 +143,7 @@ class ChangeAddressFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.change_address_fragment, container, false)
         addressModel = try {
             arguments?.getSerializable("address") as AddressModel
-        } catch (e: TypeCastException) {
+        } catch (e: Exception) {
             AddressModel()
         }
         return rootView

@@ -369,7 +369,7 @@ class HomeScreen : BaseActivity(), LocationListener {
     }
 
     fun setLocation(address: String) {
-        Timber.e("Seeting home location to $address")
+        Timber.e("Setting home location to $address")
         homelocTxt.text = address
     }
 
